@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><app>
+	<firma id="0">
+		<numar_inregistrare>ABC123</numar_inregistrare>
+		<cod_fiscal>uroi1273</cod_fiscal>
+		<adresa>Str.Oituz, Nr.7</adresa>
+		<numar_telefon>012398423</numar_telefon>
+		<numar_fax>238120948</numar_fax>
+		<email>email@domain.com</email>
+		<nume_banca>Gigi Bank</nume_banca>
+		<cod_IBAN>RO34 2134 4366 3456 4568 8457</cod_IBAN>
+		<administrator>
+			<nume>Ion Ionescu</nume>
+			<serie_buletin>AR</serie_buletin>
+			<numar_buletin>123678</numar_buletin>
+			<numar_telefon_admin>4128309478</numar_telefon_admin>
+		</administrator>
+	</firma>
+	<firma id="1">
+		<numar_inregistrare>CDE348</numar_inregistrare>
+		<cod_fiscal>234hjk213</cod_fiscal>
+		<adresa>Str.Florii, Nr.3</adresa>
+		<numar_telefon>1297048613</numar_telefon>
+		<numar_fax>532784921</numar_fax>
+		<email>email2ter@domain.com</email>
+		<nume_banca>Duru Bank</nume_banca>
+		<cod_IBAN>RO34 1234 2345 3734 8567 5600</cod_IBAN>
+		<administrator>
+			<nume>Doru Georgescu</nume>
+			<serie_buletin>MH</serie_buletin>
+			<numar_buletin>147283</numar_buletin>
+			<numar_telefon_admin>5328934729</numar_telefon_admin>
+		</administrator>
+	</firma>
+</app>
