@@ -1,5 +1,8 @@
 package com.rsvti.database.entities;
 
+import java.util.Date;
+import java.util.List;
+
 public class Firm {
 	
 	private String registrationNumber;
@@ -10,10 +13,12 @@ public class Firm {
 	private String email;
 	private String bankName;
 	private String ibanCode;
+	private Date dueDate;
 	private Administrator administrator;
+	private List<Rig> rigs;
 	
 	public Firm(String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
-			String bankName, String ibanCode, Administrator administrator) {
+			String bankName, String ibanCode, Date dueDate, Administrator administrator, List<Rig> rigs) {
 		this.setRegistrationNumber(registrationNumber);
 		this.setFiscalCode(fiscalCode);
 		this.setAddress(address);
@@ -22,9 +27,25 @@ public class Firm {
 		this.setEmail(email);
 		this.setBankName(bankName);
 		this.setIbanCode(ibanCode);
+		this.setDueDate(dueDate);
 		this.setAdministrator(administrator);
+		this.setRigs(rigs);
 	}
-
+	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Firm &&
+				this.getRegistrationNumber().equals(((Firm) o).getRegistrationNumber()) &&
+				this.getFiscalCode().equals(((Firm) o).getFiscalCode()) &&
+				this.getAddress().equals(((Firm) o).getAddress()) &&
+				this.getPhoneNumber().equals(((Firm) o).getPhoneNumber()) &&
+				this.getFaxNumber().equals(((Firm) o).getFaxNumber()) &&
+				this.getEmail().equals(((Firm) o).getEmail()) &&
+				this.getBankName().equals(((Firm) o).getBankName()) &&
+				this.getIbanCode().equals(((Firm) o).getIbanCode()) &&
+				this.getAdministrator().equals(((Firm) o).getAdministrator());
+	}
+	
 	public String getRegistrationNumber() {
 		return registrationNumber;
 	}
@@ -95,5 +116,29 @@ public class Firm {
 
 	public void setAdministrator(Administrator administrator) {
 		this.administrator = administrator;
+	}
+	
+	public Date getDueDate() {
+		return dueDate;
+	}
+	
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+	
+	public List<Rig> getRigs() {
+		return rigs;
+	}
+	
+	public void setRigs(List<Rig> rigs) {
+		this.rigs = rigs;
+	}
+	
+	public void addRig(Rig rig) {
+		rigs.add(rig);
+	}
+	
+	public void removeRig(Rig rig) {
+		rigs.remove(rig);
 	}
 }

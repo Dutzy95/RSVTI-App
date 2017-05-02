@@ -8,12 +8,17 @@
 		<email>email@domain.com</email>
 		<nume_banca>Gigi Bank</nume_banca>
 		<cod_IBAN>RO34 2134 4366 3456 4568 8457</cod_IBAN>
+		<data_scadentei>12-05-2000</data_scadentei>
 		<administrator>
 			<nume>Ion Ionescu</nume>
 			<serie_buletin>AR</serie_buletin>
 			<numar_buletin>123678</numar_buletin>
 			<numar_telefon_admin>4128309478</numar_telefon_admin>
 		</administrator>
+		<instalatie id="0" type="de ridicat">
+			<greutate_maxima>44</greutate_maxima>
+			<inaltime_maxima>23</inaltime_maxima>
+		</instalatie>
 	</firma>
 	<firma id="1">
 		<numar_inregistrare>CDE348</numar_inregistrare>
@@ -24,11 +29,20 @@
 		<email>email2ter@domain.com</email>
 		<nume_banca>Duru Bank</nume_banca>
 		<cod_IBAN>RO34 1234 2345 3734 8567 5600</cod_IBAN>
+		<data_scadentei>20-08-2010</data_scadentei>
 		<administrator>
 			<nume>Doru Georgescu</nume>
 			<serie_buletin>MH</serie_buletin>
 			<numar_buletin>147283</numar_buletin>
 			<numar_telefon_admin>5328934729</numar_telefon_admin>
 		</administrator>
+		<instalatie id="1" type="de ridicat">
+			<ceva>45</ceva>
+			<altceva>96</altceva>
+		</instalatie>
+		<instalatie id="2" type="sub presiune">
+			<volum_maxim>98</volum_maxim>
+			<presiune_maxima>74</presiune_maxima>
+		</instalatie>
 	</firma>
 </app>

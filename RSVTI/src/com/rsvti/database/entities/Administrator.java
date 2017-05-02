@@ -21,6 +21,15 @@ public class Administrator {
 		this.phoneNumber = phoneNumber;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Administrator &&
+				this.getIdCode().equals(((Administrator) o).getIdCode()) &&
+				this.getIdNumber().equals(((Administrator) o).getIdNumber()) &&
+				this.getName().equals(((Administrator) o).getName()) &&
+				this.getPhoneNumber().equals(((Administrator) o).getPhoneNumber());
+	}
+	
 	public String getName() {
 		return name;
 	}

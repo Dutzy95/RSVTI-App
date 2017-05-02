@@ -5,4 +5,6 @@ public class Constants {
 	public static final String XML_DB_FILE_NAME = "src/com/rsvti/xml/RSVTI_database.xml";
 	
 	public static final String APP_NAME = "RSVTI App";
+	
+	public static final String DATE_FORMAT = "dd-MM-yyyy"; 
 }
