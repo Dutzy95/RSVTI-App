@@ -1,8 +1,8 @@
 package com.rsvti.database.entities;
 
+import java.util.Date;
 import java.util.HashMap;
-
-import org.w3c.dom.Node;
+import java.util.List;
 
 public interface Rig {
 	
@@ -12,6 +12,11 @@ public interface Rig {
 	
 	public String getType();
 	
-	@Override
-	public boolean equals(Object o);
+	public Date getDueDate();
+	
+	public void setDueDate(Date dueDate);
+	
+	public void setEmployees(List<Employee> employees);
+	
+	public List<Employee> getEmployees();
 }

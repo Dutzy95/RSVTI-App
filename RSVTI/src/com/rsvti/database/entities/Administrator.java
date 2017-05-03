@@ -2,7 +2,8 @@ package com.rsvti.database.entities;
 
 public class Administrator {
 	
-	private String name;
+	private String firstName;
+	private String lastName;
 	private String idCode;
 	private String idNumber;
 	private String phoneNumber;
@@ -14,8 +15,9 @@ public class Administrator {
 	 * @param idNumber admin id number (numar de buletin)
 	 * @param phoneNumber admin personal phone number
 	 */
-	public Administrator(String name, String idCode, String idNumber, String phoneNumber) {
-		this.name = name;
+	public Administrator(String firstName, String lastName, String idCode, String idNumber, String phoneNumber) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.idCode = idCode;
 		this.idNumber = idNumber;
 		this.phoneNumber = phoneNumber;
@@ -26,12 +28,17 @@ public class Administrator {
 		return o instanceof Administrator &&
 				this.getIdCode().equals(((Administrator) o).getIdCode()) &&
 				this.getIdNumber().equals(((Administrator) o).getIdNumber()) &&
-				this.getName().equals(((Administrator) o).getName()) &&
+				this.getFirstName().equals(((Administrator) o).getFirstName()) &&
+				this.getLastName().equals(((Administrator) o).getLastName()) &&
 				this.getPhoneNumber().equals(((Administrator) o).getPhoneNumber());
 	}
 	
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
 	}
 	
 	public String getIdCode() {
@@ -46,8 +53,12 @@ public class Administrator {
 		return phoneNumber;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	public void setIdCode(String idCode) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><app>
-	<firma id="0">
+	<firma id="1">
 		<numar_inregistrare>ABC123</numar_inregistrare>
 		<cod_fiscal>uroi1273</cod_fiscal>
 		<adresa>Str.Oituz, Nr.7</adresa>
@@ -8,19 +8,44 @@
 		<email>email@domain.com</email>
 		<nume_banca>Gigi Bank</nume_banca>
 		<cod_IBAN>RO34 2134 4366 3456 4568 8457</cod_IBAN>
-		<data_scadentei>12-05-2000</data_scadentei>
 		<administrator>
-			<nume>Ion Ionescu</nume>
+			<nume>Ion</nume>
+			<prenume>Ionescu</prenume>
 			<serie_buletin>AR</serie_buletin>
 			<numar_buletin>123678</numar_buletin>
 			<numar_telefon_admin>4128309478</numar_telefon_admin>
 		</administrator>
-		<instalatie id="0" type="de ridicat">
+		<instalatie id="1" type="de ridicat">
+			<data_scadenta>20-07-2017</data_scadenta>
 			<greutate_maxima>44</greutate_maxima>
 			<inaltime_maxima>23</inaltime_maxima>
-		</instalatie>
+			<angajat title="stivuitorist">
+				<nume>FirstName1</nume>
+				<prenume>LastName1</prenume>
+				<serie_buletin>CT</serie_buletin>
+				<numar_buletin>123456</numar_buletin>
+				<CNP>195042033495</CNP>
+				<autorizatie>
+					<numar_autorizatie>123948273</numar_autorizatie>
+					<data_obtinerii>12-05-2000</data_obtinerii>
+					<data_obtinerii>12-05-2000</data_obtinerii>
+				</autorizatie>
+			</angajat>
+			<angajat title="macaragist">
+				<nume>FirstName2</nume>
+				<prenume>LastName2</prenume>
+				<serie_buletin>BH</serie_buletin>
+				<numar_buletin>098742</numar_buletin>
+				<CNP>240928735387</CNP>
+				<autorizatie>
+					<numar_autorizatie>56732894</numar_autorizatie>
+					<data_obtinerii>06-05-2020</data_obtinerii>
+					<data_obtinerii>06-05-2020</data_obtinerii>
+				</autorizatie>
+			</angajat>
+			</instalatie>
 	</firma>
-	<firma id="1">
+	<firma id="2">
 		<numar_inregistrare>CDE348</numar_inregistrare>
 		<cod_fiscal>234hjk213</cod_fiscal>
 		<adresa>Str.Florii, Nr.3</adresa>
@@ -29,20 +54,58 @@
 		<email>email2ter@domain.com</email>
 		<nume_banca>Duru Bank</nume_banca>
 		<cod_IBAN>RO34 1234 2345 3734 8567 5600</cod_IBAN>
-		<data_scadentei>20-08-2010</data_scadentei>
 		<administrator>
-			<nume>Doru Georgescu</nume>
+			<nume>Doru</nume>
+			<prenume>Georgescu</prenume>
 			<serie_buletin>MH</serie_buletin>
 			<numar_buletin>147283</numar_buletin>
 			<numar_telefon_admin>5328934729</numar_telefon_admin>
 		</administrator>
-		<instalatie id="1" type="de ridicat">
+		<instalatie id="2" type="de ridicat">
+			<data_scadenta>26-01-2006</data_scadenta>
 			<ceva>45</ceva>
 			<altceva>96</altceva>
-		</instalatie>
-		<instalatie id="2" type="sub presiune">
+			<angajat title="manevrant">
+				<nume>FirstName3</nume>
+				<prenume>LastName3</prenume>
+				<serie_buletin>GZ</serie_buletin>
+				<numar_buletin>472893</numar_buletin>
+				<CNP>2190287463728</CNP>
+				<autorizatie>
+					<numar_autorizatie>2357234345</numar_autorizatie>
+					<data_obtinerii>20-07-2017</data_obtinerii>
+					<data_obtinerii>20-07-2017</data_obtinerii>
+				</autorizatie>
+			</angajat>
+			</instalatie>
+		<instalatie id="3" type="sub presiune">
+			<data_scadenta>20-08-2010</data_scadenta>
 			<volum_maxim>98</volum_maxim>
 			<presiune_maxima>74</presiune_maxima>
-		</instalatie>
+			<angajat title="stivuitorist">
+				<nume>FirstName1</nume>
+				<prenume>LastName1</prenume>
+				<serie_buletin>CT</serie_buletin>
+				<numar_buletin>123456</numar_buletin>
+				<CNP>195042033495</CNP>
+				<autorizatie>
+					<numar_autorizatie>123948273</numar_autorizatie>
+					<data_obtinerii>12-05-2000</data_obtinerii>
+					<data_obtinerii>12-05-2000</data_obtinerii>
+				</autorizatie>
+			</angajat>
+			<angajat title="manevrant">
+				<nume>FirstName3</nume>
+				<prenume>LastName3</prenume>
+				<serie_buletin>GZ</serie_buletin>
+				<numar_buletin>472893</numar_buletin>
+				<CNP>2190287463728</CNP>
+				<autorizatie>
+					<numar_autorizatie>2357234345</numar_autorizatie>
+					<data_obtinerii>20-07-2017</data_obtinerii>
+					<data_obtinerii>20-07-2017</data_obtinerii>
+				</autorizatie>
+			</angajat>
+			</instalatie>
 	</firma>
 </app>

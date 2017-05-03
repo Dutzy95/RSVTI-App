@@ -1,6 +1,5 @@
 package com.rsvti.database.entities;
 
-import java.util.Date;
 import java.util.List;
 
 public class Firm {
@@ -13,23 +12,21 @@ public class Firm {
 	private String email;
 	private String bankName;
 	private String ibanCode;
-	private Date dueDate;
 	private Administrator administrator;
 	private List<Rig> rigs;
 	
 	public Firm(String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
-			String bankName, String ibanCode, Date dueDate, Administrator administrator, List<Rig> rigs) {
-		this.setRegistrationNumber(registrationNumber);
-		this.setFiscalCode(fiscalCode);
-		this.setAddress(address);
-		this.setPhoneNumber(phoneNumber);
-		this.setFaxNumber(faxNumber);
-		this.setEmail(email);
-		this.setBankName(bankName);
-		this.setIbanCode(ibanCode);
-		this.setDueDate(dueDate);
-		this.setAdministrator(administrator);
-		this.setRigs(rigs);
+			String bankName, String ibanCode, Administrator administrator, List<Rig> rigs) {
+		this.registrationNumber = registrationNumber;
+		this.fiscalCode = fiscalCode;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.faxNumber = faxNumber;
+		this.email = email;
+		this.bankName = bankName;
+		this.ibanCode = ibanCode; 
+		this.administrator = administrator;
+		this.rigs = rigs;
 	}
 	
 	@Override
@@ -116,14 +113,6 @@ public class Firm {
 
 	public void setAdministrator(Administrator administrator) {
 		this.administrator = administrator;
-	}
-	
-	public Date getDueDate() {
-		return dueDate;
-	}
-	
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
 	}
 	
 	public List<Rig> getRigs() {

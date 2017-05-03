@@ -24,21 +24,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.rsvti.database.entities.Administrator;
+import com.rsvti.database.entities.Employee;
+import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.main.Constants;
 
 public class DBServices {
 	
-	private static long indexOfFirms;
-	private static long indexOfRigs;
-	
 	public static void saveEntry(Document document, Firm firm) {
+		
+		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		
 		Element root = document.getDocumentElement();
 		
 		root.appendChild(document.createTextNode("\t"));
 		Element firma = document.createElement("firma");
-		firma.setAttribute("id", "" + indexOfFirms);
+		firma.setAttribute("id", "" + (getLastFirmIndex(document) + 1));
 		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element nr_inreg = document.createElement("numar_inregistrare");
@@ -81,21 +83,19 @@ public class DBServices {
 		firma.appendChild(ibanCode);
 		firma.appendChild(document.createTextNode("\n\t\t"));
 		
-		Element dueDate = document.createElement("data_scadentei");
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-		dueDate.appendChild(document.createTextNode(format.format(firm.getDueDate())));
-		firma.appendChild(dueDate);
-		firma.appendChild(document.createTextNode("\n\t\t"));
-		
 		//administrator
 		Administrator administrator = firm.getAdministrator();
 		Element adminElement = document.createElement("administrator");
-		firma.appendChild(adminElement);
 		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
-		Element adminName = document.createElement("nume");
-		adminName.appendChild(document.createTextNode(administrator.getName()));
-		adminElement.appendChild(adminName);
+		Element adminFirstName = document.createElement("nume");
+		adminFirstName.appendChild(document.createTextNode(administrator.getFirstName()));
+		adminElement.appendChild(adminFirstName);
+		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
+		
+		Element adminLastName = document.createElement("prenume");
+		adminLastName.appendChild(document.createTextNode(administrator.getLastName()));
+		adminElement.appendChild(adminLastName);
 		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element idCode = document.createElement("serie_buletin");
@@ -112,14 +112,25 @@ public class DBServices {
 		adminPhoneNumber.appendChild(document.createTextNode(administrator.getPhoneNumber()));
 		adminElement.appendChild(adminPhoneNumber);
 		adminElement.appendChild(document.createTextNode("\n\t\t"));
+		
+		firma.appendChild(adminElement);
+		
 		//administrator - end
 		
+		int lastRigIndex = getLastRigIndex(document);
 		for(Rig rigIndex : firm.getRigs()) {
 			Element rig = document.createElement("instalatie");
-			rig.setAttribute("id", indexOfRigs + "");
+			
+			rig.setAttribute("id", "" + (lastRigIndex + 1));
+			lastRigIndex++;
 			rig.setAttribute("type", rigIndex.getType());
 			
 			Map<String,String> parameters = rigIndex.getParameters();
+			
+			Element dueDate = document.createElement("data_scadenta");
+			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
+			rig.appendChild(document.createTextNode("\n\t\t\t"));
+			rig.appendChild(dueDate);
 			
 			for(Map.Entry<String,String> rigParameterIndex : parameters.entrySet()) {
 				Element node = document.createElement(rigParameterIndex.getKey());
@@ -127,18 +138,70 @@ public class DBServices {
 				rig.appendChild(document.createTextNode("\n\t\t\t"));
 				rig.appendChild(node);
 			}
-			rig.appendChild(document.createTextNode("\n\t\t"));
+			rig.appendChild(document.createTextNode("\n\t\t\t"));
+			for(Employee employeeIndex : rigIndex.getEmployees()) {
+				
+				Element employee = document.createElement("angajat");
+				employee.setAttribute("title", employeeIndex.getTitle());
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				Element employeeFirstName = document.createElement("nume");
+				employeeFirstName.appendChild(document.createTextNode(employeeIndex.getFirstName()));
+				employee.appendChild(employeeFirstName);
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				Element employeeLastName = document.createElement("prenume");
+				employeeLastName.appendChild(document.createTextNode(employeeIndex.getLastName()));
+				employee.appendChild(employeeLastName);
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				Element employeeIdCode = document.createElement("serie_buletin");
+				employeeIdCode.appendChild(document.createTextNode(employeeIndex.getIdCode()));
+				employee.appendChild(employeeIdCode);
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				Element employeeIdNumber = document.createElement("numar_buletin");
+				employeeIdNumber.appendChild(document.createTextNode(employeeIndex.getIdNumber()));
+				employee.appendChild(employeeIdNumber);
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				Element personalIdentificationNumber = document.createElement("CNP");
+				personalIdentificationNumber.appendChild(document.createTextNode(employeeIndex.getPersonalIdentificationNumber()));
+				employee.appendChild(personalIdentificationNumber);
+				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				EmployeeAuthorization authorization = employeeIndex.getAuthorization();
+				Element authorizationElement = document.createElement("autorizatie");
+				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
+				
+				Element authorizationNumber = document.createElement("numar_autorizatie");
+				authorizationNumber.appendChild(document.createTextNode(authorization.getAuthorizationNumber()));
+				authorizationElement.appendChild(authorizationNumber);
+				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
+				
+				Element obtainingDate = document.createElement("data_obtinerii");
+				obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
+				authorizationElement.appendChild(obtainingDate);
+				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
+				
+				Element employeeDueDate = document.createElement("data_obtinerii");
+				employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
+				authorizationElement.appendChild(employeeDueDate);
+				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t"));
+				
+				employee.appendChild(authorizationElement);
+				employee.appendChild(document.createTextNode("\n\t\t\t"));
+				
+				rig.appendChild(employee);
+				rig.appendChild(document.createTextNode("\n\t\t\t"));
+			}
 			firma.appendChild(document.createTextNode("\n\t\t"));
 			firma.appendChild(rig);
-			
-			indexOfRigs++;
 		}
 		
 		firma.appendChild(document.createTextNode("\n\t"));
 		root.appendChild(firma);
 		root.appendChild(document.createTextNode("\n"));
-		
-		indexOfFirms++;
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -151,7 +214,7 @@ public class DBServices {
 		}
 	}
 	
-	public static void saveEntry(Document document, Rig rig) {
+	/*public static void saveEntry(Document document, Rig rig) {
 		Element root = document.getDocumentElement();
 		
 		root.appendChild(document.createTextNode("\t"));
@@ -183,7 +246,7 @@ public class DBServices {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	//TODO:may not be needed
 	public static List<Firm> getAllFirms(Document document) {
