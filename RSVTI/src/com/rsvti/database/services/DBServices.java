@@ -1,12 +1,15 @@
 package com.rsvti.database.services;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -21,6 +24,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.rsvti.database.entities.Administrator;
@@ -28,11 +32,46 @@ import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.entities.RigParameter;
 import com.rsvti.main.Constants;
 
 public class DBServices {
 	
-	public static void saveEntry(Document document, Firm firm) {
+	private static Document document;
+	
+	private static void openFile(String filepath) {
+		try {
+			File file = new File(filepath);
+			
+			if(file.createNewFile()) {
+				PrintStream ps = new PrintStream(file);
+				if(filepath.contains("RigParameters.xml")) {
+					ps.println("<?xml version=\"1.0\"?>\n<parameters>"
+							+ "\n\t<instalatie type=\"de ridicat\"></instalatie>"
+							+ "\n\t<instalatie type=\"sub presiune\"></instalatie>"
+							+ "\n</parameters>");
+				} else {
+					ps.println("<?xml version=\"1.0\"?>\n<app>\n</app>");
+				}
+				ps.close();
+			}
+			
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			if(document != null) {
+				if(!document.getBaseURI().substring(document.getBaseURI().lastIndexOf('/') + 1).equals(dBuilder.parse(file).getBaseURI().substring(dBuilder.parse(file).getBaseURI().lastIndexOf('/') + 1))) {
+					document = dBuilder.parse(file);
+				}
+			} else {
+				document = dBuilder.parse(file);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveEntry(Firm firm) {
+		openFile(Constants.XML_DB_FILE_NAME);
 		
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 		
@@ -40,7 +79,7 @@ public class DBServices {
 		
 		root.appendChild(document.createTextNode("\t"));
 		Element firma = document.createElement("firma");
-		firma.setAttribute("id", "" + (getLastFirmIndex(document) + 1));
+		firma.setAttribute("id", "" + (getLastFirmIndex() + 1));
 		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element nr_inreg = document.createElement("numar_inregistrare");
@@ -117,7 +156,7 @@ public class DBServices {
 		
 		//administrator - end
 		
-		int lastRigIndex = getLastRigIndex(document);
+		int lastRigIndex = getLastRigIndex();
 		for(Rig rigIndex : firm.getRigs()) {
 			Element rig = document.createElement("instalatie");
 			
@@ -214,53 +253,32 @@ public class DBServices {
 		}
 	}
 	
-	/*public static void saveEntry(Document document, Rig rig) {
-		Element root = document.getDocumentElement();
-		
-		root.appendChild(document.createTextNode("\t"));
-		Element instalatie = document.createElement("instalatie");
-		instalatie.setAttribute("id", "" + indexOfRigs);
-		instalatie.setAttribute("type", rig.getType());
-		
-		Map<String,String> parameters = rig.getParameters();
-		
-		for(Map.Entry<String,String> index : parameters.entrySet()) {
-			Element node = document.createElement(index.getKey());
-			node.appendChild(document.createTextNode(index.getValue()));
-			instalatie.appendChild(document.createTextNode("\n\t\t"));
-			instalatie.appendChild(node);
+	public static void updateEntry(Firm source, Firm replacement) {
+		openFile(Constants.XML_DB_FILE_NAME);
+		List<Firm> firms = EntityBuilder.buildFirmListFormXml((NodeList) DBServices.executeXmlQuery("//firma", XPathConstants.NODESET));
+		for(Firm index : firms) {
+			if(index.equals(source)) {
+				deleteEntry(source);
+				saveEntry(replacement);
+			}
 		}
-		
-		instalatie.appendChild(document.createTextNode("\n\t"));
-		root.appendChild(instalatie);
-		root.appendChild(document.createTextNode("\n"));
-		
-		indexOfRigs++;
-		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(Constants.XML_DB_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}*/
+	}
 	
 	//TODO:may not be needed
-	public static List<Firm> getAllFirms(Document document) {
+	public static List<Firm> getAllFirms() {
 		List<Firm> firms = new ArrayList<Firm>();
-		NodeList firmNodes = (NodeList) executeXmlQuery(document, "//firma", XPathConstants.NODESET);
+		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			firms.add(EntityBuilder.buildFirmFromXml(firmNodes.item(i)));
 		}
 		return firms;
 	}
 	
-	public static void deleteEntry(Document document, Firm firm) {
+	public static void deleteEntry(Firm firm) {
+		openFile(Constants.XML_DB_FILE_NAME);
+		
 		Element root = document.getDocumentElement();
-		NodeList firmNodes = (NodeList) executeXmlQuery(document, "//firma", XPathConstants.NODESET);
+		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			if(EntityBuilder.buildFirmFromXml(firmNodes.item(i)).equals(firm)) {
 				root.removeChild(firmNodes.item(i).getPreviousSibling().getPreviousSibling());	//deletes the CR and LF that remain after node deletion
@@ -281,7 +299,7 @@ public class DBServices {
 	
 	/**
 	 * Method that executes a given XPath query and returns the object/s provided. Method must be cast to obtain desired objects.
-	 * @param document the .xml document
+	 * @param doc the .xml document
 	 * @param query the string of the query to be executed
 	 * @param xpathConstant constant that shows the type of the returned object/s
 	 * <br>
@@ -293,7 +311,8 @@ public class DBServices {
 	 * &emsp;NUMBER for Number values<br>
 	 * @return object/s resulted from the query
 	 */
-	public static Object executeXmlQuery(Document document,String query, QName xpathConstant) {
+	public static Object executeXmlQuery(String query, QName xpathConstant) {
+		openFile(Constants.XML_DB_FILE_NAME);
 		Object returnValue = null;
 		try {
 			XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -306,9 +325,87 @@ public class DBServices {
 		return returnValue;
 	}
 	
-	public static int getLastFirmIndex(Document document) {
+	public static Object executeXmlQuery(String filepath, String query, QName xpathConstant) {
+		openFile(filepath);
+		Object returnValue = null;
+		try {
+			XPathFactory xPathfactory = XPathFactory.newInstance();
+			XPath xpath = xPathfactory.newXPath();
+			XPathExpression expr = xpath.compile(query);
+			returnValue = expr.evaluate(document,xpathConstant);
+		} catch(XPathExpressionException xee) {
+			xee.printStackTrace();
+		}
+		return returnValue;
+	}
+	
+	public static void saveEntry(RigParameter parameter) {
+		openFile(Constants.XML_RIG_PARAMETERS);
+		
+		Node liftingRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"de ridicat\"]", XPathConstants.NODE);
+		Node pressureRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"sub presiune\"]", XPathConstants.NODE);
+		
+		Element parameterElement = document.createElement(parameter.getName());
+		
+		if(parameter.getType().equals("de ridicat")) {
+			liftingRigNode.appendChild(document.createTextNode("\n\t\t"));
+			liftingRigNode.appendChild(parameterElement);
+		} else {
+			pressureRigNode.appendChild(document.createTextNode("\n\t\t"));
+			pressureRigNode.appendChild(parameterElement);
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(Constants.XML_RIG_PARAMETERS));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteEntry(RigParameter parameter) {
+		Node liftingRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"de ridicat\"]", XPathConstants.NODE);
+		Node pressureRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"sub presiune\"]", XPathConstants.NODE);
+		NodeList parameters;
+		
+		if(parameter.getType().equals("de ridicat")) {
+			parameters = liftingRigNode.getChildNodes();
+		} else {
+			parameters = pressureRigNode.getChildNodes();
+		}
+		
+		for(int i = 0; i < parameters.getLength(); i++) {
+			if(!parameters.item(i).getTextContent().contains("\t") ||
+					!parameters.item(i).getTextContent().contains("\n")) {
+				if(parameters.item(i).getNodeName().equals(parameter.getName())) {
+					if(parameter.getType().equals("de ridicat")) {
+						liftingRigNode.removeChild(parameters.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
+						liftingRigNode.removeChild(parameters.item(i-1));	//because it deleted previous sibling the item to delete is now shifted one position to the left
+					} else {
+						pressureRigNode.removeChild(parameters.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
+						pressureRigNode.removeChild(parameters.item(i-1));	//because it deleted previous sibling the item to delete is now shifted one position to the left
+					}
+				}
+			}
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(Constants.XML_RIG_PARAMETERS));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static int getLastFirmIndex() {
 		int maxIndex = 0;
-		NodeList firms = (NodeList) executeXmlQuery(document, "//firma", XPathConstants.NODESET);
+		NodeList firms = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firms.getLength(); i++) {
 			if(Integer.parseInt(firms.item(i).getAttributes().getNamedItem("id").getTextContent()) > maxIndex) {
 				maxIndex = Integer.parseInt(firms.item(i).getAttributes().getNamedItem("id").getTextContent());
@@ -317,9 +414,9 @@ public class DBServices {
 		return maxIndex;
 	}
 	
-	public static int getLastRigIndex(Document document) {
+	public static int getLastRigIndex() {
 		int maxIndex = 0;
-		NodeList rigs = (NodeList) executeXmlQuery(document, "//instalatie", XPathConstants.NODESET);
+		NodeList rigs = (NodeList) executeXmlQuery("//instalatie", XPathConstants.NODESET);
 		for(int i = 0; i < rigs.getLength(); i++) {
 			if(Integer.parseInt(rigs.item(i).getAttributes().getNamedItem("id").getTextContent()) > maxIndex) {
 				maxIndex = Integer.parseInt(rigs.item(i).getAttributes().getNamedItem("id").getTextContent());

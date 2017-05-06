@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
@@ -127,5 +128,133 @@ public class EntityBuilder {
 						),
 				rigs
 				);
+	}
+	
+	public static Rig buildRigFromXml(Node node) {
+		HashMap<String,String> parametersAndValues = new HashMap<String,String>();
+		
+		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		Date dueDate = new Date();
+		try {
+			dueDate = format.parse(node.getChildNodes().item(1).getTextContent());
+		} catch(ParseException pe) {
+			pe.printStackTrace();
+		}
+		
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+				
+		for(int i = 3; i < node.getChildNodes().getLength(); i++) {
+			
+			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
+				if(!node.getChildNodes().item(i).getTextContent().contains("\t") ||
+						!node.getChildNodes().item(i).getTextContent().contains("\n")) {
+						parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent());
+				}
+			} else {
+				Node employeeNode = node.getChildNodes().item(i);
+				ArrayList<String> employeeParameters = new ArrayList<String>();
+				for(int j = 0; j < employeeNode.getChildNodes().getLength()-2; j++) {
+					if(!employeeNode.getChildNodes().item(j).getTextContent().contains("\t") ||
+							!employeeNode.getChildNodes().item(j).getTextContent().contains("\n")) {
+						employeeParameters.add(employeeNode.getChildNodes().item(j).getTextContent());
+					}
+				}
+				
+				Node employeeAuthorizationNode = employeeNode.getChildNodes().item(employeeNode.getChildNodes().getLength()-2);
+				ArrayList<String> employeeAuthorsationParameters = new ArrayList<String>();
+				for(int k = 0; k < employeeAuthorizationNode.getChildNodes().getLength(); k++) {
+					if(!employeeAuthorizationNode.getChildNodes().item(k).getTextContent().contains("\t") ||
+							!employeeAuthorizationNode.getChildNodes().item(k).getTextContent().contains("\n")) {
+						employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(k).getTextContent());
+					}
+				}
+				try {
+					employees.add(new Employee(
+							employeeParameters.get(0),
+							employeeParameters.get(1),
+							employeeParameters.get(2),
+							employeeParameters.get(3),
+							employeeParameters.get(4),
+							new EmployeeAuthorization(
+									employeeAuthorsationParameters.get(0),
+									format.parse(employeeAuthorsationParameters.get(1)),
+									format.parse(employeeAuthorsationParameters.get(1))
+									),
+							employeeNode.getAttributes().getNamedItem("title").getTextContent()
+							));
+				} catch(ParseException pe) {
+					pe.printStackTrace();
+				}
+			}
+		}
+		
+		if(node.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
+			return new LiftingRig(parametersAndValues, dueDate, employees);
+		} else {
+			return new PressureRig(parametersAndValues, dueDate, employees);
+		}
+	}
+	
+	public static Employee buildEmployeeFromXml(Node node) {
+		ArrayList<String> employeeParameters = new ArrayList<String>();
+		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		
+		for(int i = 0; i < node.getChildNodes().getLength()-2; i++) {
+			if(!node.getChildNodes().item(i).getTextContent().contains("\t") ||
+					!node.getChildNodes().item(i).getTextContent().contains("\n")) {
+				employeeParameters.add(node.getChildNodes().item(i).getTextContent());
+			}
+		}
+		
+		Node employeeAuthorizationNode = node.getChildNodes().item(node.getChildNodes().getLength()-2);
+		ArrayList<String> employeeAuthorsationParameters = new ArrayList<String>();
+		for(int j = 0; j < employeeAuthorizationNode.getChildNodes().getLength(); j++) {
+			if(!employeeAuthorizationNode.getChildNodes().item(j).getTextContent().contains("\t") ||
+					!employeeAuthorizationNode.getChildNodes().item(j).getTextContent().contains("\n")) {
+				employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(j).getTextContent());
+			}
+		}
+		try {
+			return new Employee(
+					employeeParameters.get(0),
+					employeeParameters.get(1),
+					employeeParameters.get(2),
+					employeeParameters.get(3),
+					employeeParameters.get(4),
+					new EmployeeAuthorization(
+							employeeAuthorsationParameters.get(0),
+							format.parse(employeeAuthorsationParameters.get(1)),
+							format.parse(employeeAuthorsationParameters.get(1))
+							),
+					node.getAttributes().getNamedItem("title").getTextContent()
+					);
+		} catch(ParseException pe) {
+			pe.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Firm> buildFirmListFormXml(NodeList nodeList) {
+		List<Firm> firms = new ArrayList<Firm>();
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			firms.add(buildFirmFromXml(nodeList.item(i)));
+		}
+		return firms;
+	}
+	
+	public static List<Rig> buildRigListFromXml(NodeList nodeList) {
+		List<Rig> rigs = new ArrayList<Rig>();
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			rigs.add(buildRigFromXml(nodeList.item(i)));
+		}
+		return rigs;
+	}
+	
+	public List<Employee> buildEmployeeListFromXml(NodeList nodeList) {
+		List<Employee> employees = new ArrayList<Employee>();
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			employees.add(buildEmployeeFromXml(nodeList.item(i)));
+		}
+		return employees;
 	}
 }
