@@ -18,6 +18,7 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.database.services.EntityBuilder;
+import com.rsvti.ui.Forms;
 
 public class Main {
 
@@ -41,7 +42,7 @@ public class Main {
 			
 			DBServices.saveEntry(new Firm("ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
-					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1)));
+					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1)), false);
 			
 			date.set(2005, 12, 26);
 			Rig liftingRig2 = new LiftingRig(date.getTime(), Arrays.asList(employee3));
@@ -55,11 +56,11 @@ public class Main {
 			
 			DBServices.saveEntry(new Firm("CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig)));
+					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig)), false);
 			
-			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 2]", XPathConstants.NODE));
-			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[@id = 1]", XPathConstants.NODE));
-			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[nume = \"FirstName1\"]", XPathConstants.NODE));
+//			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 2]", XPathConstants.NODE));
+//			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[@id = 1]", XPathConstants.NODE));
+//			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[nume = \"FirstName1\"]", XPathConstants.NODE));
 			
 //			DBServices.deleteEntry(new Firm("CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 //					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
@@ -71,18 +72,8 @@ public class Main {
 //						new Firm("XYZ123", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 //						"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 //						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
-			
-			//Forms.entryForm();
-			
-//			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima"));
-//			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima"));
-//			DBServices.saveEntry(new RigParameter("de ridicat", "ceva"));
-//			DBServices.saveEntry(new RigParameter("de ridicat", "altceva"));
-//			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim"));
-//			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima"));
-			
-			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
-			DBServices.deleteEntry(new RigParameter("sub presiune", "volum_maxim"));
+//			
+//			Forms.entryForm();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -38,6 +38,9 @@ import com.rsvti.main.Constants;
 public class DBServices {
 	
 	private static Document document;
+	private static boolean indexesAreInitialized = false;
+	private static long numberOfFirms;
+	private static long indexOfUpdatedFirm;
 	
 	private static void openFile(String filepath) {
 		try {
@@ -70,8 +73,21 @@ public class DBServices {
 		}
 	}
 	
-	public static void saveEntry(Firm firm) {
+	/**
+	 * Method that sets the number of firms and rigs, depending on whether there is some data in the xml or not.
+	 * If there isn't both indexes are 0. If there is some data in the xml it takes the last index of both firms and rigs to count
+	 * the total number of firms and rigs that have been added at some point to the database. 
+	 */
+	private static void setIndexes() {
+		if(!indexesAreInitialized) {
+			numberOfFirms = getLastFirmIndex();
+			indexesAreInitialized = true;
+		}
+	}
+	
+	public static void saveEntry(Firm firm, boolean update) {
 		openFile(Constants.XML_DB_FILE_NAME);
+		setIndexes();
 		
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 		
@@ -79,7 +95,11 @@ public class DBServices {
 		
 		root.appendChild(document.createTextNode("\t"));
 		Element firma = document.createElement("firma");
-		firma.setAttribute("id", "" + (getLastFirmIndex() + 1));
+		if(update) {
+			firma.setAttribute("id", "" + indexOfUpdatedFirm);
+		} else {
+			firma.setAttribute("id", "" + numberOfFirms++);
+		}
 		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element nr_inreg = document.createElement("numar_inregistrare");
@@ -155,13 +175,9 @@ public class DBServices {
 		firma.appendChild(adminElement);
 		
 		//administrator - end
-		
-		int lastRigIndex = getLastRigIndex();
 		for(Rig rigIndex : firm.getRigs()) {
 			Element rig = document.createElement("instalatie");
 			
-			rig.setAttribute("id", "" + (lastRigIndex + 1));
-			lastRigIndex++;
 			rig.setAttribute("type", rigIndex.getType());
 			
 			Map<String,String> parameters = rigIndex.getParameters();
@@ -255,11 +271,12 @@ public class DBServices {
 	
 	public static void updateEntry(Firm source, Firm replacement) {
 		openFile(Constants.XML_DB_FILE_NAME);
+		setIndexes();
 		List<Firm> firms = EntityBuilder.buildFirmListFormXml((NodeList) DBServices.executeXmlQuery("//firma", XPathConstants.NODESET));
 		for(Firm index : firms) {
 			if(index.equals(source)) {
 				deleteEntry(source);
-				saveEntry(replacement);
+				saveEntry(replacement, true);
 			}
 		}
 	}
@@ -281,8 +298,9 @@ public class DBServices {
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			if(EntityBuilder.buildFirmFromXml(firmNodes.item(i)).equals(firm)) {
-				root.removeChild(firmNodes.item(i).getPreviousSibling().getPreviousSibling());	//deletes the CR and LF that remain after node deletion
-				root.removeChild(firmNodes.item(i));
+				indexOfUpdatedFirm = Long.parseLong(firmNodes.item(i).getAttributes().getNamedItem("id").getTextContent());
+				root.removeChild(firmNodes.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
+				root.removeChild(firmNodes.item(i - 1));
 			}
 		}
 		
