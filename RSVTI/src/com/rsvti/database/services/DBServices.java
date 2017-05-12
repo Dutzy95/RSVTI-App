@@ -49,12 +49,12 @@ public class DBServices {
 			if(file.createNewFile()) {
 				PrintStream ps = new PrintStream(file);
 				if(filepath.contains("RigParameters.xml")) {
-					ps.println("<?xml version=\"1.0\"?>\n<parameters>"
-							+ "\n\t<instalatie type=\"de ridicat\"></instalatie>"
-							+ "\n\t<instalatie type=\"sub presiune\"></instalatie>"
-							+ "\n</parameters>");
+					ps.println("<?xml version=\"1.0\"?><parameters>"
+							+ "<instalatie type=\"de ridicat\"></instalatie>"
+							+ "<instalatie type=\"sub presiune\"></instalatie>"
+							+ "</parameters>");
 				} else {
-					ps.println("<?xml version=\"1.0\"?>\n<app>\n</app>");
+					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
 				ps.close();
 			}
@@ -93,84 +93,68 @@ public class DBServices {
 		
 		Element root = document.getDocumentElement();
 		
-		root.appendChild(document.createTextNode("\t"));
 		Element firma = document.createElement("firma");
 		if(update) {
 			firma.setAttribute("id", "" + indexOfUpdatedFirm);
 		} else {
 			firma.setAttribute("id", "" + numberOfFirms++);
 		}
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element nr_inreg = document.createElement("numar_inregistrare");
 		nr_inreg.appendChild(document.createTextNode(firm.getRegistrationNumber()));
 		firma.appendChild(nr_inreg);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element cod_fiscal = document.createElement("cod_fiscal");
 		cod_fiscal.appendChild(document.createTextNode(firm.getFiscalCode()));
 		firma.appendChild(cod_fiscal);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element address = document.createElement("adresa");
 		address.appendChild(document.createTextNode(firm.getAddress()));
 		firma.appendChild(address);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element phoneNumber = document.createElement("numar_telefon");
 		phoneNumber.appendChild(document.createTextNode(firm.getPhoneNumber()));
 		firma.appendChild(phoneNumber);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element faxNumber = document.createElement("numar_fax");
 		faxNumber.appendChild(document.createTextNode(firm.getFaxNumber()));
 		firma.appendChild(faxNumber);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element email = document.createElement("email");
 		email.appendChild(document.createTextNode(firm.getEmail()));
 		firma.appendChild(email);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element bankName = document.createElement("nume_banca");
 		bankName.appendChild(document.createTextNode(firm.getBankName()));
 		firma.appendChild(bankName);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		Element ibanCode = document.createElement("cod_IBAN");
 		ibanCode.appendChild(document.createTextNode(firm.getIbanCode()));
 		firma.appendChild(ibanCode);
-		firma.appendChild(document.createTextNode("\n\t\t"));
 		
 		//administrator
 		Administrator administrator = firm.getAdministrator();
 		Element adminElement = document.createElement("administrator");
-		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element adminFirstName = document.createElement("nume");
 		adminFirstName.appendChild(document.createTextNode(administrator.getFirstName()));
 		adminElement.appendChild(adminFirstName);
-		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element adminLastName = document.createElement("prenume");
 		adminLastName.appendChild(document.createTextNode(administrator.getLastName()));
 		adminElement.appendChild(adminLastName);
-		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element idCode = document.createElement("serie_buletin");
 		idCode.appendChild(document.createTextNode(administrator.getIdCode()));
 		adminElement.appendChild(idCode);
-		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element idNumber = document.createElement("numar_buletin");
 		idNumber.appendChild(document.createTextNode(administrator.getIdNumber()));
 		adminElement.appendChild(idNumber);
-		adminElement.appendChild(document.createTextNode("\n\t\t\t"));
 		
 		Element adminPhoneNumber = document.createElement("numar_telefon_admin");
 		adminPhoneNumber.appendChild(document.createTextNode(administrator.getPhoneNumber()));
 		adminElement.appendChild(adminPhoneNumber);
-		adminElement.appendChild(document.createTextNode("\n\t\t"));
 		
 		firma.appendChild(adminElement);
 		
@@ -184,79 +168,61 @@ public class DBServices {
 			
 			Element dueDate = document.createElement("data_scadenta");
 			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
-			rig.appendChild(document.createTextNode("\n\t\t\t"));
 			rig.appendChild(dueDate);
 			
 			for(Map.Entry<String,String> rigParameterIndex : parameters.entrySet()) {
 				Element node = document.createElement(rigParameterIndex.getKey());
 				node.appendChild(document.createTextNode(rigParameterIndex.getValue()));
-				rig.appendChild(document.createTextNode("\n\t\t\t"));
 				rig.appendChild(node);
 			}
-			rig.appendChild(document.createTextNode("\n\t\t\t"));
 			for(Employee employeeIndex : rigIndex.getEmployees()) {
 				
 				Element employee = document.createElement("angajat");
 				employee.setAttribute("title", employeeIndex.getTitle());
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				Element employeeFirstName = document.createElement("nume");
 				employeeFirstName.appendChild(document.createTextNode(employeeIndex.getFirstName()));
 				employee.appendChild(employeeFirstName);
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				Element employeeLastName = document.createElement("prenume");
 				employeeLastName.appendChild(document.createTextNode(employeeIndex.getLastName()));
 				employee.appendChild(employeeLastName);
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				Element employeeIdCode = document.createElement("serie_buletin");
 				employeeIdCode.appendChild(document.createTextNode(employeeIndex.getIdCode()));
 				employee.appendChild(employeeIdCode);
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				Element employeeIdNumber = document.createElement("numar_buletin");
 				employeeIdNumber.appendChild(document.createTextNode(employeeIndex.getIdNumber()));
 				employee.appendChild(employeeIdNumber);
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				Element personalIdentificationNumber = document.createElement("CNP");
 				personalIdentificationNumber.appendChild(document.createTextNode(employeeIndex.getPersonalIdentificationNumber()));
 				employee.appendChild(personalIdentificationNumber);
-				employee.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				EmployeeAuthorization authorization = employeeIndex.getAuthorization();
 				Element authorizationElement = document.createElement("autorizatie");
-				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
 				
 				Element authorizationNumber = document.createElement("numar_autorizatie");
 				authorizationNumber.appendChild(document.createTextNode(authorization.getAuthorizationNumber()));
 				authorizationElement.appendChild(authorizationNumber);
-				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
 				
 				Element obtainingDate = document.createElement("data_obtinerii");
 				obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
 				authorizationElement.appendChild(obtainingDate);
-				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t\t"));
 				
 				Element employeeDueDate = document.createElement("data_obtinerii");
 				employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
 				authorizationElement.appendChild(employeeDueDate);
-				authorizationElement.appendChild(document.createTextNode("\n\t\t\t\t"));
 				
 				employee.appendChild(authorizationElement);
-				employee.appendChild(document.createTextNode("\n\t\t\t"));
 				
 				rig.appendChild(employee);
-				rig.appendChild(document.createTextNode("\n\t\t\t"));
 			}
-			firma.appendChild(document.createTextNode("\n\t\t"));
 			firma.appendChild(rig);
 		}
 		
-		firma.appendChild(document.createTextNode("\n\t"));
 		root.appendChild(firma);
-		root.appendChild(document.createTextNode("\n"));
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -299,8 +265,7 @@ public class DBServices {
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			if(EntityBuilder.buildFirmFromXml(firmNodes.item(i)).equals(firm)) {
 				indexOfUpdatedFirm = Long.parseLong(firmNodes.item(i).getAttributes().getNamedItem("id").getTextContent());
-				root.removeChild(firmNodes.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
-				root.removeChild(firmNodes.item(i - 1));
+				root.removeChild(firmNodes.item(i));
 			}
 		}
 		
@@ -366,10 +331,8 @@ public class DBServices {
 		Element parameterElement = document.createElement(parameter.getName());
 		
 		if(parameter.getType().equals("de ridicat")) {
-			liftingRigNode.appendChild(document.createTextNode("\n\t\t"));
 			liftingRigNode.appendChild(parameterElement);
 		} else {
-			pressureRigNode.appendChild(document.createTextNode("\n\t\t"));
 			pressureRigNode.appendChild(parameterElement);
 		}
 		
@@ -396,16 +359,11 @@ public class DBServices {
 		}
 		
 		for(int i = 0; i < parameters.getLength(); i++) {
-			if(!parameters.item(i).getTextContent().contains("\t") ||
-					!parameters.item(i).getTextContent().contains("\n")) {
-				if(parameters.item(i).getNodeName().equals(parameter.getName())) {
-					if(parameter.getType().equals("de ridicat")) {
-						liftingRigNode.removeChild(parameters.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
-						liftingRigNode.removeChild(parameters.item(i-1));	//because it deleted previous sibling the item to delete is now shifted one position to the left
-					} else {
-						pressureRigNode.removeChild(parameters.item(i).getPreviousSibling());	//deletes the CR and LF that remain after node deletion
-						pressureRigNode.removeChild(parameters.item(i-1));	//because it deleted previous sibling the item to delete is now shifted one position to the left
-					}
+			if(parameters.item(i).getNodeName().equals(parameter.getName())) {
+				if(parameter.getType().equals("de ridicat")) {
+					liftingRigNode.removeChild(parameters.item(i));
+				} else {
+					pressureRigNode.removeChild(parameters.item(i));
 				}
 			}
 		}

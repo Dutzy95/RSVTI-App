@@ -23,65 +23,48 @@ public class EntityBuilder {
 
 	public static Firm buildFirmFromXml(Node node) {
 		ArrayList<String> firmParameterValues = new ArrayList<String>();
-		for(int i = 0; i <= 15; i++) {
-			//To see why for loop is up to 15, de-comment next line and set for loop until node.getChildNodes().getLength(). It memorizes only the fields up to the administrator, which is on line 19. 
-			//System.out.println(i + ": " + node.getChildNodes().item(i).getTextContent().replaceAll("\t", "\\\\t").replaceAll("\n", "\\\\n"));
-			if(!node.getChildNodes().item(i).getTextContent().contains("\t") ||
-					!node.getChildNodes().item(i).getTextContent().contains("\n")) {
-				firmParameterValues.add(node.getChildNodes().item(i).getTextContent());
-			}
+		for(int i = 0; i < 8; i++) {
+			firmParameterValues.add(node.getChildNodes().item(i).getTextContent());
 		}
 		
-		Node adminNode = node.getChildNodes().item(17);
+		Node adminNode = node.getChildNodes().item(8);
 		ArrayList<String> adminParameterValues = new ArrayList<String>();
 		
 		for(int j = 0; j < adminNode.getChildNodes().getLength(); j++) {
-			if(!node.getChildNodes().item(j).getTextContent().contains("\t") ||
-					!node.getChildNodes().item(j).getTextContent().contains("\n")) {
-				adminParameterValues.add(adminNode.getChildNodes().item(j).getTextContent());
-			}
+			adminParameterValues.add(adminNode.getChildNodes().item(j).getTextContent());
 		}
 		
 		List<Rig> rigs = new ArrayList<Rig>();
 		
-		for(int k = 19; k < node.getChildNodes().getLength(); k+=2) {
+		for(int k = 9; k < node.getChildNodes().getLength(); k++) {
 			Node rigNode = node.getChildNodes().item(k);
 			HashMap<String,String> parametersAndValues = new HashMap<String,String>();
 			
 			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 			Date dueDate = new Date();
 			try {
-				dueDate = format.parse(rigNode.getChildNodes().item(1).getTextContent());
+				dueDate = format.parse(rigNode.getChildNodes().item(0).getTextContent());
 			} catch(ParseException pe) {
 				pe.printStackTrace();
 			}
 			
 			ArrayList<Employee> employees = new ArrayList<Employee>();
 					
-			for(int l = 3; l < rigNode.getChildNodes().getLength(); l++) {
+			for(int l = 1; l < rigNode.getChildNodes().getLength(); l++) {
 				
 				if(rigNode.getChildNodes().item(l).getChildNodes().getLength() <= 1) {
-					if(!rigNode.getChildNodes().item(l).getTextContent().contains("\t") ||
-							!rigNode.getChildNodes().item(l).getTextContent().contains("\n")) {
-							parametersAndValues.put(rigNode.getChildNodes().item(l).getNodeName(), rigNode.getChildNodes().item(l).getTextContent());
-					}
+						parametersAndValues.put(rigNode.getChildNodes().item(l).getNodeName(), rigNode.getChildNodes().item(l).getTextContent());
 				} else {
 					Node employeeNode = rigNode.getChildNodes().item(l);
 					ArrayList<String> employeeParameters = new ArrayList<String>();
-					for(int m = 0; m < employeeNode.getChildNodes().getLength()-2; m++) {
-						if(!employeeNode.getChildNodes().item(m).getTextContent().contains("\t") ||
-								!employeeNode.getChildNodes().item(m).getTextContent().contains("\n")) {
-							employeeParameters.add(employeeNode.getChildNodes().item(m).getTextContent());
-						}
+					for(int m = 0; m < employeeNode.getChildNodes().getLength()-1; m++) {
+						employeeParameters.add(employeeNode.getChildNodes().item(m).getTextContent());
 					}
 					
-					Node employeeAuthorizationNode = employeeNode.getChildNodes().item(employeeNode.getChildNodes().getLength()-2);
+					Node employeeAuthorizationNode = employeeNode.getChildNodes().item(employeeNode.getChildNodes().getLength()-1);
 					ArrayList<String> employeeAuthorsationParameters = new ArrayList<String>();
 					for(int n = 0; n < employeeAuthorizationNode.getChildNodes().getLength(); n++) {
-						if(!employeeAuthorizationNode.getChildNodes().item(n).getTextContent().contains("\t") ||
-								!employeeAuthorizationNode.getChildNodes().item(n).getTextContent().contains("\n")) {
-							employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(n).getTextContent());
-						}
+						employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(n).getTextContent());
 					}
 					try {
 						employees.add(new Employee(
@@ -136,37 +119,28 @@ public class EntityBuilder {
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 		Date dueDate = new Date();
 		try {
-			dueDate = format.parse(node.getChildNodes().item(1).getTextContent());
+			dueDate = format.parse(node.getChildNodes().item(0).getTextContent());
 		} catch(ParseException pe) {
 			pe.printStackTrace();
 		}
 		
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 				
-		for(int i = 3; i < node.getChildNodes().getLength(); i++) {
+		for(int i = 1; i < node.getChildNodes().getLength(); i++) {
 			
 			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
-				if(!node.getChildNodes().item(i).getTextContent().contains("\t") ||
-						!node.getChildNodes().item(i).getTextContent().contains("\n")) {
-						parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent());
-				}
+					parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent());
 			} else {
 				Node employeeNode = node.getChildNodes().item(i);
 				ArrayList<String> employeeParameters = new ArrayList<String>();
-				for(int j = 0; j < employeeNode.getChildNodes().getLength()-2; j++) {
-					if(!employeeNode.getChildNodes().item(j).getTextContent().contains("\t") ||
-							!employeeNode.getChildNodes().item(j).getTextContent().contains("\n")) {
-						employeeParameters.add(employeeNode.getChildNodes().item(j).getTextContent());
-					}
+				for(int j = 0; j < employeeNode.getChildNodes().getLength()-1; j++) {
+					employeeParameters.add(employeeNode.getChildNodes().item(j).getTextContent());
 				}
 				
-				Node employeeAuthorizationNode = employeeNode.getChildNodes().item(employeeNode.getChildNodes().getLength()-2);
+				Node employeeAuthorizationNode = employeeNode.getChildNodes().item(employeeNode.getChildNodes().getLength()-1);
 				ArrayList<String> employeeAuthorsationParameters = new ArrayList<String>();
 				for(int k = 0; k < employeeAuthorizationNode.getChildNodes().getLength(); k++) {
-					if(!employeeAuthorizationNode.getChildNodes().item(k).getTextContent().contains("\t") ||
-							!employeeAuthorizationNode.getChildNodes().item(k).getTextContent().contains("\n")) {
-						employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(k).getTextContent());
-					}
+					employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(k).getTextContent());
 				}
 				try {
 					employees.add(new Employee(
@@ -199,20 +173,14 @@ public class EntityBuilder {
 		ArrayList<String> employeeParameters = new ArrayList<String>();
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 		
-		for(int i = 0; i < node.getChildNodes().getLength()-2; i++) {
-			if(!node.getChildNodes().item(i).getTextContent().contains("\t") ||
-					!node.getChildNodes().item(i).getTextContent().contains("\n")) {
-				employeeParameters.add(node.getChildNodes().item(i).getTextContent());
-			}
+		for(int i = 0; i < node.getChildNodes().getLength()-1; i++) {
+			employeeParameters.add(node.getChildNodes().item(i).getTextContent());
 		}
 		
-		Node employeeAuthorizationNode = node.getChildNodes().item(node.getChildNodes().getLength()-2);
+		Node employeeAuthorizationNode = node.getChildNodes().item(node.getChildNodes().getLength()-1);
 		ArrayList<String> employeeAuthorsationParameters = new ArrayList<String>();
 		for(int j = 0; j < employeeAuthorizationNode.getChildNodes().getLength(); j++) {
-			if(!employeeAuthorizationNode.getChildNodes().item(j).getTextContent().contains("\t") ||
-					!employeeAuthorizationNode.getChildNodes().item(j).getTextContent().contains("\n")) {
-				employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(j).getTextContent());
-			}
+			employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(j).getTextContent());
 		}
 		try {
 			return new Employee(

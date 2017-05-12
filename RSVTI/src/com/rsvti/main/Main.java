@@ -1,5 +1,6 @@
 package com.rsvti.main;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,6 +24,8 @@ import com.rsvti.ui.Forms;
 public class Main {
 
 	public static void main(String[] args) {
+		new File(Constants.XML_DB_FILE_NAME).delete();
+		new File(Constants.XML_RIG_PARAMETERS).delete();
 		try {
 			Calendar date = Calendar.getInstance();
 			date.set(2000, 4, 12);
@@ -58,9 +61,9 @@ public class Main {
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig)), false);
 			
-//			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 2]", XPathConstants.NODE));
-//			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[@id = 1]", XPathConstants.NODE));
-//			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[nume = \"FirstName1\"]", XPathConstants.NODE));
+//			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 0]", XPathConstants.NODE));
+//			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[parent::firma[@id = 0]]", XPathConstants.NODE));
+//			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[@title = \"macaragist\" and parent::instalatie[parent::firma[@id = 0]]]", XPathConstants.NODE));
 			
 //			DBServices.deleteEntry(new Firm("CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 //					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
@@ -74,6 +77,9 @@ public class Main {
 //						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
 //			
 //			Forms.entryForm();
+			DBServices.saveEntry(new RigParameter("de ridicat", "ceva"));
+			DBServices.saveEntry(new RigParameter("sub presiune", "altceva"));
+			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
