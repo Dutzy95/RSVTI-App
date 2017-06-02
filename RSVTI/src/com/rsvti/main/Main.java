@@ -19,7 +19,6 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.database.services.EntityBuilder;
-import com.rsvti.ui.Forms;
 
 public class Main {
 
@@ -76,7 +75,6 @@ public class Main {
 //						"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 //						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
 //			
-//			Forms.entryForm();
 			DBServices.saveEntry(new RigParameter("de ridicat", "ceva"));
 			DBServices.saveEntry(new RigParameter("sub presiune", "altceva"));
 			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
