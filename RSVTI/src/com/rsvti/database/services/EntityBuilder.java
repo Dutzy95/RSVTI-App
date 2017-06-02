@@ -23,11 +23,11 @@ public class EntityBuilder {
 
 	public static Firm buildFirmFromXml(Node node) {
 		ArrayList<String> firmParameterValues = new ArrayList<String>();
-		for(int i = 0; i < 8; i++) {
+		for(int i = 0; i < 9; i++) {
 			firmParameterValues.add(node.getChildNodes().item(i).getTextContent());
 		}
 		
-		Node adminNode = node.getChildNodes().item(8);
+		Node adminNode = node.getChildNodes().item(9);
 		ArrayList<String> adminParameterValues = new ArrayList<String>();
 		
 		for(int j = 0; j < adminNode.getChildNodes().getLength(); j++) {
@@ -36,14 +36,16 @@ public class EntityBuilder {
 		
 		List<Rig> rigs = new ArrayList<Rig>();
 		
-		for(int k = 9; k < node.getChildNodes().getLength(); k++) {
+		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
 			Node rigNode = node.getChildNodes().item(k);
 			HashMap<String,String> parametersAndValues = new HashMap<String,String>();
+			
+			String rigName = rigNode.getChildNodes().item(0).getTextContent();
 			
 			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 			Date dueDate = new Date();
 			try {
-				dueDate = format.parse(rigNode.getChildNodes().item(0).getTextContent());
+				dueDate = format.parse(rigNode.getChildNodes().item(1).getTextContent());
 			} catch(ParseException pe) {
 				pe.printStackTrace();
 			}
@@ -87,9 +89,9 @@ public class EntityBuilder {
 			}
 			
 			if(rigNode.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-				rigs.add(new LiftingRig(parametersAndValues, dueDate, employees));
+				rigs.add(new LiftingRig(rigName, parametersAndValues, dueDate, employees));
 			} else {
-				rigs.add(new PressureRig(parametersAndValues, dueDate, employees));
+				rigs.add(new PressureRig(rigName, parametersAndValues, dueDate, employees));
 			}
 		}
 		
@@ -102,6 +104,7 @@ public class EntityBuilder {
 				firmParameterValues.get(5),
 				firmParameterValues.get(6),
 				firmParameterValues.get(7),
+				firmParameterValues.get(8),
 				new Administrator(
 						adminParameterValues.get(0),
 						adminParameterValues.get(1),
@@ -116,10 +119,12 @@ public class EntityBuilder {
 	public static Rig buildRigFromXml(Node node) {
 		HashMap<String,String> parametersAndValues = new HashMap<String,String>();
 		
+		String rigName = node.getChildNodes().item(0).getTextContent();
+		
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 		Date dueDate = new Date();
 		try {
-			dueDate = format.parse(node.getChildNodes().item(0).getTextContent());
+			dueDate = format.parse(node.getChildNodes().item(1).getTextContent());
 		} catch(ParseException pe) {
 			pe.printStackTrace();
 		}
@@ -163,9 +168,9 @@ public class EntityBuilder {
 		}
 		
 		if(node.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-			return new LiftingRig(parametersAndValues, dueDate, employees);
+			return new LiftingRig(rigName, parametersAndValues, dueDate, employees);
 		} else {
-			return new PressureRig(parametersAndValues, dueDate, employees);
+			return new PressureRig(rigName, parametersAndValues, dueDate, employees);
 		}
 	}
 	

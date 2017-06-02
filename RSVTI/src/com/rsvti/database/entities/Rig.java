@@ -14,6 +14,8 @@ public interface Rig {
 	
 	public Date getDueDate();
 	
+	public String getRigName();
+	
 	public void setDueDate(Date dueDate);
 	
 	public void setEmployees(List<Employee> employees);

@@ -99,6 +99,9 @@ public class DBServices {
 		} else {
 			firma.setAttribute("id", "" + numberOfFirms++);
 		}
+		Element nume_firma = document.createElement("nume_firma");
+		nume_firma.appendChild(document.createTextNode(firm.getFirmName()));
+		firma.appendChild(nume_firma);
 		
 		Element nr_inreg = document.createElement("numar_inregistrare");
 		nr_inreg.appendChild(document.createTextNode(firm.getRegistrationNumber()));
@@ -165,6 +168,10 @@ public class DBServices {
 			rig.setAttribute("type", rigIndex.getType());
 			
 			Map<String,String> parameters = rigIndex.getParameters();
+			
+			Element rigName = document.createElement("nume_instalatie");
+			rigName.appendChild(document.createTextNode(rigIndex.getRigName()));
+			rig.appendChild(rigName);
 			
 			Element dueDate = document.createElement("data_scadenta");
 			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
@@ -247,7 +254,6 @@ public class DBServices {
 		}
 	}
 	
-	//TODO:may not be needed
 	public static List<Firm> getAllFirms() {
 		List<Firm> firms = new ArrayList<Firm>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);

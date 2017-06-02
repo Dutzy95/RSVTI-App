@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Firm {
 	
+	private String firmName;
 	private String registrationNumber;
 	private String fiscalCode;
 	private String address;
@@ -15,8 +16,9 @@ public class Firm {
 	private Administrator administrator;
 	private List<Rig> rigs;
 	
-	public Firm(String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
+	public Firm(String firmName, String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
 			String bankName, String ibanCode, Administrator administrator, List<Rig> rigs) {
+		this.setFirmName(firmName);
 		this.registrationNumber = registrationNumber;
 		this.fiscalCode = fiscalCode;
 		this.address = address;
@@ -32,6 +34,7 @@ public class Firm {
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof Firm &&
+				this.getFirmName().equals(((Firm) o).getFirmName()) &&
 				this.getRegistrationNumber().equals(((Firm) o).getRegistrationNumber()) &&
 				this.getFiscalCode().equals(((Firm) o).getFiscalCode()) &&
 				this.getAddress().equals(((Firm) o).getAddress()) &&
@@ -129,5 +132,13 @@ public class Firm {
 	
 	public void removeRig(Rig rig) {
 		rigs.remove(rig);
+	}
+
+	public String getFirmName() {
+		return firmName;
+	}
+
+	public void setFirmName(String firmName) {
+		this.firmName = firmName;
 	}
 }
