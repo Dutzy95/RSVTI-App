@@ -266,6 +266,15 @@ public class DBServices {
 		return firms;
 	}
 	
+	public static List<Rig> getAllRigs() {
+		List<Rig> rigs = new ArrayList<Rig>();
+		NodeList rigNodes = (NodeList) executeXmlQuery("//instalatie", XPathConstants.NODESET);
+		for(int i = 0; i < rigNodes.getLength(); i++) {
+			rigs.add(EntityBuilder.buildRigFromXml(rigNodes.item(i)));
+		}
+		return rigs;
+	}
+	
 	public static void deleteEntry(Firm firm) {
 		openFile(Constants.XML_DB_FILE_NAME);
 		

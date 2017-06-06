@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
+import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Firm;
@@ -18,6 +19,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -28,6 +32,7 @@ public class JavaFxMain extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private ObservableList<Firm> firmData = FXCollections.observableArrayList();
+	private TabPane tabPane;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -44,11 +49,17 @@ public class JavaFxMain extends Application {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(JavaFxMain.class.getResource("view/RootLayout.fxml"));
+            
             rootLayout = (BorderPane) loader.load();
+            tabPane = (TabPane) rootLayout.getCenter();
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
+            
+            MenuController menuController = loader.getController();
+            menuController.setJavaFxMain(this);
+            
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +74,10 @@ public class JavaFxMain extends Application {
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
-            rootLayout.setCenter(personOverview);
+            Tab tab = new Tab("Firme");
+            tab.setContent(personOverview);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
             
             FirmOverviewController controller = loader.getController();
             controller.setJavaFxMain(this);
@@ -72,28 +86,25 @@ public class JavaFxMain extends Application {
         }
     }
 	
-	public void showRigOverview(List<Rig> rigList) {
+	public void showRigOverview(String firmName, List<Rig> rigList) {
 	    try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/RigOverview.fxml"));
-	        AnchorPane page = (AnchorPane) loader.load();
-
-	        // Create the dialog Stage.
-	        Stage dialogStage = new Stage();
-	        dialogStage.setTitle("Utilaje");
-	        dialogStage.initModality(Modality.WINDOW_MODAL);
-	        dialogStage.initOwner(primaryStage);
-	        Scene scene = new Scene(page);
-	        dialogStage.setScene(scene);
+	        AnchorPane rigOverview = (AnchorPane) loader.load();
 
 	        // Set the person into the controller.
 	        RigOverviewController controller = loader.getController();
-	        controller.setDialogStage(dialogStage);
 	        controller.setRigList(rigList);
 	        controller.setJavaFxMain(this);
-	        // Show the dialog and wait until the user closes it
-	        dialogStage.showAndWait();
+	        
+	        Tab tab = new Tab(firmName);
+            tab.setContent(rigOverview);
+            tab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
 
 	    } catch (IOException e) {
 	        e.printStackTrace();
@@ -144,6 +155,10 @@ public class JavaFxMain extends Application {
 	public Stage getPrimaryStage() {
         return primaryStage;
     }
+	
+	public TabPane getTabPane() {
+		return tabPane;
+	}
 
 	public static void main(String[] args) {
 		Data.populate();

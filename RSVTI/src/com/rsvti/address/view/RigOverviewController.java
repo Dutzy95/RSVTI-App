@@ -72,10 +72,6 @@ public class RigOverviewController {
 		}
 	}
 	
-	public void setDialogStage(Stage stage) {
-		this.stage = stage;
-	}
-	
 	public void setRigList(List<Rig> rigList) {
 		this.rigList = rigList;
 		rigTable.setItems(FXCollections.observableArrayList(rigList));

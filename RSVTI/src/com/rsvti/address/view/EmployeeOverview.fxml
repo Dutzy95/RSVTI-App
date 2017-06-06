@@ -11,19 +11,19 @@
         <columns>
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="Nume" />
           <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Prenume" />
-            <TableColumn prefWidth="75.0" text="Carte de identitate">
+            <TableColumn prefWidth="531.0" text="Carte de identitate">
                <columns>
                   <TableColumn fx:id="idCodeColumn" prefWidth="85.0" text="Serie" />
                   <TableColumn fx:id="idNumberColumn" prefWidth="181.0" text="Număr" />
                   <TableColumn fx:id="personalIdentificationNumberColumn" prefWidth="75.0" text="CNP" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Titlu" />
-            <TableColumn fx:id="authorizationColumn" prefWidth="75.0" text="Autorizatie">
+            <TableColumn fx:id="titleColumn" prefWidth="343.0" text="Titlu" />
+            <TableColumn fx:id="authorizationColumn" prefWidth="375.0" text="Autorizatie">
             	<columns>
-		            <TableColumn fx:id="authorizationNumberColumn" prefWidth="75.0" text="Numărul autorizației" />
-		            <TableColumn fx:id="authorizationObtainingDateColumn" prefWidth="75.0" text="Data obținere" />
-		            <TableColumn fx:id="authorizationDueDateColumn" prefWidth="75.0" text="Data scadentă" />
+		            <TableColumn fx:id="authorizationNumberColumn" prefWidth="116.0" text="Nr autorizație" />
+		            <TableColumn fx:id="authorizationObtainingDateColumn" minWidth="0.0" prefWidth="144.0" text="Data obținerii" />
+		            <TableColumn fx:id="authorizationDueDateColumn" prefWidth="115.0" text="Data scadentă" />
 	        	</columns>
 	        </TableColumn>
         </columns>

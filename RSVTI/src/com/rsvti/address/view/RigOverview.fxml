@@ -33,13 +33,10 @@
                   </Label>
                   <TableView fx:id="rigParameterTable" layoutX="42.0" layoutY="236.0" prefHeight="312.0" prefWidth="580.0">
                     <columns>
-                      <TableColumn fx:id="parameterNameColumn" prefWidth="75.0" text="Parametru" />
-                      <TableColumn fx:id="parameterValueColumn" prefWidth="75.0" text="Valoare" />
-                        <TableColumn fx:id="parameterMeasuringUnit" prefWidth="75.0" text="Unitate de măsură" />
+                      <TableColumn fx:id="parameterNameColumn" prefWidth="358.0" text="Parametru" />
+                      <TableColumn fx:id="parameterValueColumn" minWidth="9.0" prefWidth="78.0" text="Valoare" />
+                        <TableColumn fx:id="parameterMeasuringUnit" prefWidth="143.0" text="Unitate de măsură" />
                     </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
                   </TableView>
                   <Button layoutX="476.0" layoutY="618.0" mnemonicParsing="false" onAction="#handleOpenEmployeeOverview" text="Personal deservent" />
                </children></AnchorPane>

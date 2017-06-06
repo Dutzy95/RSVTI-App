@@ -109,13 +109,7 @@ public class FirmOverviewController {
 			firmTable.getItems().remove(selectedIndex);
 	    } else {
 	        // Nothing selected.
-	        Alert alert = new Alert(AlertType.WARNING);
-	        alert.initOwner(javaFxMain.getPrimaryStage());
-	        alert.setTitle("Nu exista selectie");
-	        alert.setHeaderText("Nu ati selectat o firma");
-	        alert.setContentText("Selectati o firma din tabel.");
-
-	        alert.showAndWait();
+	        firmNotSelectedAlert();
 	    }
 	}
 	
@@ -123,12 +117,25 @@ public class FirmOverviewController {
 	private void handleOpenRigOverview() {
 		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 		if(selectedIndex >= 0) {
-			javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getRigs());
+			javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
+		} else {
+			firmNotSelectedAlert();
 		}
+			
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
 		firmTable.setItems(javaFxMain.getFirmData());
+	}
+	
+	private void firmNotSelectedAlert() {
+		Alert alert = new Alert(AlertType.WARNING);
+        alert.initOwner(javaFxMain.getPrimaryStage());
+        alert.setTitle("Nu exista selectie");
+        alert.setHeaderText("Nu ati selectat o firma");
+        alert.setContentText("Selectati o firma din tabel.");
+
+        alert.showAndWait();
 	}
 }
