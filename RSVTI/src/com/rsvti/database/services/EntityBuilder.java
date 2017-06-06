@@ -15,6 +15,7 @@ import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LiftingRig;
+import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.PressureRig;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.main.Constants;
@@ -38,7 +39,7 @@ public class EntityBuilder {
 		
 		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
 			Node rigNode = node.getChildNodes().item(k);
-			HashMap<String,String> parametersAndValues = new HashMap<String,String>();
+			HashMap<String,ParameterDetails> parametersAndValues = new HashMap<String,ParameterDetails>();
 			
 			String rigName = rigNode.getChildNodes().item(0).getTextContent();
 			
@@ -52,10 +53,10 @@ public class EntityBuilder {
 			
 			ArrayList<Employee> employees = new ArrayList<Employee>();
 					
-			for(int l = 1; l < rigNode.getChildNodes().getLength(); l++) {
+			for(int l = 2; l < rigNode.getChildNodes().getLength(); l++) {
 				
 				if(rigNode.getChildNodes().item(l).getChildNodes().getLength() <= 1) {
-						parametersAndValues.put(rigNode.getChildNodes().item(l).getNodeName(), rigNode.getChildNodes().item(l).getTextContent());
+						parametersAndValues.put(rigNode.getChildNodes().item(l).getNodeName(), new ParameterDetails(rigNode.getChildNodes().item(l).getTextContent(), rigNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 				} else {
 					Node employeeNode = rigNode.getChildNodes().item(l);
 					ArrayList<String> employeeParameters = new ArrayList<String>();
@@ -117,7 +118,7 @@ public class EntityBuilder {
 	}
 	
 	public static Rig buildRigFromXml(Node node) {
-		HashMap<String,String> parametersAndValues = new HashMap<String,String>();
+		HashMap<String,ParameterDetails> parametersAndValues = new HashMap<String,ParameterDetails>();
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
 		
@@ -131,10 +132,10 @@ public class EntityBuilder {
 		
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 				
-		for(int i = 1; i < node.getChildNodes().getLength(); i++) {
+		for(int i = 2; i < node.getChildNodes().getLength(); i++) {
 			
 			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
-					parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent());
+					parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), new ParameterDetails(node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 			} else {
 				Node employeeNode = node.getChildNodes().item(i);
 				ArrayList<String> employeeParameters = new ArrayList<String>();

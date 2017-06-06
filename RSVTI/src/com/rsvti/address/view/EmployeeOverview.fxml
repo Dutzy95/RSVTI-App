@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.EmployeeOverviewController">
+   <children>
+      <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="Nume" />
+          <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Prenume" />
+            <TableColumn prefWidth="75.0" text="Carte de identitate">
+               <columns>
+                  <TableColumn fx:id="idCodeColumn" prefWidth="85.0" text="Serie" />
+                  <TableColumn fx:id="idNumberColumn" prefWidth="181.0" text="Număr" />
+                  <TableColumn fx:id="personalIdentificationNumberColumn" prefWidth="75.0" text="CNP" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Titlu" />
+            <TableColumn fx:id="authorizationColumn" prefWidth="75.0" text="Autorizatie">
+            	<columns>
+		            <TableColumn fx:id="authorizationNumberColumn" prefWidth="75.0" text="Numărul autorizației" />
+		            <TableColumn fx:id="authorizationObtainingDateColumn" prefWidth="75.0" text="Data obținere" />
+		            <TableColumn fx:id="authorizationDueDateColumn" prefWidth="75.0" text="Data scadentă" />
+	        	</columns>
+	        </TableColumn>
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>

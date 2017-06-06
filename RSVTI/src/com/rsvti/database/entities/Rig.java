@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface Rig {
 	
-	public void addParameter(String key, String value);
+	public void addParameter(String key, ParameterDetails details);
 	
-	public HashMap<String,String> getParameters();
+	public HashMap<String,ParameterDetails> getParameters();
 	
 	public String getType();
 	

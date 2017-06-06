@@ -7,18 +7,18 @@ import java.util.List;
 public class PressureRig implements Rig {
 	
 	private String rigName;
-	private HashMap<String,String> parameters;
+	private HashMap<String,ParameterDetails> parameters;
 	private Date dueDate;
 	private List<Employee> employees;
 	
 	public PressureRig(String rigName, Date dueDate, List<Employee> employees) {
 		this.setRigName(rigName);
-		parameters = new HashMap<String,String>();
+		parameters = new HashMap<String,ParameterDetails>();
 		this.dueDate = dueDate;
 		this.setEmployees(employees);
 	}
 	
-	public PressureRig(String rigName, HashMap<String,String> parameters, Date dueDate, List<Employee> employees) {
+	public PressureRig(String rigName, HashMap<String,ParameterDetails> parameters, Date dueDate, List<Employee> employees) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
 		this.dueDate = dueDate;
@@ -31,12 +31,12 @@ public class PressureRig implements Rig {
 	 * @param value parameter value
 	 */
 	@Override
-	public void addParameter(String key, String value) {
-		parameters.put(key,value);
+	public void addParameter(String key, ParameterDetails details) {
+		parameters.put(key,details);
 	}
 	
 	@Override
-	public HashMap<String,String> getParameters() {
+	public HashMap<String,ParameterDetails> getParameters() {
 		return parameters;
 	}
 	

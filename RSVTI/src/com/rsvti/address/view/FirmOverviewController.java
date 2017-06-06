@@ -20,8 +20,10 @@ public class FirmOverviewController {
 	@FXML
 	private TableColumn<Firm,String> registrationNumberColumn;
 	@FXML
-	private TableColumn<Firm,String> adminNameColumn;
+	private TableColumn<Firm,String> firmNameColumn;
 	
+	@FXML
+	private Label firmNameLabel;
 	@FXML
 	private Label registrationNumberLabel;
 	@FXML
@@ -57,8 +59,8 @@ public class FirmOverviewController {
 		
 	@FXML
 	private void initialize() {
+		firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 		registrationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRegistrationNumber()));
-		adminNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAdministrator().getFirstName()));
 		
 		showFirmDetails(null);
 		
@@ -67,6 +69,7 @@ public class FirmOverviewController {
 	
 	private void showFirmDetails(Firm firm) {
 		if(firm != null) {
+			firmNameLabel.setText(firm.getFirmName());
 			registrationNumberLabel.setText(firm.getRegistrationNumber());
 			fiscalCodeLabel.setText(firm.getFiscalCode());
 			addressLabel.setText(firm.getAddress());
@@ -81,6 +84,7 @@ public class FirmOverviewController {
 			adminIdNumberLabel.setText(firm.getAdministrator().getIdNumber());
 			adminPhoneNumberLabel.setText(firm.getAdministrator().getPhoneNumber());
 		} else {
+			firmNameLabel.setText("");
 			registrationNumberLabel.setText("");
 			fiscalCodeLabel.setText("");
 			addressLabel.setText("");

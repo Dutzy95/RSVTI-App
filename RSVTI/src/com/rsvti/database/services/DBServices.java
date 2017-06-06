@@ -31,6 +31,7 @@ import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
+import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.main.Constants;
@@ -44,7 +45,8 @@ public class DBServices {
 	
 	private static void openFile(String filepath) {
 		try {
-			File file = new File(filepath);
+			String jarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
+			File file = new File(jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\" + filepath);
 			
 			if(file.createNewFile()) {
 				PrintStream ps = new PrintStream(file);
@@ -167,7 +169,7 @@ public class DBServices {
 			
 			rig.setAttribute("type", rigIndex.getType());
 			
-			Map<String,String> parameters = rigIndex.getParameters();
+			Map<String,ParameterDetails> parameters = rigIndex.getParameters();
 			
 			Element rigName = document.createElement("nume_instalatie");
 			rigName.appendChild(document.createTextNode(rigIndex.getRigName()));
@@ -177,9 +179,10 @@ public class DBServices {
 			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
 			rig.appendChild(dueDate);
 			
-			for(Map.Entry<String,String> rigParameterIndex : parameters.entrySet()) {
+			for(Map.Entry<String,ParameterDetails> rigParameterIndex : parameters.entrySet()) {
 				Element node = document.createElement(rigParameterIndex.getKey());
-				node.appendChild(document.createTextNode(rigParameterIndex.getValue()));
+				node.appendChild(document.createTextNode(rigParameterIndex.getValue().getValue()));
+				node.setAttribute("mUnit", rigParameterIndex.getValue().getMeasuringUnit());
 				rig.appendChild(node);
 			}
 			for(Employee employeeIndex : rigIndex.getEmployees()) {
