@@ -42,19 +42,18 @@ public class DBServices {
 	private static boolean indexesAreInitialized = false;
 	private static long numberOfFirms;
 	private static long indexOfUpdatedFirm;
+	private static String jarFilePath;
 	
 	private static void openFile(String filepath) {
 		try {
-			String jarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-			File file = new File(jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\" + filepath);
+			String completeJarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
+			jarFilePath = completeJarFilePath.substring(0, completeJarFilePath.lastIndexOf("\\")) + "\\";
+			File file = new File(jarFilePath + filepath);
 			
 			if(file.createNewFile()) {
 				PrintStream ps = new PrintStream(file);
 				if(filepath.contains("RigParameters.xml")) {
-					ps.println("<?xml version=\"1.0\"?><parameters>"
-							+ "<instalatie type=\"de ridicat\"></instalatie>"
-							+ "<instalatie type=\"sub presiune\"></instalatie>"
-							+ "</parameters>");
+					ps.println("<?xml version=\"1.0\"?><parameters></parameters>");
 				} else {
 					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
@@ -236,7 +235,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(Constants.XML_DB_FILE_NAME));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_DB_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -275,6 +274,15 @@ public class DBServices {
 		return rigs;
 	}
 	
+	public static List<String> getRigParametersByType(String type) {
+		List<String> rigParameters = new ArrayList<String>();
+		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//parameter[@type=\"" + type + "\"]", XPathConstants.NODESET);
+		for(int i = 0; i < rigParameterNodes.getLength(); i++) {
+			rigParameters.add(rigParameterNodes.item(i).getTextContent());
+		}
+		return rigParameters;
+	}
+	
 	public static void deleteEntry(Firm firm) {
 		openFile(Constants.XML_DB_FILE_NAME);
 		
@@ -289,7 +297,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(Constants.XML_DB_FILE_NAME));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_DB_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -343,20 +351,17 @@ public class DBServices {
 	public static void saveEntry(RigParameter parameter) {
 		openFile(Constants.XML_RIG_PARAMETERS);
 		
-		Node liftingRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"de ridicat\"]", XPathConstants.NODE);
-		Node pressureRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"sub presiune\"]", XPathConstants.NODE);
+		Element rootElement = document.getDocumentElement();
 		
-		Element parameterElement = document.createElement(parameter.getName());
+		Element parameterElement = document.createElement("parameter");
+		parameterElement.appendChild(document.createTextNode(parameter.getName()));
+		parameterElement.setAttribute("type", parameter.getType());
 		
-		if(parameter.getType().equals("de ridicat")) {
-			liftingRigNode.appendChild(parameterElement);
-		} else {
-			pressureRigNode.appendChild(parameterElement);
-		}
+		rootElement.appendChild(parameterElement);
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(Constants.XML_RIG_PARAMETERS));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -388,7 +393,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(Constants.XML_RIG_PARAMETERS));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);

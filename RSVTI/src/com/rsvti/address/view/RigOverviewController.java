@@ -15,6 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,6 +44,9 @@ public class RigOverviewController {
 	@FXML
 	private TableColumn<Map.Entry<String, ParameterDetails> ,String> parameterMeasuringUnit;
 	
+	@FXML
+	private Button employeeOverviewButton;
+	
 	private JavaFxMain javaFxMain;
 	
 	private Stage stage;
@@ -58,6 +62,7 @@ public class RigOverviewController {
 	}
 	
 	private void showRigDetails(Rig rig) {
+		employeeOverviewButton.setDisable(false);
 		if(rig != null) {
 			rigNameLabel.setText(rig.getRigName());
 			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -78,6 +83,8 @@ public class RigOverviewController {
 		rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 		
 		showRigDetails(null);
+		
+		employeeOverviewButton.setDisable(true);
 		
 		rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showRigDetails(newValue));
 	}

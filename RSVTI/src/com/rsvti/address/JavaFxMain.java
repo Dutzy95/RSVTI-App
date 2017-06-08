@@ -3,6 +3,8 @@ package com.rsvti.address;
 import java.io.IOException;
 import java.util.List;
 
+import com.rsvti.address.view.AddFirmController;
+import com.rsvti.address.view.AddRigsToFirmController;
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
 import com.rsvti.address.view.MenuController;
@@ -116,24 +118,68 @@ public class JavaFxMain extends Application {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/EmployeeOverview.fxml"));
-	        AnchorPane page = (AnchorPane) loader.load();
+	        AnchorPane employeeOverview = (AnchorPane) loader.load();
 
-	        // Create the dialog Stage.
-	        Stage dialogStage = new Stage();
-	        dialogStage.setTitle("Personal deservent");
-	        dialogStage.initModality(Modality.WINDOW_MODAL);
-	        dialogStage.initOwner(primaryStage);
-	        Scene scene = new Scene(page);
-	        dialogStage.setScene(scene);
+	        Tab tab = new Tab("Personal deservent");
+            tab.setContent(employeeOverview);
+            tab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
 
 	        // Set the person into the controller.
 	        EmployeeOverviewController controller = loader.getController();
-	        controller.setDialogStage(dialogStage);
 	        controller.setEmployeeList(employeeList);
 	        controller.setJavaFxMain(this);
-	        // Show the dialog and wait until the user closes it
-	        dialogStage.showAndWait();
 
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void addFirm() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddFirm.fxml"));
+	        AnchorPane addFirm = (AnchorPane) loader.load();
+
+	        Tab tab = new Tab("Adaugă firmă");
+            tab.setContent(addFirm);
+            tab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+            
+            AddFirmController controller = loader.getController();
+            controller.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void showAddRigsToFirm() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
+	        AnchorPane addRigsToFirm = (AnchorPane) loader.load();
+
+	        AddRigsToFirmController controller = loader.getController();
+            controller.setJavaFxMain(this);
+            
+	        Stage dialogStage = new Stage();
+	        dialogStage.setTitle("Adaugă utilaje");
+	        dialogStage.initModality(Modality.WINDOW_MODAL);
+	        dialogStage.initOwner(primaryStage);
+	        Scene scene = new Scene(addRigsToFirm);
+	        dialogStage.setScene(scene);
+            
+            dialogStage.showAndWait();
+            
+            
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

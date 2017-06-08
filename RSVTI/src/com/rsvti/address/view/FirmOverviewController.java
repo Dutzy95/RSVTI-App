@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -52,6 +53,9 @@ public class FirmOverviewController {
 	@FXML
 	private Label adminPhoneNumberLabel;
 	
+	@FXML
+	private Button rigOverviewButton;
+	
 	private JavaFxMain javaFxMain;
 	
 	public FirmOverviewController() {
@@ -65,9 +69,12 @@ public class FirmOverviewController {
 		showFirmDetails(null);
 		
 		firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showFirmDetails(newValue));
+		firmTable.setEditable(true);
+		rigOverviewButton.setDisable(true);
 	}
 	
 	private void showFirmDetails(Firm firm) {
+		rigOverviewButton.setDisable(false);
 		if(firm != null) {
 			firmNameLabel.setText(firm.getFirmName());
 			registrationNumberLabel.setText(firm.getRegistrationNumber());
@@ -122,6 +129,11 @@ public class FirmOverviewController {
 			firmNotSelectedAlert();
 		}
 			
+	}
+	
+	@FXML
+	private void handleAddFirm() {
+		javaFxMain.addFirm();
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

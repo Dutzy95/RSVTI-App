@@ -7,14 +7,14 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.EmployeeOverviewController">
    <children>
-      <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="1000.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="Nume" />
           <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Prenume" />
             <TableColumn prefWidth="531.0" text="Carte de identitate">
                <columns>
-                  <TableColumn fx:id="idCodeColumn" prefWidth="85.0" text="Serie" />
-                  <TableColumn fx:id="idNumberColumn" prefWidth="181.0" text="Număr" />
+                  <TableColumn fx:id="idCodeColumn" prefWidth="89.0" text="Serie" />
+                  <TableColumn fx:id="idNumberColumn" prefWidth="224.0" text="Număr" />
                   <TableColumn fx:id="personalIdentificationNumberColumn" prefWidth="75.0" text="CNP" />
                </columns>
             </TableColumn>

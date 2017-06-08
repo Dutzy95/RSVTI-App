@@ -41,8 +41,6 @@ public class EmployeeOverviewController {
 	@FXML
 	private List<Employee> employeeList;
 	
-	private Stage stage;
-	
 	private JavaFxMain javaFxMain;
 	
 	public EmployeeOverviewController() {
@@ -50,10 +48,6 @@ public class EmployeeOverviewController {
 	}
 	
 	private void initialize() {
-	}
-	
-	public void setDialogStage(Stage stage) {
-		this.stage = stage;
 	}
 	
 	public void setEmployeeList(List<Employee> employeeList) {
