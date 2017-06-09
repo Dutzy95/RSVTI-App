@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -168,7 +167,7 @@ public class DBServices {
 			
 			rig.setAttribute("type", rigIndex.getType());
 			
-			Map<String,ParameterDetails> parameters = rigIndex.getParameters();
+			List<ParameterDetails> parameters = rigIndex.getParameters();
 			
 			Element rigName = document.createElement("nume_instalatie");
 			rigName.appendChild(document.createTextNode(rigIndex.getRigName()));
@@ -178,10 +177,10 @@ public class DBServices {
 			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
 			rig.appendChild(dueDate);
 			
-			for(Map.Entry<String,ParameterDetails> rigParameterIndex : parameters.entrySet()) {
-				Element node = document.createElement(rigParameterIndex.getKey());
-				node.appendChild(document.createTextNode(rigParameterIndex.getValue().getValue()));
-				node.setAttribute("mUnit", rigParameterIndex.getValue().getMeasuringUnit());
+			for(ParameterDetails rigParameterIndex : parameters) {
+				Element node = document.createElement(rigParameterIndex.getName());
+				node.appendChild(document.createTextNode(rigParameterIndex.getValue()));
+				node.setAttribute("mUnit", rigParameterIndex.getMeasuringUnit());
 				rig.appendChild(node);
 			}
 			for(Employee employeeIndex : rigIndex.getEmployees()) {

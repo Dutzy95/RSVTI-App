@@ -36,13 +36,13 @@ public class RigOverviewController {
 	@FXML
 	private Label dueDateLabel;
 	@FXML
-	private TableView<Map.Entry<String, ParameterDetails>> rigParameterTable;
+	private TableView<ParameterDetails> rigParameterTable;
 	@FXML
-	private TableColumn<Map.Entry<String, ParameterDetails> ,String> parameterNameColumn;
+	private TableColumn<ParameterDetails ,String> parameterNameColumn;
 	@FXML
-	private TableColumn<Map.Entry<String, ParameterDetails> ,Double> parameterValueColumn;
+	private TableColumn<ParameterDetails ,Double> parameterValueColumn;
 	@FXML
-	private TableColumn<Map.Entry<String, ParameterDetails> ,String> parameterMeasuringUnit;
+	private TableColumn<ParameterDetails ,String> parameterMeasuringUnit;
 	
 	@FXML
 	private Button employeeOverviewButton;
@@ -67,10 +67,10 @@ public class RigOverviewController {
 			rigNameLabel.setText(rig.getRigName());
 			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 			dueDateLabel.setText(format.format(rig.getDueDate()));
-			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters().entrySet()));
-			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getKey()));
-			parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue().getValue())).asObject());
-			parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue().getMeasuringUnit()));
+			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
+			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+			parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
+			parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
 		} else {
 			rigNameLabel.setText("Instalatie");
 			dueDateLabel.setText("zz-ll-aaaa");

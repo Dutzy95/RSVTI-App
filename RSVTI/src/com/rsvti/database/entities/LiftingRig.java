@@ -1,24 +1,24 @@
 package com.rsvti.database.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class LiftingRig implements Rig{
 
 	private String rigName;
-	private HashMap<String,ParameterDetails> parameters;
+	private List<ParameterDetails> parameters;
 	private Date dueDate;
 	private List<Employee> employees;
 	
 	public LiftingRig(String rigName, Date dueDate, List<Employee> employees) {
 		this.setRigName(rigName);
-		parameters = new HashMap<String,ParameterDetails>();
+		parameters = new ArrayList<ParameterDetails>();
 		this.dueDate = dueDate;
 		this.setEmployees(employees);
 	}
 	
-	public LiftingRig(String rigName, HashMap<String,ParameterDetails> parameters, Date dueDate, List<Employee> employees) {
+	public LiftingRig(String rigName, List<ParameterDetails> parameters, Date dueDate, List<Employee> employees) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
 		this.setDueDate(dueDate);
@@ -31,12 +31,12 @@ public class LiftingRig implements Rig{
 	 * @param value parameter value
 	 */
 	@Override
-	public void addParameter(String key, ParameterDetails details) {
-		parameters.put(key,details);
+	public void addParameter(ParameterDetails details) {
+		parameters.add(details);
 	}
 	
 	@Override
-	public HashMap<String,ParameterDetails> getParameters() {
+	public List<ParameterDetails> getParameters() {
 		return parameters;
 	}
 	

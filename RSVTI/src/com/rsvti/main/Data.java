@@ -44,8 +44,8 @@ public class Data {
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
 			Rig liftingRig1 = new LiftingRig("macara", date.getTime(), Arrays.asList(employee1,employee2));
-			liftingRig1.addParameter("inaltime_maxima", new ParameterDetails("23","m"));
-			liftingRig1.addParameter("greutate_maxima", new ParameterDetails("44", "kg"));
+			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
+			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
 			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
@@ -53,13 +53,13 @@ public class Data {
 			
 			date.set(2005, 12, 26);
 			Rig liftingRig2 = new LiftingRig("stivuitor", date.getTime(), Arrays.asList(employee3));
-			liftingRig2.addParameter("ceva", new ParameterDetails("45","cevauri"));
-			liftingRig2.addParameter("altceva", new ParameterDetails("96","altcevauri"));
+			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
+			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
 			date.set(2010, 7, 20);
 			Rig pressureRig = new PressureRig("cazan", date.getTime(), Arrays.asList(employee1,employee3));
-			pressureRig.addParameter("volum_maxim", new ParameterDetails("98","m3"));
-			pressureRig.addParameter("presiune_maxima", new ParameterDetails("74","bar"));
+			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
+			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			
 			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 

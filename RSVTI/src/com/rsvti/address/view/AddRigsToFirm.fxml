@@ -21,8 +21,8 @@
          <children>
             <Label text="Nume" />
             <Label text="Data scadenței" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" />
-            <DatePicker prefHeight="36.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="rigNameField" GridPane.columnIndex="1" />
+            <DatePicker fx:id="dueDateField" prefHeight="36.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Tipul instalației" GridPane.rowIndex="2" />
             <ComboBox fx:id="rigType" prefHeight="31.0" prefWidth="217.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
@@ -40,16 +40,16 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TableView layoutX="769.0" layoutY="85.0" prefHeight="301.0" prefWidth="200.0">
+      <TableView fx:id="employeeTable" layoutX="769.0" layoutY="85.0" prefHeight="301.0" prefWidth="200.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Nume" />
-          <TableColumn prefWidth="75.0" text="Prenume" />
+          <TableColumn fx:id="employeeLastNameColumn" prefWidth="75.0" text="Nume" />
+          <TableColumn fx:id="employeeFirstNameColumn" prefWidth="75.0" text="Prenume" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button layoutX="837.0" layoutY="424.0" mnemonicParsing="false" text="Button" />
+      <Button layoutX="803.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleAddEmployee" text="Adaugă personal" />
       <TableView fx:id="chosenParametersTable" layoutX="352.0" layoutY="167.0" prefHeight="282.0" prefWidth="397.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -66,5 +66,6 @@
             <Button mnemonicParsing="false" onAction="#handleArrowLeft" text="&lt;-" />
          </children>
       </VBox>
+      <Button layoutX="830.0" layoutY="434.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
    </children>
 </AnchorPane>

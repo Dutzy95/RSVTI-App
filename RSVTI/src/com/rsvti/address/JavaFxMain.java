@@ -3,6 +3,9 @@ package com.rsvti.address;
 import java.io.IOException;
 import java.util.List;
 
+import javax.sound.midi.ControllerEventListener;
+
+import com.rsvti.address.view.AddEmployeesToRigController;
 import com.rsvti.address.view.AddFirmController;
 import com.rsvti.address.view.AddRigsToFirmController;
 import com.rsvti.address.view.EmployeeOverviewController;
@@ -35,6 +38,8 @@ public class JavaFxMain extends Application {
 	private BorderPane rootLayout;
 	private ObservableList<Firm> firmData = FXCollections.observableArrayList();
 	private TabPane tabPane;
+	private Stage addEmployeesToRigStage;
+	private AddRigsToFirmController addRigsToFirmController;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -167,8 +172,8 @@ public class JavaFxMain extends Application {
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
 	        AnchorPane addRigsToFirm = (AnchorPane) loader.load();
 
-	        AddRigsToFirmController controller = loader.getController();
-            controller.setJavaFxMain(this);
+	        addRigsToFirmController = loader.getController();
+	        addRigsToFirmController.setJavaFxMain(this);
             
 	        Stage dialogStage = new Stage();
 	        dialogStage.setTitle("Adaugă utilaje");
@@ -178,6 +183,35 @@ public class JavaFxMain extends Application {
 	        dialogStage.setScene(scene);
             
             dialogStage.showAndWait();
+            
+            
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void showAddEmployeesToRig(Employee employee) {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToRig.fxml"));
+	        AnchorPane addEmployeesToRig = (AnchorPane) loader.load();
+
+	        AddEmployeesToRigController controller = loader.getController();
+            controller.setJavaFxMain(this);
+            
+            if(employee != null) {
+            	controller.showEmployeeDetails(employee);
+            }
+            
+            addEmployeesToRigStage = new Stage();
+	        addEmployeesToRigStage.setTitle("Adaugă personal");
+	        addEmployeesToRigStage.initModality(Modality.WINDOW_MODAL);
+	        addEmployeesToRigStage.initOwner(primaryStage);
+	        Scene scene = new Scene(addEmployeesToRig);
+	        addEmployeesToRigStage.setScene(scene);
+            
+            addEmployeesToRigStage.showAndWait();
             
             
 	    } catch (IOException e) {
@@ -204,6 +238,14 @@ public class JavaFxMain extends Application {
 	
 	public TabPane getTabPane() {
 		return tabPane;
+	}
+	
+	public Stage getAddEmployeesToRigStage() {
+		return addEmployeesToRigStage;
+	}
+	
+	public AddRigsToFirmController getAddRigsToFirmController() {
+		return addRigsToFirmController;
 	}
 
 	public static void main(String[] args) {

@@ -39,7 +39,7 @@ public class EntityBuilder {
 		
 		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
 			Node rigNode = node.getChildNodes().item(k);
-			HashMap<String,ParameterDetails> parametersAndValues = new HashMap<String,ParameterDetails>();
+			List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
 			
 			String rigName = rigNode.getChildNodes().item(0).getTextContent();
 			
@@ -56,7 +56,7 @@ public class EntityBuilder {
 			for(int l = 2; l < rigNode.getChildNodes().getLength(); l++) {
 				
 				if(rigNode.getChildNodes().item(l).getChildNodes().getLength() <= 1) {
-						parametersAndValues.put(rigNode.getChildNodes().item(l).getNodeName(), new ParameterDetails(rigNode.getChildNodes().item(l).getTextContent(), rigNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+						parameters.add(new ParameterDetails(rigNode.getChildNodes().item(l).getNodeName(), rigNode.getChildNodes().item(l).getTextContent(), rigNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 				} else {
 					Node employeeNode = rigNode.getChildNodes().item(l);
 					ArrayList<String> employeeParameters = new ArrayList<String>();
@@ -90,9 +90,9 @@ public class EntityBuilder {
 			}
 			
 			if(rigNode.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-				rigs.add(new LiftingRig(rigName, parametersAndValues, dueDate, employees));
+				rigs.add(new LiftingRig(rigName, parameters, dueDate, employees));
 			} else {
-				rigs.add(new PressureRig(rigName, parametersAndValues, dueDate, employees));
+				rigs.add(new PressureRig(rigName, parameters, dueDate, employees));
 			}
 		}
 		
@@ -118,7 +118,7 @@ public class EntityBuilder {
 	}
 	
 	public static Rig buildRigFromXml(Node node) {
-		HashMap<String,ParameterDetails> parametersAndValues = new HashMap<String,ParameterDetails>();
+		List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
 		
@@ -135,7 +135,7 @@ public class EntityBuilder {
 		for(int i = 2; i < node.getChildNodes().getLength(); i++) {
 			
 			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
-					parametersAndValues.put(node.getChildNodes().item(i).getNodeName(), new ParameterDetails(node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
+					parameters.add(new ParameterDetails(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 			} else {
 				Node employeeNode = node.getChildNodes().item(i);
 				ArrayList<String> employeeParameters = new ArrayList<String>();
@@ -169,9 +169,9 @@ public class EntityBuilder {
 		}
 		
 		if(node.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-			return new LiftingRig(rigName, parametersAndValues, dueDate, employees);
+			return new LiftingRig(rigName, parameters, dueDate, employees);
 		} else {
-			return new PressureRig(rigName, parametersAndValues, dueDate, employees);
+			return new PressureRig(rigName, parameters, dueDate, employees);
 		}
 	}
 	

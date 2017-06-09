@@ -2,10 +2,12 @@ package com.rsvti.database.entities;
 
 public class ParameterDetails {
 
+	private String name;
 	private String value;
 	private String measuringUnit;
 	
-	public ParameterDetails(String value, String measuringUnit) {
+	public ParameterDetails(String name, String value, String measuringUnit) {
+		this.setName(name);
 		this.setValue(value);
 		this.setMeasuringUnit(measuringUnit);
 	}
@@ -24,5 +26,13 @@ public class ParameterDetails {
 
 	public void setMeasuringUnit(String measuringUnit) {
 		this.measuringUnit = measuringUnit;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
