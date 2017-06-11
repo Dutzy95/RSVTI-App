@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.ParameterDetails;
+import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -99,7 +100,7 @@ public class AddRigsToFirmController {
 			@Override 
 			public void changed(ObservableValue<? extends String> ov, String t, String t1) {
 				String selectedItem = rigType.getSelectionModel().getSelectedItem();
-				importedParameterTable.setItems(FXCollections.observableArrayList(DBServices.getRigParametersByType(selectedItem)));
+				filterSelectedParameters(selectedItem);
 				importedParameterTable.refresh();
 			}
 		});
@@ -119,13 +120,24 @@ public class AddRigsToFirmController {
 		});
 	}
 	
+	private void filterSelectedParameters(String selectedItem) {
+		List<String> parameters = DBServices.getRigParametersByType(selectedItem);
+		List<ParameterDetails> chosenParameters = chosenParametersTable.getItems();
+		for(ParameterDetails index : chosenParameters) {
+			if(parameters.contains(index.getName())) {
+				parameters.remove(index.getName());
+			}
+		}
+		importedParameterTable.setItems(FXCollections.observableArrayList(parameters));
+	}
+	
 	@FXML
 	private void handleArrowRight() {
 		ObservableList<String> selectedItems = importedParameterTable.getSelectionModel().getSelectedItems();
 		if(selectedItems != null) {
-			for(int i = 0; i < selectedItems.size(); i++) {
-				chosenParametersTable.getItems().add(new ParameterDetails(selectedItems.get(i),"",""));
-				importedParameterTable.getItems().remove(selectedItems.get(i));
+			for(String index : selectedItems) {
+				chosenParametersTable.getItems().add(new ParameterDetails(index,"",""));
+				importedParameterTable.getItems().remove(index);
 			}
 		}
 	}
@@ -153,7 +165,21 @@ public class AddRigsToFirmController {
 	
 	@FXML
 	private void handleSave() {
-		System.out.println(chosenParametersTable.getItems());
+		javaFxMain.getAddFirmController().updateRigTable(new Rig(rigNameField.getText(), 
+				chosenParametersTable.getItems(), 
+				java.sql.Date.valueOf(dueDateField.getValue()), 
+				employeeTable.getItems(), 
+				rigType.getValue()));
+		javaFxMain.getAddRigsToFirmStage().close();
+	}
+	
+	public void showRigDetails(Rig rig) {
+		rigNameField.setText(rig.getRigName());
+		dueDateField.setValue(new java.sql.Date(rig.getDueDate().getTime()).toLocalDate());
+		rigType.setValue(rig.getType());
+		chosenParametersTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
+		employeeTable.setItems(FXCollections.observableArrayList(rig.getEmployees()));
+		filterSelectedParameters("de ridicat");
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

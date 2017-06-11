@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.w3c.dom.Node;
@@ -14,9 +13,7 @@ import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
-import com.rsvti.database.entities.LiftingRig;
 import com.rsvti.database.entities.ParameterDetails;
-import com.rsvti.database.entities.PressureRig;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.main.Constants;
 
@@ -52,8 +49,10 @@ public class EntityBuilder {
 			}
 			
 			ArrayList<Employee> employees = new ArrayList<Employee>();
-					
+			String type = "";
+			
 			for(int l = 2; l < rigNode.getChildNodes().getLength(); l++) {
+				type = rigNode.getAttributes().getNamedItem("type").getTextContent();
 				
 				if(rigNode.getChildNodes().item(l).getChildNodes().getLength() <= 1) {
 						parameters.add(new ParameterDetails(rigNode.getChildNodes().item(l).getNodeName(), rigNode.getChildNodes().item(l).getTextContent(), rigNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
@@ -89,11 +88,7 @@ public class EntityBuilder {
 				}
 			}
 			
-			if(rigNode.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-				rigs.add(new LiftingRig(rigName, parameters, dueDate, employees));
-			} else {
-				rigs.add(new PressureRig(rigName, parameters, dueDate, employees));
-			}
+			rigs.add(new Rig(rigName, parameters, dueDate, employees, type));
 		}
 		
 		return new Firm(
@@ -131,7 +126,8 @@ public class EntityBuilder {
 		}
 		
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-				
+		
+		String type = "";
 		for(int i = 2; i < node.getChildNodes().getLength(); i++) {
 			
 			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
@@ -168,11 +164,7 @@ public class EntityBuilder {
 			}
 		}
 		
-		if(node.getAttributes().getNamedItem("type").getTextContent().equals("de ridicat")) {
-			return new LiftingRig(rigName, parameters, dueDate, employees);
-		} else {
-			return new PressureRig(rigName, parameters, dueDate, employees);
-		}
+		return new Rig(rigName, parameters, dueDate, employees, type);
 	}
 	
 	public static Employee buildEmployeeFromXml(Node node) {

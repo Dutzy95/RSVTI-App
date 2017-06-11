@@ -13,9 +13,7 @@ import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
-import com.rsvti.database.entities.LiftingRig;
 import com.rsvti.database.entities.ParameterDetails;
-import com.rsvti.database.entities.PressureRig;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
@@ -43,7 +41,7 @@ public class Data {
 			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", 
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
-			Rig liftingRig1 = new LiftingRig("macara", date.getTime(), Arrays.asList(employee1,employee2));
+			Rig liftingRig1 = new Rig("macara", date.getTime(), Arrays.asList(employee1,employee2), "de ridicat");
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
@@ -52,12 +50,12 @@ public class Data {
 					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1)), false);
 			
 			date.set(2005, 12, 26);
-			Rig liftingRig2 = new LiftingRig("stivuitor", date.getTime(), Arrays.asList(employee3));
+			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), Arrays.asList(employee3), "de ridicat");
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
 			date.set(2010, 7, 20);
-			Rig pressureRig = new PressureRig("cazan", date.getTime(), Arrays.asList(employee1,employee3));
+			Rig pressureRig = new Rig("cazan", date.getTime(), Arrays.asList(employee1,employee3), "sub presiune");
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			

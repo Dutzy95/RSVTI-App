@@ -1,7 +1,11 @@
 package com.rsvti.address.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.Administrator;
+import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
@@ -10,6 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
@@ -49,6 +54,8 @@ public class AddFirmController {
 	@FXML
 	private TableColumn<Rig,String> rigColumn;
 	
+	private List<Rig> rigList = new ArrayList<Rig>();
+	
 	@FXML
 	private JavaFxMain javaFxMain;
 	
@@ -58,7 +65,18 @@ public class AddFirmController {
 	
 	@FXML
 	private void initialize() {
-		rigTable.setItems(FXCollections.observableArrayList(DBServices.getAllRigs()));
+		rigTable.setItems(FXCollections.observableArrayList(rigList));
+		rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
+		rigTable.setRowFactory( tv -> {
+		    TableRow<Rig> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		            Rig rowData = row.getItem();
+		            javaFxMain.showAddRigsToFirm(rowData);
+		        }
+		    });
+		    return row ;
+		});
 		rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 	}
 	
@@ -80,12 +98,18 @@ public class AddFirmController {
 						adminIdCodeField.getText(),
 						adminIdNumberField.getText(),
 						adminPhoneNumberField.getText()),
-				null), false);
+				rigTable.getItems()), false);
+		javaFxMain.getTabPane().getTabs().remove(javaFxMain.getAddFirmTab());
 	}
 	
 	@FXML
 	private void handleAddRig() {
-		javaFxMain.showAddRigsToFirm();
+		javaFxMain.showAddRigsToFirm(null);
+	}
+	
+	public void updateRigTable(Rig rig) {
+		rigList.add(rig);
+		rigTable.setItems(FXCollections.observableArrayList(rigList));
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

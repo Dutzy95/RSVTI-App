@@ -6,6 +6,7 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -68,6 +69,7 @@ public class FirmOverviewController {
 		
 		showFirmDetails(null);
 		
+		firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
 		firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showFirmDetails(newValue));
 		firmTable.setEditable(true);
 		rigOverviewButton.setDisable(true);
@@ -138,7 +140,6 @@ public class FirmOverviewController {
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
-		firmTable.setItems(javaFxMain.getFirmData());
 	}
 	
 	private void firmNotSelectedAlert() {
