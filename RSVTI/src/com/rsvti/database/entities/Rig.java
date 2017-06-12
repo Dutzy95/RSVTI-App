@@ -2,30 +2,34 @@ package com.rsvti.database.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Rig{
 
 	private String rigName;
 	private List<ParameterDetails> parameters;
-	private Date dueDate;
+	private Date revisionDate;
+	private int authorizationExtension;
 	private List<Employee> employees;
 	private String type;
 	
 	public Rig(String rigName, Date dueDate, List<Employee> employees, String type) {
 		this.setRigName(rigName);
 		parameters = new ArrayList<ParameterDetails>();
-		this.dueDate = dueDate;
+		this.revisionDate = dueDate;
 		this.setEmployees(employees);
 		this.setType(type);
+		this.setAuthorizationExtension(0);
 	}
 	
-	public Rig(String rigName, List<ParameterDetails> parameters, Date dueDate, List<Employee> employees, String type) {
+	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, List<Employee> employees, String type) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
-		this.setDueDate(dueDate);
+		this.setRevisionDate(revisionDate);
 		this.setEmployees(employees);
 		this.setType(type);
+		this.setAuthorizationExtension(0);
 	}
 	
 	/**
@@ -41,12 +45,12 @@ public class Rig{
 		return parameters;
 	}
 	
-	public Date getDueDate() {
-		return dueDate;
+	public Date getRevisionDate() {
+		return revisionDate;
 	}
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setRevisionDate(Date dueDate) {
+		this.revisionDate = dueDate;
 	}
 
 	public List<Employee> getEmployees() {
@@ -71,5 +75,26 @@ public class Rig{
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public int getAuthorizationExtension() {
+		return authorizationExtension;
+	}
+
+	public void setAuthorizationExtension(int authorizationExtension) {
+		this.authorizationExtension = authorizationExtension;
+	}
+	
+	public static Date getDueDate(Date revisionDate, int authorizationExtension) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(revisionDate);
+		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
+		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, 2);
+		}
+		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		}
+		return calendar.getTime();
 	}
 }

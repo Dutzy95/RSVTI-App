@@ -174,7 +174,7 @@ public class DBServices {
 			rig.appendChild(rigName);
 			
 			Element dueDate = document.createElement("data_scadenta");
-			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getDueDate())));
+			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getRevisionDate())));
 			rig.appendChild(dueDate);
 			
 			for(ParameterDetails rigParameterIndex : parameters) {

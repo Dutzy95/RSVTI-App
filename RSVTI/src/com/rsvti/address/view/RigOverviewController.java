@@ -66,7 +66,7 @@ public class RigOverviewController {
 		if(rig != null) {
 			rigNameLabel.setText(rig.getRigName());
 			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-			dueDateLabel.setText(format.format(rig.getDueDate()));
+			dueDateLabel.setText(format.format(rig.getRevisionDate()));
 			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 			parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());

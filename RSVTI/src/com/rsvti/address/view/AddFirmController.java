@@ -72,7 +72,7 @@ public class AddFirmController {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            Rig rowData = row.getItem();
-		            javaFxMain.showAddRigsToFirm(rowData);
+		            javaFxMain.showAddRigsToFirm(rowData, true);
 		        }
 		    });
 		    return row ;
@@ -104,11 +104,19 @@ public class AddFirmController {
 	
 	@FXML
 	private void handleAddRig() {
-		javaFxMain.showAddRigsToFirm(null);
+		javaFxMain.showAddRigsToFirm(null, false);
 	}
 	
-	public void updateRigTable(Rig rig) {
-		rigList.add(rig);
+	public void updateRigTable(Rig rig, boolean isUpdate, Rig updatedRig) {
+		if(isUpdate) {
+			for(int i = 0; i < rigList.size(); i++) {
+				if(rigList.get(i).equals(rig)) {
+					rigList.set(i, updatedRig);
+				}
+			}
+		} else {
+			rigList.add(rig);
+		}
 		rigTable.setItems(FXCollections.observableArrayList(rigList));
 	}
 	

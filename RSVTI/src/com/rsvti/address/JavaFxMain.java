@@ -31,6 +31,7 @@ public class JavaFxMain extends Application {
 	private BorderPane rootLayout;
 	private TabPane tabPane;
 	private Stage addEmployeesToRigStage;
+	private AddEmployeesToRigController addEmployeesToRigController;
 	private AddRigsToFirmController addRigsToFirmController;
 	private Stage addRigsToFirmStage;
 	private AddFirmController addFirmController;
@@ -160,7 +161,7 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddRigsToFirm(Rig rig) {
+	public void showAddRigsToFirm(Rig rig, boolean isUpdate) {
 		try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
@@ -176,6 +177,7 @@ public class JavaFxMain extends Application {
 	        
 	        addRigsToFirmController = loader.getController();
 	        addRigsToFirmController.setJavaFxMain(this);
+	        addRigsToFirmController.setIsUpdate(isUpdate);
             
 	        addRigsToFirmStage = new Stage();
 	        addRigsToFirmStage.setTitle("Adaugă utilaje");
@@ -192,18 +194,19 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddEmployeesToRig(Employee employee) {
+	public void showAddEmployeesToRig(Employee employee, boolean isUpdate) {
 		try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToRig.fxml"));
 	        AnchorPane addEmployeesToRig = (AnchorPane) loader.load();
 
-	        AddEmployeesToRigController controller = loader.getController();
-            controller.setJavaFxMain(this);
+	        addEmployeesToRigController = loader.getController();
+            addEmployeesToRigController.setJavaFxMain(this);
+            addEmployeesToRigController.setIsUpdate(isUpdate);
             
             if(employee != null) {
-            	controller.showEmployeeDetails(employee);
+            	addEmployeesToRigController.showEmployeeDetails(employee);
             }
             
             addEmployeesToRigStage = new Stage();
@@ -234,6 +237,10 @@ public class JavaFxMain extends Application {
 	
 	public Stage getAddEmployeesToRigStage() {
 		return addEmployeesToRigStage;
+	}
+	
+	public AddEmployeesToRigController getAddEmployeesToRigController() {
+		return addEmployeesToRigController;
 	}
 	
 	public AddRigsToFirmController getAddRigsToFirmController() {
