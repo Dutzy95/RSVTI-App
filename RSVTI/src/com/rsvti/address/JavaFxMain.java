@@ -19,6 +19,7 @@ import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.generator.Generator;
 import com.rsvti.main.Constants;
 import com.rsvti.main.Data;
 import com.rsvti.main.Utils;
@@ -327,6 +328,8 @@ public class JavaFxMain extends Application {
 
 	public static void main(String[] args) {
 //		Utils.setErrorLog();
+		Utils.createFolderHierarchy();
+		Generator.generateWordFile();
 		Data.populate();
 		launch(args);
 	}

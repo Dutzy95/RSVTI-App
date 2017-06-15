@@ -24,10 +24,9 @@ public class Data {
 	public static void populate() {
 		try {
 			
-			String completeJarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-			String jarFilePath = completeJarFilePath.substring(0, completeJarFilePath.lastIndexOf("\\")) + "\\";
+			String jarFilePath = Utils.getJarFilePath();
 			new File(jarFilePath + Constants.XML_DB_FILE_NAME).delete();
-//			new File(jarFilePath + Constants.XML_RIG_PARAMETERS).delete();
+			new File(jarFilePath + Constants.XML_RIG_PARAMETERS).delete();
 			
 			Calendar date = Calendar.getInstance();
 			date.set(2000, 4, 12);
@@ -81,16 +80,15 @@ public class Data {
 //						"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 //						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
 //			
-//			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
-//			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));
-//			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima", "m"));
-//			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim", "m3"));
-//			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim", "m3"));
-//			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima", "bar"));
+			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
+			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));
+			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima", "m"));
+			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim", "m3"));
+			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim", "m3"));
+			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima", "bar"));
 //			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

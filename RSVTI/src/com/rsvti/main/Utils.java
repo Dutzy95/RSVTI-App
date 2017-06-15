@@ -2,21 +2,16 @@ package com.rsvti.main;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.lang.invoke.ConstantCallSite;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
-import com.rsvti.database.services.DBServices;
-
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Alert.AlertType;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -89,14 +84,11 @@ public class Utils {
 		{
 		    public void run() {
 		    	try {
-		    		String completeJarFilePath = new File(Utils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-					String jarFilePath = completeJarFilePath.substring(0, completeJarFilePath.lastIndexOf("\\")) + "\\";
+					String jarFilePath = Utils.getJarFilePath();
 					File file = new File(jarFilePath + Constants.ERROR_LOG_FILE);
 					System.setErr(new PrintStream(file));
 					
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_EXTENDED);
-					Calendar fileReplaceBegin = Calendar.getInstance();
-					fileReplaceBegin.add(Constants.ERR_LOG_REPLACE_TIME_UNIT, Constants.ERR_LOG_REPLACE_INTERVAL);
 					Calendar refreshIntervalBegin = Calendar.getInstance();
 					refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
 					while(true) {
@@ -106,15 +98,38 @@ public class Utils {
 							System.out.println("[" + simpleDateFormat.format(refreshIntervalBegin.getTime()) + "]");
 							refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
 						}
-						if(instance.equals(fileReplaceBegin) || instance.after(fileReplaceBegin)) {
-							Files.delete(Paths.get(jarFilePath + Constants.ERROR_LOG_FILE));
-							file.createNewFile();
-						}
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
 		    }
 		}.start();
+	}
+	
+	public static String getJarFilePath() {
+		//		For .jar file
+//		String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+//		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
+		
+		//		For Eclipse
+		String jarFilePath = "";
+		try {
+			jarFilePath = new File(Utils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
+	}
+	
+	public static void createFolderHierarchy() {
+		try {
+			String jarFilePath = getJarFilePath();
+			File file = new File(jarFilePath + "database");
+			file.mkdir();
+			file = new File(jarFilePath + "docs");
+			file.mkdir();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

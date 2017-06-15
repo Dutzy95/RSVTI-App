@@ -25,6 +25,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#handleViewDueDateOverview" text="Date scadente" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Generează">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Document Word" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Ajutor">
             <items>
               <MenuItem mnemonicParsing="false" text="Despre" />

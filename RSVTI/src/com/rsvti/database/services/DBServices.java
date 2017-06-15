@@ -37,6 +37,7 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.main.Constants;
+import com.rsvti.main.Utils;
 
 public class DBServices {
 	
@@ -48,8 +49,7 @@ public class DBServices {
 	
 	private static void openFile(String filepath) {
 		try {
-			String completeJarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-			jarFilePath = completeJarFilePath.substring(0, completeJarFilePath.lastIndexOf("\\")) + "\\";
+			jarFilePath = Utils.getJarFilePath();
 			File file = new File(jarFilePath + filepath);
 			
 			if(file.createNewFile()) {

@@ -74,41 +74,6 @@ public class MyApp {
 			}
 		}
 		
-//		JFrame frame = new JFrame("DatePicker");
-//		frame.setSize(400, 400);
-//		frame.setLocation(200, 200);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		UtilCalendarModel model = new UtilCalendarModel();
-//		//model.setDate(2014,04,20);
-//		// Need this...
-//		Properties p = new Properties();
-//		p.put("text.today", "Azi");
-//		p.put("text.month", "Month");
-//		p.put("text.year", "Year");
-//		p.put("text.sun", "Dum");
-//		p.put("text.april", "APRILIE");
-//		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-//		// Don't know about the formatter, but there it is...
-//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-//		 
-//		datePicker.setVisible(true);
-//		frame.setLayout(new FlowLayout());
-//		JButton button = new JButton("Ceva");
-//		JLabel label = new JLabel();
-//		frame.add(button);
-//		button.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				Calendar date = (Calendar) datePicker.getModel().getValue();
-//				if(date != null) {
-//					label.setText(((Calendar) datePicker.getModel().getValue()).getTime().toString());				
-//				}
-//			}
-//		});
-//		frame.add(datePicker);
-//		frame.add(label);
-//		
 //		try {
 //			ImageIcon imageIcon = new ImageIcon(MyApp.class.getResource("/coffee-cup-icon.png"));
 //			final SystemTray tray = SystemTray.getSystemTray();
