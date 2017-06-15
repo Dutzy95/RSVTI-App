@@ -120,42 +120,6 @@ public class MyApp {
 //        	awte.printStackTrace();
 //        }
 //		
-//		JButton instance = new JButton("Get Instance");
-//		JLabel instanceLabel = new JLabel();
-//		frame.add(instance);
-//		frame.add(instanceLabel);
-//		
-//		instance.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				instanceLabel.setText(Calendar.getInstance().getTime().toString());
-//			}
-//		});
-		
-//		final int seconds = 5;
-//		while(true) {
-//			Calendar calendar = Calendar.getInstance();
-//			if(calendar.get(Calendar.SECOND) % seconds == 0) {
-//				try {
-//					//System.out.println(calendar.getTime());
-//					JOptionPane optionPane = new JOptionPane(calendar.getTime(), JOptionPane.INFORMATION_MESSAGE);
-//					JDialog dialog = new JDialog();
-//					dialog.setVisible(true);
-//					dialog.setTitle("Test");
-//					dialog.add(optionPane);
-//					dialog.setSize(400, 200);
-//					dialog.setLocation(500, 500);
-//					dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-//					Thread.sleep(seconds * 900);
-//					dialog.dispose();
-//				} catch(InterruptedException ie) {
-//					
-//				}
-//			}
-//		}
-		
-//		frame.setVisible(true);
 		
 //		try {
 //			XWPFDocument document = new XWPFDocument();

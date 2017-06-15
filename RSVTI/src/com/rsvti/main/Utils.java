@@ -1,5 +1,17 @@
 package com.rsvti.main;
 
+import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
+import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
@@ -8,10 +20,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -128,8 +146,96 @@ public class Utils {
 			file.mkdir();
 			file = new File(jarFilePath + "docs");
 			file.mkdir();
+			file = new File(jarFilePath + "images");
+			file.mkdir();
+			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_with_text.png")), "png", new File(jarFilePath + "images/RSVTI_with_text.png"));
+			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png")), "png", new File(jarFilePath + "images/RSVTI_without_text.png"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void setTray(Stage primaryStage) {
+		try {
+			
+			primaryStage.setOnCloseRequest(event -> 
+				{Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						primaryStage.hide();
+					}
+				});});
+			
+			ImageIcon imageIcon = new ImageIcon(Utils.class.getResource("/RSVTI_without_text.png"));
+			final SystemTray tray = SystemTray.getSystemTray();
+			int trayIconWidth = new TrayIcon(imageIcon.getImage()).getSize().width;
+			final TrayIcon trayIcon = new TrayIcon(imageIcon.getImage().getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
+			trayIcon.setImageAutoSize(true);
+			tray.add(trayIcon);
+			
+			final PopupMenu popup = new PopupMenu();
+			
+	        MenuItem show = new MenuItem("Show");
+	        MenuItem exit = new MenuItem("Exit");
+	        
+	        exit.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+	        
+	        show.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Platform.runLater(new Runnable() { 
+			            @Override
+			            public void run() {
+			                primaryStage.show();
+			            }
+			        });
+				}
+			});
+	        
+	        trayIcon.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(e.getClickCount() >= 2) {
+						Platform.runLater(new Runnable() { 
+				            @Override
+				            public void run() {
+				                primaryStage.show();
+				            }
+				        });
+					}
+				}
+			});
+	       
+	        //Add components to pop-up menu
+	        popup.add(show);
+	        popup.addSeparator();
+	        popup.add(exit);
+	        
+	        trayIcon.setPopupMenu(popup);
+	    } catch(AWTException awte) {
+	    	awte.printStackTrace();
+	    }
 	}
 }

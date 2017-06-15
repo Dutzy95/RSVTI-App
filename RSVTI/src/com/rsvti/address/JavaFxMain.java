@@ -2,11 +2,9 @@ package com.rsvti.address;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
 
 import com.rsvti.address.view.AddEmployeesToRigController;
 import com.rsvti.address.view.AddFirmController;
@@ -20,17 +18,18 @@ import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.generator.Generator;
-import com.rsvti.main.Constants;
 import com.rsvti.main.Data;
 import com.rsvti.main.Utils;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -39,7 +38,7 @@ import javafx.stage.WindowEvent;
 
 public class JavaFxMain extends Application {
 
-	private Stage primaryStage;
+	private static Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabPane;
 	private Stage addUpdateEmployeesToRigStage;
@@ -55,6 +54,11 @@ public class JavaFxMain extends Application {
 		this.primaryStage = primaryStage;
         this.primaryStage.setTitle("RSVTI App");
         
+        this.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+        
+        Platform.setImplicitExit(false);
+		Utils.setTray(primaryStage);
+		
         initRootLayout();
 	}
 	
