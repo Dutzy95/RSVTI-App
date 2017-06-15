@@ -9,6 +9,7 @@ import java.util.Map;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.main.Constants;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -65,9 +66,10 @@ public class RigOverviewController {
 		employeeOverviewButton.setDisable(false);
 		if(rig != null) {
 			rigNameLabel.setText(rig.getRigName());
-			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
 			dueDateLabel.setText(format.format(rig.getRevisionDate()));
 			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
+			rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 			parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
 			parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
@@ -80,6 +82,7 @@ public class RigOverviewController {
 	public void setRigList(List<Rig> rigList) {
 		this.rigList = rigList;
 		rigTable.setItems(FXCollections.observableArrayList(rigList));
+		rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 		
 		showRigDetails(null);

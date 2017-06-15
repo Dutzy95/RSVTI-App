@@ -19,6 +19,16 @@ public class MenuController {
 	}
 	
 	@FXML
+	private void handleAddFirm() {
+		javaFxMain.addFirm();
+	}
+	
+	@FXML
+	private void handleAddRigParameters() {
+		javaFxMain.addRigParameter();
+	}
+	
+	@FXML
 	public void handleFileClose() {
 		System.exit(0);
 	}
@@ -31,6 +41,11 @@ public class MenuController {
 	@FXML
 	private void handleViewFirms() {
 		javaFxMain.showFirmOverview();
+	}
+	
+	@FXML
+	private void handleViewDueDateOverview() {
+		javaFxMain.showDueDateOverview();
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

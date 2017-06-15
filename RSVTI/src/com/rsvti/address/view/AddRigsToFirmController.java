@@ -9,6 +9,7 @@ import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.main.Constants;
 import com.rsvti.main.Utils;
@@ -38,9 +39,9 @@ public class AddRigsToFirmController {
 	private ComboBox<String> rigType;
 	
 	@FXML
-	private TableView<String> importedParameterTable;
+	private TableView<RigParameter> importedParameterTable;
 	@FXML
-	private TableColumn<String,String> importedParameterColumn;
+	private TableColumn<RigParameter,String> importedParameterColumn;
 	
 	@FXML
 	private TableView<ParameterDetails> chosenParametersTable;
@@ -72,6 +73,8 @@ public class AddRigsToFirmController {
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 	
 	private boolean isUpdate = false;
+	private boolean isDueDateUpdate = false;
+	private String firmName;
 	private Rig rigToUpdate;
 	
 	@FXML
@@ -86,7 +89,8 @@ public class AddRigsToFirmController {
 		rigType.getSelectionModel().select(0);
 		importedParameterTable.setItems(FXCollections.observableArrayList(DBServices.getRigParametersByType("de ridicat")));
 		importedParameterTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		importedParameterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
+		importedParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+		importedParameterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 		chosenParameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 		chosenParameterValueColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue()));
 		chosenParameterValueColumn.setOnEditCommit(new EventHandler<CellEditEvent<ParameterDetails, String>>() {
@@ -98,18 +102,10 @@ public class AddRigsToFirmController {
 	        }
 	    });
 		chosenParameterMeasuringUnitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
-		chosenParameterMeasuringUnitColumn.setOnEditCommit(new EventHandler<CellEditEvent<ParameterDetails, String>>() {
-	        @Override
-	        public void handle(CellEditEvent<ParameterDetails, String> t) {
-	            ((ParameterDetails) t.getTableView().getItems().get(
-	                t.getTablePosition().getRow())
-	                ).setMeasuringUnit(t.getNewValue());
-	        }
-	    });
 		chosenParameterValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-		chosenParameterMeasuringUnitColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 		chosenParametersTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		chosenParametersTable.setEditable(true);
+		chosenParametersTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigType.valueProperty().addListener(new ChangeListener<String>() {
 			@Override 
 			public void changed(ObservableValue<? extends String> ov, String t, String t1) {
@@ -120,6 +116,7 @@ public class AddRigsToFirmController {
 		});
 		
 		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
+		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
 		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
 		employeeTable.setRowFactory( tv -> {
@@ -127,7 +124,7 @@ public class AddRigsToFirmController {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            Employee rowData = row.getItem();
-		            javaFxMain.showAddEmployeesToRig(rowData, true);
+		            javaFxMain.showAddUpdateEmployeesToRig(rowData, true, false, "Editează personal");
 		        }
 		    });
 		    return row ;
@@ -160,12 +157,14 @@ public class AddRigsToFirmController {
 		dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), 1)));
 	}
 	
+	//TODO: 
 	private void filterSelectedParameters(String selectedItem) {
-		List<String> parameters = DBServices.getRigParametersByType(selectedItem);
+		List<RigParameter> parameters = DBServices.getRigParametersByType(selectedItem);
 		List<ParameterDetails> chosenParameters = chosenParametersTable.getItems();
 		for(ParameterDetails index : chosenParameters) {
-			if(parameters.contains(index.getName())) {
-				parameters.remove(index.getName());
+			RigParameter rigParameter = new RigParameter(rigType.getValue(), index.getName(), index.getMeasuringUnit()); 
+			if(parameters.contains(rigParameter)) {
+				parameters.remove(rigParameter);
 			}
 		}
 		importedParameterTable.setItems(FXCollections.observableArrayList(parameters));
@@ -173,23 +172,23 @@ public class AddRigsToFirmController {
 	
 	@FXML
 	private void handleArrowRight() {
-		ObservableList<String> selectedItems = importedParameterTable.getSelectionModel().getSelectedItems();
+		List<RigParameter> selectedItems = importedParameterTable.getSelectionModel().getSelectedItems();
 		if(selectedItems != null) {
-			for(String index : selectedItems) {
-				chosenParametersTable.getItems().add(new ParameterDetails(index,"",""));
-				importedParameterTable.getItems().remove(index);
+			for(RigParameter index : selectedItems) {
+				chosenParametersTable.getItems().add(new ParameterDetails(index.getName(),"",index.getMeasuringUnit()));
 			}
+			importedParameterTable.getItems().removeAll(selectedItems);
 		}
 	}
 	
 	@FXML
 	private void handleArrowLeft() {
-		ObservableList<ParameterDetails> selectedItems = chosenParametersTable.getSelectionModel().getSelectedItems();
+		List<ParameterDetails> selectedItems = chosenParametersTable.getSelectionModel().getSelectedItems();
 		if(selectedItems != null) {
 			for(ParameterDetails index : selectedItems) {
-				importedParameterTable.getItems().add(index.getName());
-				chosenParametersTable.getItems().remove(index);
+				importedParameterTable.getItems().add(new RigParameter(rigType.getValue(), index.getName(),index.getMeasuringUnit()));
 			}
+			chosenParametersTable.getItems().removeAll(selectedItems);
 		}
 	}
 	
@@ -208,29 +207,41 @@ public class AddRigsToFirmController {
 	
 	@FXML
 	private void handleAddEmployee() {
-		javaFxMain.showAddEmployeesToRig(null, false);
+		javaFxMain.showAddUpdateEmployeesToRig(null, false, false,"Adaugă personal");
 	}
 	
 	@FXML
 	private void handleSave() {
-		if(isUpdate) {
+		if(isDueDateUpdate) {
 			Rig newRig = new Rig(rigNameField.getText(), 
-								 chosenParametersTable.getItems(), 
-								 java.sql.Date.valueOf(revisionDate.getValue()), 
-							 	 employeeTable.getItems(), 
-								 rigType.getValue());
+					 chosenParametersTable.getItems(), 
+					 java.sql.Date.valueOf(revisionDate.getValue()), 
+				 	 employeeTable.getItems(), 
+					 rigType.getValue());
 			newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
-			javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
+			javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
 		} else {
-			Rig newRig = new Rig(rigNameField.getText(), 
-								 chosenParametersTable.getItems(), 
-								 java.sql.Date.valueOf(revisionDate.getValue()), 
-							 	 employeeTable.getItems(), 
-								 rigType.getValue());
-			newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
-			javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
+			if(isUpdate) {
+				Rig newRig = new Rig(rigNameField.getText(), 
+									 chosenParametersTable.getItems(), 
+									 java.sql.Date.valueOf(revisionDate.getValue()), 
+								 	 employeeTable.getItems(), 
+									 rigType.getValue());
+				newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
+				javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
+			} else {
+				Rig newRig = new Rig(rigNameField.getText(), 
+									 chosenParametersTable.getItems(), 
+									 java.sql.Date.valueOf(revisionDate.getValue()), 
+								 	 employeeTable.getItems(), 
+									 rigType.getValue());
+				newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
+				javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
+			}
 		}
 		javaFxMain.getAddRigsToFirmStage().close();
+		isDueDateUpdate = false;
+		isUpdate = false;
 	}
 	
 	public void showRigDetails(Rig rig) {
@@ -244,13 +255,20 @@ public class AddRigsToFirmController {
 		filterSelectedParameters("de ridicat");
 		revisionDate.setValue(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate());
 		authorizationExtension.getSelectionModel().select(rig.getAuthorizationExtension() - 1);
-		dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(rig.getRevisionDate(), rig.getAuthorizationExtension())));
+		dueDateLabel.setText(simpleDateFormat.format(rig.getDueDate()));
 	}
 	
 	public void setIsUpdate(boolean isUpdate) {
 		this.isUpdate = isUpdate;
 	}
 	
+	public void setIsDueDateUpdate(boolean isDueDateUpdate) {
+		this.isDueDateUpdate = isDueDateUpdate;
+	}
+
+	public void setFirmName(String firmName) {
+		this.firmName = firmName;
+	}
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
 	}

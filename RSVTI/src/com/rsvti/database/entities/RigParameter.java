@@ -4,10 +4,12 @@ public class RigParameter {
 
 	private String type;
 	private String name;
+	private String measuringUnit;
 	
-	public RigParameter(String type, String name) {
+	public RigParameter(String type, String name, String measuringUnit) {
 		this.setType(type);
 		this.setName(name);
+		this.setMeasuringUnit(measuringUnit);
 	}
 
 	public String getType() {
@@ -25,6 +27,18 @@ public class RigParameter {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getMeasuringUnit() {
+		return measuringUnit;
+	}
+
+	public void setMeasuringUnit(String measuringUnit) {
+		this.measuringUnit = measuringUnit;
+	}
 	
-	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof RigParameter &&
+				((RigParameter) o).getName().equals(name);
+	}
 }

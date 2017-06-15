@@ -77,4 +77,15 @@ public class Employee {
 		this.title = title;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Employee &&
+				((Employee) o).getFirstName().equals(firstName) &&
+				((Employee) o).getLastName().equals(lastName) &&
+				((Employee) o).getIdCode().equals(idCode) &&
+				((Employee) o).getIdNumber().equals(idNumber) &&
+				((Employee) o).getPersonalIdentificationNumber().equals(personalIdentificationNumber) &&
+				((Employee) o).getTitle().equals(title);
+	}
+	
 }

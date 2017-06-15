@@ -14,13 +14,13 @@ public class Rig{
 	private List<Employee> employees;
 	private String type;
 	
-	public Rig(String rigName, Date dueDate, List<Employee> employees, String type) {
+	public Rig(String rigName, Date revisionDate, List<Employee> employees, String type) {
 		this.setRigName(rigName);
 		parameters = new ArrayList<ParameterDetails>();
-		this.revisionDate = dueDate;
+		this.revisionDate = revisionDate;
 		this.setEmployees(employees);
 		this.setType(type);
-		this.setAuthorizationExtension(0);
+		this.setAuthorizationExtension(1);
 	}
 	
 	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, List<Employee> employees, String type) {
@@ -29,7 +29,7 @@ public class Rig{
 		this.setRevisionDate(revisionDate);
 		this.setEmployees(employees);
 		this.setType(type);
-		this.setAuthorizationExtension(0);
+		this.setAuthorizationExtension(1);
 	}
 	
 	/**
@@ -96,5 +96,27 @@ public class Rig{
 			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 		return calendar.getTime();
+	}
+	
+	public Date getDueDate() {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(revisionDate);
+		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
+		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, 2);
+		}
+		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		}
+		return calendar.getTime();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Rig &&
+				((Rig) o).getRigName().equals(rigName) &&
+				((Rig) o).getRevisionDate().equals(revisionDate) &&
+				((Rig) o).getType().equals(type) &&
+				((Rig) o).getAuthorizationExtension() == authorizationExtension;
 	}
 }

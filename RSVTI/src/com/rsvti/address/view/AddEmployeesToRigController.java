@@ -1,6 +1,7 @@
 package com.rsvti.address.view;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 
 import com.rsvti.address.JavaFxMain;
@@ -38,6 +39,8 @@ public class AddEmployeesToRigController {
 	
 	private Employee employeeToUpdate;
 	private boolean isUpdate = false;
+	private boolean isDueDateUpdate = false;
+	private String firmAndRigName;
 	
 	@FXML
 	private void initialize() {
@@ -49,32 +52,51 @@ public class AddEmployeesToRigController {
 	
 	@FXML
 	private void handleSave() {
-		if(isUpdate) {
-			javaFxMain.getAddRigsToFirmController().updateEmployeeList(
-					employeeToUpdate, true, new Employee(firstNameField.getText(),
-														 lastNameField.getText(),
-														 idCodeField.getText(), 
-														 idNumberField.getText(), 
-														 personalIdentificationNumberField.getText(), 
-														 new EmployeeAuthorization(authorizationNumberField.getText(), 
-																				   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
-																				   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-													    	titleField.getText()));
+		if(isDueDateUpdate) {
+			javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmAndRigName, employeeToUpdate, 
+															new Employee(firstNameField.getText(),
+																		 lastNameField.getText(),
+																		 idCodeField.getText(), 
+																		 idNumberField.getText(), 
+																		 personalIdentificationNumberField.getText(), 
+																		 new EmployeeAuthorization(authorizationNumberField.getText(), 
+																								   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
+																								   java.sql.Date.valueOf(authorizationDueDate.getValue())),
+																	    	titleField.getText()));
+			
 		} else {
-			javaFxMain.getAddRigsToFirmController().updateEmployeeList(
-					new Employee(firstNameField.getText(),
-								 lastNameField.getText(),
-								 idCodeField.getText(), 
-								 idNumberField.getText(), 
-								 personalIdentificationNumberField.getText(), 
-								 new EmployeeAuthorization(authorizationNumberField.getText(), 
-														   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
-														   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-								 titleField.getText()),
-					false,
-					null);
+			if(isUpdate) {
+				javaFxMain.getAddRigsToFirmController().updateEmployeeList(
+						employeeToUpdate, true, new Employee(firstNameField.getText(),
+															 lastNameField.getText(),
+															 idCodeField.getText(), 
+															 idNumberField.getText(), 
+															 personalIdentificationNumberField.getText(), 
+															 new EmployeeAuthorization(authorizationNumberField.getText(), 
+																					   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
+																					   java.sql.Date.valueOf(authorizationDueDate.getValue())),
+														    	titleField.getText()));
+			} else {
+				try {
+				javaFxMain.getAddRigsToFirmController().updateEmployeeList(
+						new Employee(firstNameField.getText(),
+									 lastNameField.getText(),
+									 idCodeField.getText(), 
+									 idNumberField.getText(), 
+									 personalIdentificationNumberField.getText(), 
+									 new EmployeeAuthorization(authorizationNumberField.getText(), 
+															   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
+															   java.sql.Date.valueOf(authorizationDueDate.getValue())),
+									 titleField.getText()),
+						false,
+						null);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		javaFxMain.getAddEmployeesToRigStage().close();
+		isDueDateUpdate = false;
 		isUpdate = false;
 	}
 	
@@ -94,6 +116,14 @@ public class AddEmployeesToRigController {
 	
 	public void setIsUpdate(boolean isUpdate) {
 		this.isUpdate = isUpdate;
+	}
+	
+	public void setIsDueDateUpdate(boolean isDueDateUpdate) {
+		this.isDueDateUpdate = isDueDateUpdate;
+	}
+	
+	public void setFirmAndRigName(String firmAndRigName) {
+		this.firmAndRigName = firmAndRigName;
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

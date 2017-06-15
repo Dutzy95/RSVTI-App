@@ -96,10 +96,8 @@
                         <Font size="29.0" />
                      </font>
                   </Label>
-                  <Button layoutX="460.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleAddFirm" prefWidth="100.0" text="Adauga..." />
-                  <Button layoutX="570.0" layoutY="734.0" mnemonicParsing="false" prefWidth="100.0" text="Modifica..." />
-                  <Button fx:id="rigOverviewButton" layoutX="350.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje..." />
-                  <Button layoutX="680.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleDeleteFirm" prefWidth="100.0" text="Șterge" />
+                  <Button fx:id="rigOverviewButton" layoutX="573.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje..." />
+                  <Button fx:id="deleteFirmButton" layoutX="680.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleDeleteFirm" prefWidth="100.0" text="Șterge" />
                </children></AnchorPane>
         </items>
       </SplitPane>

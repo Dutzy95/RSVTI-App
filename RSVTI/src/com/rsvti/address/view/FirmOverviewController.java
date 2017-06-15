@@ -3,6 +3,7 @@ package com.rsvti.address.view;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.services.DBServices;
+import com.rsvti.main.Constants;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -56,6 +57,8 @@ public class FirmOverviewController {
 	
 	@FXML
 	private Button rigOverviewButton;
+	@FXML
+	private Button deleteFirmButton;
 	
 	private JavaFxMain javaFxMain;
 	
@@ -71,12 +74,15 @@ public class FirmOverviewController {
 		
 		firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
 		firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showFirmDetails(newValue));
-		firmTable.setEditable(true);
+		firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigOverviewButton.setDisable(true);
+		deleteFirmButton.setDisable(true);
+		
 	}
 	
 	private void showFirmDetails(Firm firm) {
 		rigOverviewButton.setDisable(false);
+		deleteFirmButton.setDisable(false);
 		if(firm != null) {
 			firmNameLabel.setText(firm.getFirmName());
 			registrationNumberLabel.setText(firm.getRegistrationNumber());
@@ -116,10 +122,7 @@ public class FirmOverviewController {
 		if (selectedIndex >= 0) {
 			DBServices.deleteEntry(firmTable.getItems().get(selectedIndex));
 			firmTable.getItems().remove(selectedIndex);
-	    } else {
-	        // Nothing selected.
-	        firmNotSelectedAlert();
-	    }
+		}
 	}
 	
 	@FXML
@@ -127,28 +130,10 @@ public class FirmOverviewController {
 		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 		if(selectedIndex >= 0) {
 			javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
-		} else {
-			firmNotSelectedAlert();
 		}
-			
-	}
-	
-	@FXML
-	private void handleAddFirm() {
-		javaFxMain.addFirm();
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
-	}
-	
-	private void firmNotSelectedAlert() {
-		Alert alert = new Alert(AlertType.WARNING);
-        alert.initOwner(javaFxMain.getPrimaryStage());
-        alert.setTitle("Nu exista selectie");
-        alert.setHeaderText("Nu ati selectat o firma");
-        alert.setContentText("Selectati o firma din tabel.");
-
-        alert.showAndWait();
 	}
 }

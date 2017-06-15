@@ -27,7 +27,7 @@ public class Data {
 			String completeJarFilePath = new File(DBServices.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
 			String jarFilePath = completeJarFilePath.substring(0, completeJarFilePath.lastIndexOf("\\")) + "\\";
 			new File(jarFilePath + Constants.XML_DB_FILE_NAME).delete();
-			new File(jarFilePath + Constants.XML_RIG_PARAMETERS).delete();
+//			new File(jarFilePath + Constants.XML_RIG_PARAMETERS).delete();
 			
 			Calendar date = Calendar.getInstance();
 			date.set(2000, 4, 12);
@@ -42,6 +42,7 @@ public class Data {
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
 			Rig liftingRig1 = new Rig("macara", date.getTime(), Arrays.asList(employee1,employee2), "de ridicat");
+			liftingRig1.setAuthorizationExtension(1);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
@@ -51,11 +52,13 @@ public class Data {
 			
 			date.set(2005, 12, 26);
 			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), Arrays.asList(employee3), "de ridicat");
+			liftingRig2.setAuthorizationExtension(2);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
 			date.set(2010, 7, 20);
 			Rig pressureRig = new Rig("cazan", date.getTime(), Arrays.asList(employee1,employee3), "sub presiune");
+			pressureRig.setAuthorizationExtension(1);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			
@@ -78,12 +81,12 @@ public class Data {
 //						"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 //						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
 //			
-			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima"));
-			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima"));
-			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima"));
+//			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
+//			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));
+//			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima", "m"));
+//			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim", "m3"));
+//			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim", "m3"));
+//			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima", "bar"));
 //			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
 		} catch(Exception e) {
 			e.printStackTrace();

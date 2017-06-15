@@ -41,17 +41,19 @@ public class EntityBuilder {
 			String rigName = rigNode.getChildNodes().item(0).getTextContent();
 			
 			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-			Date dueDate = new Date();
+			Date revisionDate = new Date();
 			try {
-				dueDate = format.parse(rigNode.getChildNodes().item(1).getTextContent());
+				revisionDate = format.parse(rigNode.getChildNodes().item(1).getTextContent());
 			} catch(ParseException pe) {
 				pe.printStackTrace();
 			}
 			
+			int authorizationExtension = Integer.parseInt(rigNode.getChildNodes().item(2).getTextContent());
+			
 			ArrayList<Employee> employees = new ArrayList<Employee>();
 			String type = "";
 			
-			for(int l = 2; l < rigNode.getChildNodes().getLength(); l++) {
+			for(int l = 3; l < rigNode.getChildNodes().getLength(); l++) {
 				type = rigNode.getAttributes().getNamedItem("type").getTextContent();
 				
 				if(rigNode.getChildNodes().item(l).getChildNodes().getLength() <= 1) {
@@ -88,7 +90,9 @@ public class EntityBuilder {
 				}
 			}
 			
-			rigs.add(new Rig(rigName, parameters, dueDate, employees, type));
+			Rig rig = new Rig(rigName, parameters, revisionDate, employees, type);
+			rig.setAuthorizationExtension(authorizationExtension);
+			rigs.add(rig);
 		}
 		
 		return new Firm(
@@ -127,8 +131,10 @@ public class EntityBuilder {
 		
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		
+		int authorizationExtension = Integer.parseInt(node.getChildNodes().item(2).getTextContent());
+		
 		String type = "";
-		for(int i = 2; i < node.getChildNodes().getLength(); i++) {
+		for(int i = 3; i < node.getChildNodes().getLength(); i++) {
 			
 			if(node.getChildNodes().item(i).getChildNodes().getLength() <= 1) {
 					parameters.add(new ParameterDetails(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
@@ -163,8 +169,9 @@ public class EntityBuilder {
 				}
 			}
 		}
-		
-		return new Rig(rigName, parameters, dueDate, employees, type);
+		Rig rig = new Rig(rigName, parameters, dueDate, employees, type);
+		rig.setAuthorizationExtension(authorizationExtension);
+		return rig;
 	}
 	
 	public static Employee buildEmployeeFromXml(Node node) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -29,9 +30,11 @@ import org.w3c.dom.NodeList;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
+import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.main.Constants;
 
@@ -173,9 +176,13 @@ public class DBServices {
 			rigName.appendChild(document.createTextNode(rigIndex.getRigName()));
 			rig.appendChild(rigName);
 			
-			Element dueDate = document.createElement("data_scadenta");
-			dueDate.appendChild(document.createTextNode(format.format(rigIndex.getRevisionDate())));
-			rig.appendChild(dueDate);
+			Element revisionDate = document.createElement("data_reviziei");
+			revisionDate.appendChild(document.createTextNode(format.format(rigIndex.getRevisionDate())));
+			rig.appendChild(revisionDate);
+			
+			Element authorizationExtension = document.createElement("extinderea_autorizatiei");
+			authorizationExtension.appendChild(document.createTextNode("" + rigIndex.getAuthorizationExtension()));
+			rig.appendChild(authorizationExtension);
 			
 			for(ParameterDetails rigParameterIndex : parameters) {
 				Element node = document.createElement(rigParameterIndex.getName());
@@ -219,7 +226,7 @@ public class DBServices {
 				obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
 				authorizationElement.appendChild(obtainingDate);
 				
-				Element employeeDueDate = document.createElement("data_obtinerii");
+				Element employeeDueDate = document.createElement("data_scadenta");
 				employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
 				authorizationElement.appendChild(employeeDueDate);
 				
@@ -255,6 +262,38 @@ public class DBServices {
 		}
 	}
 	
+	public static void updateRigForFirm(String firmName, Rig rigToUpdate, Rig newRig) {
+		openFile(Constants.XML_DB_FILE_NAME);
+		setIndexes();
+		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
+		deleteEntry(firm);
+		for(int i = 0; i < firm.getRigs().size(); i++) {
+			if(firm.getRigs().get(i).equals(rigToUpdate)) {
+				firm.getRigs().set(i, newRig);
+			}
+		}
+		saveEntry(firm, true);
+	}
+	
+	public static void updateEmployeeForRig(String firmAndRigName, Employee employeeToUpdate, Employee newEmployee) {
+		openFile(Constants.XML_DB_FILE_NAME);
+		setIndexes();
+		String firmName = firmAndRigName.split("-")[0].trim();
+		String rigName = firmAndRigName.split("-")[1].trim();
+		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
+		deleteEntry(firm);
+		for(int i = 0; i < firm.getRigs().size(); i++) {
+			if(firm.getRigs().get(i).getRigName().equals(rigName)) {
+				for(int j = 0; j < firm.getRigs().get(i).getEmployees().size(); j++) {
+					if(firm.getRigs().get(i).getEmployees().get(j).equals(employeeToUpdate)) {
+						firm.getRigs().get(i).getEmployees().set(j, newEmployee);
+					}
+				}
+			}
+		}
+		saveEntry(firm, true);
+	}
+	
 	public static List<Firm> getAllFirms() {
 		List<Firm> firms = new ArrayList<Firm>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
@@ -273,11 +312,20 @@ public class DBServices {
 		return rigs;
 	}
 	
-	public static List<String> getRigParametersByType(String type) {
-		List<String> rigParameters = new ArrayList<String>();
+	public static List<RigParameter> getAllRigParameters() {
+		List<RigParameter> rigParameters = new ArrayList<RigParameter>();
+		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//parameter", XPathConstants.NODESET);
+		for(int i = 0; i < rigParameterNodes.getLength(); i++) {
+			rigParameters.add(new RigParameter(rigParameterNodes.item(i).getAttributes().getNamedItem("type").getTextContent(), rigParameterNodes.item(i).getTextContent(), rigParameterNodes.item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
+		}
+		return rigParameters;
+	}
+	
+	public static List<RigParameter> getRigParametersByType(String type) {
+		List<RigParameter> rigParameters = new ArrayList<RigParameter>();
 		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//parameter[@type=\"" + type + "\"]", XPathConstants.NODESET);
 		for(int i = 0; i < rigParameterNodes.getLength(); i++) {
-			rigParameters.add(rigParameterNodes.item(i).getTextContent());
+			rigParameters.add(new RigParameter(type, rigParameterNodes.item(i).getTextContent(), rigParameterNodes.item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 		}
 		return rigParameters;
 	}
@@ -355,6 +403,7 @@ public class DBServices {
 		Element parameterElement = document.createElement("parameter");
 		parameterElement.appendChild(document.createTextNode(parameter.getName()));
 		parameterElement.setAttribute("type", parameter.getType());
+		parameterElement.setAttribute("mUnit", parameter.getMeasuringUnit());
 		
 		rootElement.appendChild(parameterElement);
 		
@@ -370,23 +419,16 @@ public class DBServices {
 	}
 	
 	public static void deleteEntry(RigParameter parameter) {
-		Node liftingRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"de ridicat\"]", XPathConstants.NODE);
-		Node pressureRigNode = (Node) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//instalatie[@type = \"sub presiune\"]", XPathConstants.NODE);
-		NodeList parameters;
+		openFile(Constants.XML_RIG_PARAMETERS);
 		
-		if(parameter.getType().equals("de ridicat")) {
-			parameters = liftingRigNode.getChildNodes();
-		} else {
-			parameters = pressureRigNode.getChildNodes();
-		}
+		Element rootElement = document.getDocumentElement();
 		
-		for(int i = 0; i < parameters.getLength(); i++) {
-			if(parameters.item(i).getNodeName().equals(parameter.getName())) {
-				if(parameter.getType().equals("de ridicat")) {
-					liftingRigNode.removeChild(parameters.item(i));
-				} else {
-					pressureRigNode.removeChild(parameters.item(i));
-				}
+		for(int i = 0; i < rootElement.getChildNodes().getLength(); i++) {
+			Node parameterNode = rootElement.getChildNodes().item(i);
+			if(parameterNode.getTextContent().equals(parameter.getName()) &&
+					parameterNode.getAttributes().getNamedItem("type").getTextContent().equals(parameter.getType()) &&
+					parameterNode.getAttributes().getNamedItem("mUnit").getTextContent().equals(parameter.getMeasuringUnit())) {
+				rootElement.removeChild(parameterNode);
 			}
 		}
 		
@@ -399,6 +441,39 @@ public class DBServices {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static List<EmployeeDueDateDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate) {
+		List<EmployeeDueDateDetails> selectedEmployees = new ArrayList<EmployeeDueDateDetails>();
+		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
+		for(int i = 0; i < firmNodes.getLength(); i++) {
+			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
+			for(int j = 0; j < firm.getRigs().size(); j++) {
+				Rig rig = firm.getRigs().get(j);
+				for(int k = 0; k < rig.getEmployees().size(); k++) {
+					Date dueDate = rig.getEmployees().get(k).getAuthorization().getDueDate();
+					if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
+						selectedEmployees.add(new EmployeeDueDateDetails(rig.getEmployees().get(k), rig, firm.getFirmName(), dueDate));
+					}
+				}
+			}
+		}
+		return selectedEmployees;
+	}
+	
+	public static List<RigDueDateDetails> getRigsBetweenDateInterval(Date beginDate, Date endDate) {
+		List<RigDueDateDetails> selectedRigs = new ArrayList<RigDueDateDetails>();
+		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
+		for(int i = 0; i < firmNodes.getLength(); i++) {
+			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
+			for(int j = 0; j < firm.getRigs().size(); j++) {
+				Date dueDate = firm.getRigs().get(j).getDueDate(); 
+				if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
+					selectedRigs.add(new RigDueDateDetails(firm.getRigs().get(j), firm.getFirmName(), dueDate));
+				}
+			}
+		}
+		return selectedRigs;
 	}
 	
 	public static int getLastFirmIndex() {

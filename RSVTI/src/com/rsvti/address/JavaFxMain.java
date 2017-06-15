@@ -1,20 +1,30 @@
 package com.rsvti.address;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.rsvti.address.view.AddEmployeesToRigController;
 import com.rsvti.address.view.AddFirmController;
+import com.rsvti.address.view.AddRigParameterController;
 import com.rsvti.address.view.AddRigsToFirmController;
+import com.rsvti.address.view.DueDateOverviewController;
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
 import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.main.Constants;
 import com.rsvti.main.Data;
+import com.rsvti.main.Utils;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -24,27 +34,27 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class JavaFxMain extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabPane;
-	private Stage addEmployeesToRigStage;
-	private AddEmployeesToRigController addEmployeesToRigController;
-	private AddRigsToFirmController addRigsToFirmController;
-	private Stage addRigsToFirmStage;
+	private Stage addUpdateEmployeesToRigStage;
+	private AddEmployeesToRigController addUpdateEmployeesToRigController;
+	private AddRigsToFirmController addUpdateRigsToFirmController;
+	private Stage addUpdateRigsToFirmStage;
 	private AddFirmController addFirmController;
-	private Tab addFirmTab;
+	private Tab addRigParameterTab;
+	private DueDateOverviewController dueDateOverviewController;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
         this.primaryStage.setTitle("RSVTI App");
-
+        
         initRootLayout();
-
-        showFirmOverview();
 	}
 	
 	public void initRootLayout() {
@@ -79,6 +89,8 @@ public class JavaFxMain extends Application {
             // Set person overview into the center of root layout.
             Tab tab = new Tab("Firme");
             tab.setContent(personOverview);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
@@ -146,13 +158,13 @@ public class JavaFxMain extends Application {
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddFirm.fxml"));
 	        AnchorPane addFirm = (AnchorPane) loader.load();
 
-	        addFirmTab = new Tab("Adaugă firmă");
-            addFirmTab.setContent(addFirm);
-            addFirmTab.setClosable(true);
+	        addRigParameterTab = new Tab("Adaugă firmă");
+            addRigParameterTab.setContent(addFirm);
+            addRigParameterTab.setClosable(true);
             
             tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
-            tabPane.getTabs().add(addFirmTab);
-            tabPane.getSelectionModel().select(addFirmTab);
+            tabPane.getTabs().add(addRigParameterTab);
+            tabPane.getSelectionModel().select(addRigParameterTab);
             
             addFirmController = loader.getController();
             addFirmController.setJavaFxMain(this);
@@ -161,32 +173,90 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddRigsToFirm(Rig rig, boolean isUpdate) {
+	public void addRigParameter() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigParameter.fxml"));
+	        AnchorPane addRigParameter = (AnchorPane) loader.load();
+
+	        addRigParameterTab = new Tab("Parametrii pentru utilaje");
+            addRigParameterTab.setContent(addRigParameter);
+            addRigParameterTab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(addRigParameterTab);
+            tabPane.getSelectionModel().select(addRigParameterTab);
+            
+            AddRigParameterController addRigParameterController = loader.getController();
+            addRigParameterController.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void showAddUpdateRigsToFirm(Rig rig, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
 		try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
-	        AnchorPane addRigsToFirm = (AnchorPane) loader.load();
+	        AnchorPane addUpdateRigsToFirm = (AnchorPane) loader.load();
 	        
 	        AddRigsToFirmController controller = loader.getController();
 	        controller.setJavaFxMain(this);
+	        controller.setFirmName(stageName);
+	        controller.setIsDueDateUpdate(isDueDateUpdate);
 
 	        if(rig != null) {
             	controller.showRigDetails(rig);
             }
 	        
-	        addRigsToFirmController = loader.getController();
-	        addRigsToFirmController.setJavaFxMain(this);
-	        addRigsToFirmController.setIsUpdate(isUpdate);
+	        addUpdateRigsToFirmController = loader.getController();
+	        addUpdateRigsToFirmController.setJavaFxMain(this);
+	        addUpdateRigsToFirmController.setIsUpdate(isUpdate);
             
-	        addRigsToFirmStage = new Stage();
-	        addRigsToFirmStage.setTitle("Adaugă utilaje");
-	        addRigsToFirmStage.initModality(Modality.WINDOW_MODAL);
-	        addRigsToFirmStage.initOwner(primaryStage);
-	        Scene scene = new Scene(addRigsToFirm);
-	        addRigsToFirmStage.setScene(scene);
+	        addUpdateRigsToFirmStage = new Stage();
+	        addUpdateRigsToFirmStage.setTitle(stageName);
+	        addUpdateRigsToFirmStage.initModality(Modality.WINDOW_MODAL);
+	        addUpdateRigsToFirmStage.initOwner(primaryStage);
+	        Scene scene = new Scene(addUpdateRigsToFirm);
+	        addUpdateRigsToFirmStage.setScene(scene);
             
-            addRigsToFirmStage.showAndWait();
+            addUpdateRigsToFirmStage.showAndWait();
+            
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void showAddUpdateEmployeesToRig(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToRig.fxml"));
+	        AnchorPane addUpdateEmployeesToRig = (AnchorPane) loader.load();
+	        
+	        AddEmployeesToRigController controller = loader.getController();
+	        controller.setJavaFxMain(this);
+	        controller.setFirmAndRigName(stageName);
+	        controller.setIsDueDateUpdate(isDueDateUpdate);
+
+	        addUpdateEmployeesToRigController = loader.getController();
+            addUpdateEmployeesToRigController.setJavaFxMain(this);
+            addUpdateEmployeesToRigController.setIsUpdate(isUpdate);
+            
+            if(employee != null) {
+            	addUpdateEmployeesToRigController.showEmployeeDetails(employee);
+            }
+            
+            addUpdateEmployeesToRigStage = new Stage();
+	        addUpdateEmployeesToRigStage.setTitle(stageName);
+	        addUpdateEmployeesToRigStage.initModality(Modality.WINDOW_MODAL);
+	        addUpdateEmployeesToRigStage.initOwner(primaryStage);
+	        Scene scene = new Scene(addUpdateEmployeesToRig);
+	        addUpdateEmployeesToRigStage.setScene(scene);
+            
+            addUpdateEmployeesToRigStage.showAndWait();
             
             
 	    } catch (IOException e) {
@@ -194,31 +264,23 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddEmployeesToRig(Employee employee, boolean isUpdate) {
+	public void showDueDateOverview() {
 		try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToRig.fxml"));
-	        AnchorPane addEmployeesToRig = (AnchorPane) loader.load();
+	        loader.setLocation(JavaFxMain.class.getResource("view/DueDateOverview.fxml"));
+	        AnchorPane dueDateOverview = (AnchorPane) loader.load();
 
-	        addEmployeesToRigController = loader.getController();
-            addEmployeesToRigController.setJavaFxMain(this);
-            addEmployeesToRigController.setIsUpdate(isUpdate);
+	        Tab dueDateOverviewTab = new Tab("Date scadente");
+	        dueDateOverviewTab.setContent(dueDateOverview);
+	        dueDateOverviewTab.setClosable(true);
             
-            if(employee != null) {
-            	addEmployeesToRigController.showEmployeeDetails(employee);
-            }
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(dueDateOverviewTab);
+            tabPane.getSelectionModel().select(dueDateOverviewTab);
             
-            addEmployeesToRigStage = new Stage();
-	        addEmployeesToRigStage.setTitle("Adaugă personal");
-	        addEmployeesToRigStage.initModality(Modality.WINDOW_MODAL);
-	        addEmployeesToRigStage.initOwner(primaryStage);
-	        Scene scene = new Scene(addEmployeesToRig);
-	        addEmployeesToRigStage.setScene(scene);
-            
-            addEmployeesToRigStage.showAndWait();
-            
-            
+            dueDateOverviewController = loader.getController();
+            dueDateOverviewController.setJavaFxMain(this);
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
@@ -236,19 +298,19 @@ public class JavaFxMain extends Application {
 	}
 	
 	public Stage getAddEmployeesToRigStage() {
-		return addEmployeesToRigStage;
+		return addUpdateEmployeesToRigStage;
 	}
 	
 	public AddEmployeesToRigController getAddEmployeesToRigController() {
-		return addEmployeesToRigController;
+		return addUpdateEmployeesToRigController;
 	}
 	
 	public AddRigsToFirmController getAddRigsToFirmController() {
-		return addRigsToFirmController;
+		return addUpdateRigsToFirmController;
 	}
 	
 	public Stage getAddRigsToFirmStage() {
-		return addRigsToFirmStage;
+		return addUpdateRigsToFirmStage;
 	}
 	
 	public AddFirmController getAddFirmController() {
@@ -256,10 +318,15 @@ public class JavaFxMain extends Application {
 	}
 	
 	public Tab getAddFirmTab() {
-		return addFirmTab;
+		return addRigParameterTab;
+	}
+	
+	public DueDateOverviewController getDueDateOverviewController() {
+		return dueDateOverviewController;
 	}
 
 	public static void main(String[] args) {
+//		Utils.setErrorLog();
 		Data.populate();
 		launch(args);
 	}

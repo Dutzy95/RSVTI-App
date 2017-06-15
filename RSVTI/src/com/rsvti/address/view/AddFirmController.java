@@ -9,10 +9,12 @@ import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
+import com.rsvti.main.Constants;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -72,11 +74,12 @@ public class AddFirmController {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            Rig rowData = row.getItem();
-		            javaFxMain.showAddRigsToFirm(rowData, true);
+		            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj");
 		        }
 		    });
 		    return row ;
 		});
+		rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 	}
 	
@@ -104,7 +107,7 @@ public class AddFirmController {
 	
 	@FXML
 	private void handleAddRig() {
-		javaFxMain.showAddRigsToFirm(null, false);
+		javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj");
 	}
 	
 	public void updateRigTable(Rig rig, boolean isUpdate, Rig updatedRig) {
