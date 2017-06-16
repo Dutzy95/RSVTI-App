@@ -13,7 +13,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -113,7 +121,6 @@ public class Utils {
 						Calendar instance = Calendar.getInstance();
 						if(instance.equals(refreshIntervalBegin) || instance.after(refreshIntervalBegin)) {
 							System.err.println("[" + simpleDateFormat.format(refreshIntervalBegin.getTime()) + "]");
-							System.out.println("[" + simpleDateFormat.format(refreshIntervalBegin.getTime()) + "]");
 							refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
 						}
 					}
@@ -122,6 +129,23 @@ public class Utils {
 				}
 		    }
 		}.start();
+	}
+	
+	public static void setStartup() {
+		Path path = Paths.get("C:/Users/" + System.getProperty("user.name") + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/");
+		if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+			try {
+				String fileName = "Start" + Constants.APP_NAME + ".bat";
+				File batchFile = new File(path.toString() + "/" + fileName);
+				OutputStream output = new FileOutputStream(batchFile);
+				String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+				byte[] bytes = new String("start javaw -jar " + jarFilePath).getBytes();
+				output.write(bytes);
+				output.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public static String getJarFilePath() {
@@ -169,7 +193,8 @@ public class Utils {
 			ImageIcon imageIcon = new ImageIcon(Utils.class.getResource("/RSVTI_without_text.png"));
 			final SystemTray tray = SystemTray.getSystemTray();
 			int trayIconWidth = new TrayIcon(imageIcon.getImage()).getSize().width;
-			final TrayIcon trayIcon = new TrayIcon(imageIcon.getImage().getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
+			int trayIconHeight = new TrayIcon(imageIcon.getImage()).getSize().height;
+			final TrayIcon trayIcon = new TrayIcon(imageIcon.getImage().getScaledInstance(trayIconWidth, trayIconHeight, Image.SCALE_SMOOTH));
 			trayIcon.setImageAutoSize(true);
 			tray.add(trayIcon);
 			

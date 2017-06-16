@@ -13,14 +13,17 @@ import com.rsvti.address.view.AddRigsToFirmController;
 import com.rsvti.address.view.DueDateOverviewController;
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
+import com.rsvti.address.view.HomeController;
 import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
+import com.rsvti.address.view.StartImageController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.generator.Generator;
 import com.rsvti.main.Data;
 import com.rsvti.main.Utils;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -34,7 +37,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 public class JavaFxMain extends Application {
 
@@ -48,6 +53,8 @@ public class JavaFxMain extends Application {
 	private AddFirmController addFirmController;
 	private Tab addRigParameterTab;
 	private DueDateOverviewController dueDateOverviewController;
+	private PauseTransition delay = new PauseTransition(Duration.seconds(3));
+	private PauseTransition delay1 = new PauseTransition(Duration.seconds(3));
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -59,7 +66,33 @@ public class JavaFxMain extends Application {
         Platform.setImplicitExit(false);
 		Utils.setTray(primaryStage);
 		
+		initApp();
+		
         initRootLayout();
+        showHome();
+	}
+	
+	public void initApp() {
+		try {
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/StartImage.fxml"));
+	        
+	        AnchorPane pane = (AnchorPane) loader.load();
+	        Scene scene = new Scene(pane);
+	        
+	        StartImageController controller = loader.getController();
+	        
+	        Stage stage = new Stage();
+	        stage.setScene(scene);
+	        stage.initStyle(StageStyle.UNDECORATED);
+	        
+	        stage.show();
+	        
+	        delay.setOnFinished( event -> stage.close() );
+	        delay.play();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void initRootLayout() {
@@ -78,20 +111,40 @@ public class JavaFxMain extends Application {
             MenuController menuController = loader.getController();
             menuController.setJavaFxMain(this);
             
-            primaryStage.show();
+            delay1.setOnFinished( event -> primaryStage.show() );
+	        delay1.play();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 	
+	public void showHome() {
+		try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(JavaFxMain.class.getResource("view/Home.fxml"));
+            BorderPane home = (BorderPane) loader.load();
+
+            HomeController controller = loader.getController();
+            
+            Tab tab = new Tab("Acasă");
+            tab.setContent(home);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+	}
+	
 	public void showFirmOverview() {
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(JavaFxMain.class.getResource("view/FirmOverview.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
-            // Set person overview into the center of root layout.
             Tab tab = new Tab("Firme");
             tab.setContent(personOverview);
             
@@ -332,8 +385,9 @@ public class JavaFxMain extends Application {
 
 	public static void main(String[] args) {
 //		Utils.setErrorLog();
+//		Utils.setStartup();
 		Utils.createFolderHierarchy();
-		Generator.generateWordFile();
+//		Generator.generateWordFile();
 		Data.populate();
 		launch(args);
 	}

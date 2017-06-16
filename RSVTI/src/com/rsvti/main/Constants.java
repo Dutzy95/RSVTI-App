@@ -16,8 +16,8 @@ public class Constants {
 	public static String DATE_FORMAT = "dd-MM-yyyy";
 	public static String DATE_FORMAT_EXTENDED = "dd-MM-yyyy HH:mm:ss";
 	public static String DATE_FORMAT_RO = "zz-ll-aaaa";
-	public static int ERR_LOG_REFRESH_TIME_UNIT = Calendar.SECOND;
-	public static int ERR_LOG_REFRESH_INTERVAL = 2;
+	public static int ERR_LOG_REFRESH_TIME_UNIT = Calendar.HOUR_OF_DAY;
+	public static int ERR_LOG_REFRESH_INTERVAL = 1;
 	
 	public static String TABLE_PLACEHOLDER_MESSAGE = "Nu există conținut în tabel";
 	
