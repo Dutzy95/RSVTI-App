@@ -77,6 +77,8 @@ public class AddRigsToFirmController {
 	private String firmName;
 	private Rig rigToUpdate;
 	
+	private int selectedExtensionValue = 0;
+	
 	@FXML
 	private JavaFxMain javaFxMain;
 	
@@ -130,12 +132,16 @@ public class AddRigsToFirmController {
 		    return row ;
 		});
 		
-		authorizationExtension.setItems(FXCollections.observableArrayList("1 an", "2 ani", "3 ani", "4 ani", "5 ani"));
+		authorizationExtension.setItems(FXCollections.observableArrayList("Nu extinde", "1 an", "2 ani", "3 ani", "4 ani", "5 ani"));
 		authorizationExtension.getSelectionModel().select(0);
 		authorizationExtension.valueProperty().addListener(new ChangeListener<String>() {
 			@Override 
 			public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-				int selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
+				if(!authorizationExtension.getValue().equals("Nu extinde")) {
+					selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
+				} else {
+					selectedExtensionValue = 0;
+				}
 				if(revisionDate.getValue() != null) {
 					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 				}
@@ -145,7 +151,11 @@ public class AddRigsToFirmController {
 		revisionDate.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				int selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
+				if(!authorizationExtension.getValue().equals("Nu extinde")) {
+					selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
+				} else {
+					selectedExtensionValue = 0;
+				}
 				dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 			}
 		});
@@ -154,10 +164,9 @@ public class AddRigsToFirmController {
         Utils.setDisabledDaysForDatePicker(revisionDate);
         revisionDate.setValue(LocalDate.now());
 		
-		dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), 1)));
+		dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), selectedExtensionValue)));
 	}
 	
-	//TODO: 
 	private void filterSelectedParameters(String selectedItem) {
 		List<RigParameter> parameters = DBServices.getRigParametersByType(selectedItem);
 		List<ParameterDetails> chosenParameters = chosenParametersTable.getItems();
@@ -218,7 +227,7 @@ public class AddRigsToFirmController {
 					 java.sql.Date.valueOf(revisionDate.getValue()), 
 				 	 employeeTable.getItems(), 
 					 rigType.getValue());
-			newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
+			newRig.setAuthorizationExtension(selectedExtensionValue);
 			javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
 		} else {
 			if(isUpdate) {
@@ -227,7 +236,7 @@ public class AddRigsToFirmController {
 									 java.sql.Date.valueOf(revisionDate.getValue()), 
 								 	 employeeTable.getItems(), 
 									 rigType.getValue());
-				newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
+				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
 			} else {
 				Rig newRig = new Rig(rigNameField.getText(), 
@@ -235,7 +244,7 @@ public class AddRigsToFirmController {
 									 java.sql.Date.valueOf(revisionDate.getValue()), 
 								 	 employeeTable.getItems(), 
 									 rigType.getValue());
-				newRig.setAuthorizationExtension(authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0');
+				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
 			}
 		}
