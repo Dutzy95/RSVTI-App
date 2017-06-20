@@ -7,13 +7,15 @@ public class EmployeeDueDateDetails {
 	private Employee employee;
 	private Rig rig;
 	private String firmName;
+	private String firmAddress;
 	private Date dueDate;
 	
-	public EmployeeDueDateDetails(Employee employee, Rig rig, String firmName, Date dueDate) {
+	public EmployeeDueDateDetails(Employee employee, Rig rig, String firmName, String firmAddress, Date dueDate) {
 		this.setEmployee(employee);
 		this.setRig(rig);
 		this.setFirmName(firmName);
 		this.setDueDate(dueDate);
+		this.setFirmAddress(firmAddress);
 	}
 
 	public Employee getEmployee() {
@@ -46,5 +48,13 @@ public class EmployeeDueDateDetails {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	public String getFirmAddress() {
+		return firmAddress;
+	}
+
+	public void setFirmAddress(String firmAddress) {
+		this.firmAddress = firmAddress;
 	}
 }

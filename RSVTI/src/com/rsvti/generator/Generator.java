@@ -5,12 +5,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder;
 
+import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.TestQuestion;
+import com.rsvti.database.services.DBServices;
 import com.rsvti.main.Constants;
 import com.rsvti.main.Utils;
 
@@ -72,5 +81,102 @@ public class Generator {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private static void addTabs(XWPFRun run, int nrOfTabs) {
+		for(int i = 0; i < nrOfTabs; i++) {
+			run.addTab();
+		}
+	}
+	
+	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails) {
+		File file = null;
+		try {
+			String jarFilePath = Utils.getJarFilePath();
+			file = new File(jarFilePath + "tests\\" + employeeDetails.getFirmName());
+			file.mkdir();
+			file = new File(jarFilePath + "tests\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+					+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
+			FileOutputStream output = new FileOutputStream(file);
+			
+			XWPFDocument document = new XWPFDocument();
+			XWPFParagraph paragraph = document.createParagraph();
+			XWPFRun run = paragraph.createRun();
+			
+			run.setText("LOCUL DESFĂȘURĂRII EXAMINĂRII");
+			addTabs(run, 4);
+			run.setText("EXAMINATOR");
+			run.addBreak();
+			run.setBold(true);
+			run = paragraph.createRun();
+			run.setText("Firma: " + employeeDetails.getFirmName());
+			addTabs(run, 6);
+			run.setText("Nume: Bogdan");
+			run.addBreak();
+			run.setText("Adresă: " + employeeDetails.getFirmAddress());
+			addTabs(run, 6);
+			run.setText("Prenume: Radu-Victor");
+			run.addBreak();
+			run.setText("Nume: " + employeeDetails.getEmployee().getLastName());
+			addTabs(run, 6);
+			run.setText("Semnătură: __________________");
+			run.addBreak();
+			run.setText("Prenume: " + employeeDetails.getEmployee().getFirstName());
+			run.addBreak();
+			run.setText("Data: ________________________");
+			run.addBreak();
+			run.setText("Semnătură: ___________________");
+			addTabs(run, 5);
+			run = paragraph.createRun();
+			run.setText("Admis / Respins");
+			run.setBold(true);
+			run.setFontSize(14);
+			run = paragraph.createRun();
+			
+			paragraph = document.createParagraph();
+			paragraph.setAlignment(ParagraphAlignment.CENTER);
+			run = paragraph.createRun();
+			run.setText("Test");
+			run.setFontSize(32);
+			run.setBold(true);
+			paragraph = document.createParagraph();
+			paragraph.setAlignment(ParagraphAlignment.CENTER);
+			run = paragraph.createRun();
+			run.setText("Examinare anuala " + employeeDetails.getEmployee().getTitle());
+			run.setFontSize(20);
+			paragraph = document.createParagraph();
+			
+			List<TestQuestion> questions = DBServices.getTestQuestionsOfType(employeeDetails.getEmployee().getTitle());
+			Collections.shuffle(questions);
+			
+			for(int i = 0; i < nrOfQuestions; i++) {
+				TestQuestion question = questions.get(i);
+				List<String> answers = question.getAnswers();
+				Collections.shuffle(answers);
+				
+				paragraph = document.createParagraph();
+				paragraph.setAlignment(ParagraphAlignment.BOTH);
+				run = paragraph.createRun();
+				run.setText((i+1) + ". " + question.getQuestion());
+				paragraph = document.createParagraph();
+				run = paragraph.createRun();
+				run.addTab();
+				run.setText("a. " + answers.get(0));
+				paragraph = document.createParagraph();
+				run = paragraph.createRun();
+				run.addTab();
+				run.setText("b. " + answers.get(1));
+				paragraph = document.createParagraph();
+				run = paragraph.createRun();
+				run.addTab();
+				run.setText("c. " + answers.get(2));
+				run.addBreak();
+			}
+			
+			document.write(output);
+			document.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return file;
+	}
 }

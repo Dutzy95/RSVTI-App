@@ -15,6 +15,7 @@ import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.main.Constants;
 
 public class EntityBuilder {
@@ -223,11 +224,24 @@ public class EntityBuilder {
 		return rigs;
 	}
 	
-	public List<Employee> buildEmployeeListFromXml(NodeList nodeList) {
+	public static List<Employee> buildEmployeeListFromXml(NodeList nodeList) {
 		List<Employee> employees = new ArrayList<Employee>();
 		for(int i = 0; i < nodeList.getLength(); i++) {
 			employees.add(buildEmployeeFromXml(nodeList.item(i)));
 		}
 		return employees;
+	}
+	
+	public static TestQuestion buildTestQuestionFromXml(Node node) {
+		String text = node.getFirstChild().getTextContent();
+		List<String> answers = new ArrayList<String>();
+		
+		String type = node.getAttributes().getNamedItem("type").getTextContent();
+		
+		for(int i = 1; i < node.getChildNodes().getLength(); i++) {
+			answers.add(node.getChildNodes().item(i).getTextContent());
+		}
+		
+		return new TestQuestion(text, answers, type);
 	}
 }

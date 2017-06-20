@@ -36,6 +36,7 @@ import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
+import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.main.Constants;
 import com.rsvti.main.Utils;
 
@@ -56,6 +57,8 @@ public class DBServices {
 				PrintStream ps = new PrintStream(file);
 				if(filepath.contains("RigParameters.xml")) {
 					ps.println("<?xml version=\"1.0\"?><parameters></parameters>");
+				} else if(filepath.contains("TestData.xml")) {
+					ps.println("<?xml version=\"1.0\"?><test></test>");
 				} else {
 					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
@@ -89,7 +92,7 @@ public class DBServices {
 	}
 	
 	public static void saveEntry(Firm firm, boolean update) {
-		openFile(Constants.XML_DB_FILE_NAME);
+		openFile(Constants.XML_FIRMS_FILE_NAME);
 		setIndexes();
 		
 		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
@@ -241,7 +244,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_DB_FILE_NAME));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -251,7 +254,7 @@ public class DBServices {
 	}
 	
 	public static void updateEntry(Firm source, Firm replacement) {
-		openFile(Constants.XML_DB_FILE_NAME);
+		openFile(Constants.XML_FIRMS_FILE_NAME);
 		setIndexes();
 		List<Firm> firms = EntityBuilder.buildFirmListFormXml((NodeList) DBServices.executeXmlQuery("//firma", XPathConstants.NODESET));
 		for(Firm index : firms) {
@@ -263,7 +266,6 @@ public class DBServices {
 	}
 	
 	public static void updateRigForFirm(String firmName, Rig rigToUpdate, Rig newRig) {
-		openFile(Constants.XML_DB_FILE_NAME);
 		setIndexes();
 		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
@@ -276,7 +278,6 @@ public class DBServices {
 	}
 	
 	public static void updateEmployeeForRig(String firmAndRigName, Employee employeeToUpdate, Employee newEmployee) {
-		openFile(Constants.XML_DB_FILE_NAME);
 		setIndexes();
 		String firmName = firmAndRigName.split("-")[0].trim();
 		String rigName = firmAndRigName.split("-")[1].trim();
@@ -314,7 +315,7 @@ public class DBServices {
 	
 	public static List<RigParameter> getAllRigParameters() {
 		List<RigParameter> rigParameters = new ArrayList<RigParameter>();
-		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//parameter", XPathConstants.NODESET);
+		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS_FILE_NAME, "//parameter", XPathConstants.NODESET);
 		for(int i = 0; i < rigParameterNodes.getLength(); i++) {
 			rigParameters.add(new RigParameter(rigParameterNodes.item(i).getAttributes().getNamedItem("type").getTextContent(), rigParameterNodes.item(i).getTextContent(), rigParameterNodes.item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 		}
@@ -323,7 +324,7 @@ public class DBServices {
 	
 	public static List<RigParameter> getRigParametersByType(String type) {
 		List<RigParameter> rigParameters = new ArrayList<RigParameter>();
-		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS, "//parameter[@type=\"" + type + "\"]", XPathConstants.NODESET);
+		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS_FILE_NAME, "//parameter[@type=\"" + type + "\"]", XPathConstants.NODESET);
 		for(int i = 0; i < rigParameterNodes.getLength(); i++) {
 			rigParameters.add(new RigParameter(type, rigParameterNodes.item(i).getTextContent(), rigParameterNodes.item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 		}
@@ -331,7 +332,7 @@ public class DBServices {
 	}
 	
 	public static void deleteEntry(Firm firm) {
-		openFile(Constants.XML_DB_FILE_NAME);
+		openFile(Constants.XML_FIRMS_FILE_NAME);
 		
 		Element root = document.getDocumentElement();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
@@ -344,7 +345,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_DB_FILE_NAME));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -368,7 +369,7 @@ public class DBServices {
 	 * @return object/s resulted from the query
 	 */
 	public static Object executeXmlQuery(String query, QName xpathConstant) {
-		openFile(Constants.XML_DB_FILE_NAME);
+		openFile(Constants.XML_FIRMS_FILE_NAME);
 		Object returnValue = null;
 		try {
 			XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -396,7 +397,7 @@ public class DBServices {
 	}
 	
 	public static void saveEntry(RigParameter parameter) {
-		openFile(Constants.XML_RIG_PARAMETERS);
+		openFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 		
 		Element rootElement = document.getDocumentElement();
 		
@@ -409,7 +410,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -419,7 +420,7 @@ public class DBServices {
 	}
 	
 	public static void deleteEntry(RigParameter parameter) {
-		openFile(Constants.XML_RIG_PARAMETERS);
+		openFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 		
 		Element rootElement = document.getDocumentElement();
 		
@@ -434,7 +435,7 @@ public class DBServices {
 		
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS));
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME));
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -453,7 +454,7 @@ public class DBServices {
 				for(int k = 0; k < rig.getEmployees().size(); k++) {
 					Date dueDate = rig.getEmployees().get(k).getAuthorization().getDueDate();
 					if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
-						selectedEmployees.add(new EmployeeDueDateDetails(rig.getEmployees().get(k), rig, firm.getFirmName(), dueDate));
+						selectedEmployees.add(new EmployeeDueDateDetails(rig.getEmployees().get(k), rig, firm.getFirmName(), firm.getAddress(), dueDate));
 					}
 				}
 			}
@@ -496,5 +497,95 @@ public class DBServices {
 			}
 		}
 		return maxIndex;
+	}
+	
+	public static void saveEntry(TestQuestion question) {
+		openFile(Constants.XML_TEST_DATA_FILE_NAME);
+		
+		Element rootElement = document.getDocumentElement();
+		
+		Element questionElement = document.createElement("intrebare");
+		questionElement.setAttribute("type", question.getType());
+		
+		Element questionText = document.createElement("enunt");
+		questionText.appendChild(document.createTextNode(question.getQuestion()));
+		questionElement.appendChild(questionText);
+		
+		for(String index : question.getAnswers()) {
+			Element answerElement = document.createElement("varianta");
+			answerElement.appendChild(document.createTextNode(index));
+			questionElement.appendChild(answerElement);
+		}
+		
+		rootElement.appendChild(questionElement);
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static List<TestQuestion> getAllTestQuestions() {
+		List<TestQuestion> questions = new ArrayList<TestQuestion>();
+		
+		NodeList questionNodes = (NodeList) executeXmlQuery(Constants.XML_TEST_DATA_FILE_NAME, "//intrebare", XPathConstants.NODESET);
+		for(int i = 0; i < questionNodes.getLength(); i++) {
+			questions.add(EntityBuilder.buildTestQuestionFromXml(questionNodes.item(i)));
+		}
+		
+		return questions;
+	}
+	
+	public static List<TestQuestion> getTestQuestionsOfType(String type) {
+		List<TestQuestion> questions = new ArrayList<TestQuestion>();
+		
+		NodeList questionNodes = (NodeList) executeXmlQuery(Constants.XML_TEST_DATA_FILE_NAME, "//intrebare[@type = \"" + type + "\"]", XPathConstants.NODESET);
+		for(int i = 0; i < questionNodes.getLength(); i++) {
+			questions.add(EntityBuilder.buildTestQuestionFromXml(questionNodes.item(i)));
+		}
+		
+		return questions;
+	}
+	
+	public static void deleteEntry(TestQuestion question) {
+		openFile(Constants.XML_TEST_DATA_FILE_NAME);
+		
+		Element rootElement = document.getDocumentElement();
+		
+		for(int i = 0; i < rootElement.getChildNodes().getLength(); i++) {
+			Node questionNode = rootElement.getChildNodes().item(i);
+			if(questionNode.getChildNodes().item(0).getTextContent().equals(question.getQuestion()) &&
+					questionNode.getChildNodes().item(1).getTextContent().equals(question.getAnswers().get(0)) &&
+					questionNode.getChildNodes().item(2).getTextContent().equals(question.getAnswers().get(1)) &&
+					questionNode.getChildNodes().item(3).getTextContent().equals(question.getAnswers().get(2))) {
+				rootElement.removeChild(questionNode);
+			}
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateEntry(TestQuestion questionToUpdate, TestQuestion newQuestion) {
+		NodeList questionNodes = (NodeList) executeXmlQuery(Constants.XML_TEST_DATA_FILE_NAME, "//intrebare", XPathConstants.NODESET);
+		
+		for(int i = 0; i < questionNodes.getLength(); i++) {
+			if(EntityBuilder.buildTestQuestionFromXml(questionNodes.item(i)).equals(questionToUpdate)) {
+				deleteEntry(questionToUpdate);
+				saveEntry(newQuestion);
+			}
+		}
 	}
 }

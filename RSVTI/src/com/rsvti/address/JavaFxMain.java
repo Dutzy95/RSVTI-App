@@ -10,9 +10,11 @@ import com.rsvti.address.view.AddEmployeesToRigController;
 import com.rsvti.address.view.AddFirmController;
 import com.rsvti.address.view.AddRigParameterController;
 import com.rsvti.address.view.AddRigsToFirmController;
+import com.rsvti.address.view.AddTestQuestionController;
 import com.rsvti.address.view.DueDateOverviewController;
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
+import com.rsvti.address.view.GenerateTestController;
 import com.rsvti.address.view.HomeController;
 import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
@@ -344,6 +346,50 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
+	public void addTestQuestions() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddTestQuestion.fxml"));
+	        AnchorPane addTestQuestion = (AnchorPane) loader.load();
+
+	        Tab addTestQuestionTab = new Tab("Adauga intrebări test");
+	        addTestQuestionTab.setContent(addTestQuestion);
+	        addTestQuestionTab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(addTestQuestionTab);
+            tabPane.getSelectionModel().select(addTestQuestionTab);
+            
+            AddTestQuestionController addTestQuestionController = loader.getController();
+            addTestQuestionController.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void generateTest() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/GenerateTest.fxml"));
+	        AnchorPane generateTest = (AnchorPane) loader.load();
+
+	        Tab generateTestTab = new Tab("Genereaza test");
+	        generateTestTab.setContent(generateTest);
+	        generateTestTab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(generateTestTab);
+            tabPane.getSelectionModel().select(generateTestTab);
+            
+            GenerateTestController generateTestController = loader.getController();
+            generateTestController.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 	public JavaFxMain() {
     }
 	
@@ -388,6 +434,7 @@ public class JavaFxMain extends Application {
 //		Utils.setStartup();
 		Utils.createFolderHierarchy();
 //		Generator.generateWordFile();
+//		Generator.generateTest(5, "manevrant");
 		Data.populate();
 		launch(args);
 	}

@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -34,7 +35,9 @@ import javax.swing.SwingUtilities;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
@@ -96,13 +99,19 @@ public class Utils {
         datePicker.setShowWeekNumbers(true);
 	}
 	
-	public static void alert(AlertType alertType, String title, String header, String content) {
+	public static Optional<ButtonType> alert(AlertType alertType, String title, String header, String content) {
 		Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
+        
+        if(alertType == AlertType.INFORMATION) {
+        	ButtonType yes = new ButtonType("Da", ButtonData.YES);
+        	ButtonType no = new ButtonType("Nu", ButtonData.NO);
+        	alert.getButtonTypes().setAll(yes,no);
+        }
 
-        alert.showAndWait();
+        return alert.showAndWait();
 	}
 	
 	public static void setErrorLog() {
@@ -169,6 +178,8 @@ public class Utils {
 			File file = new File(jarFilePath + "database");
 			file.mkdir();
 			file = new File(jarFilePath + "docs");
+			file.mkdir();
+			file = new File(jarFilePath + "tests");
 			file.mkdir();
 			file = new File(jarFilePath + "images");
 			file.mkdir();

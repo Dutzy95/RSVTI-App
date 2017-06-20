@@ -14,6 +14,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleAddFirm" text="Adaugă firmă" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddRigParameters" text="Adaugă parametru pentru utilaj" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddTestQuestion" text="Adaugă întrebare test" />
               <MenuItem mnemonicParsing="false" onAction="#handleFileClose" text="Închide aplicația" />
             </items>
           </Menu>
@@ -27,7 +28,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Generează">
               <items>
-                <MenuItem mnemonicParsing="false" text="Document Word" />
+                <MenuItem mnemonicParsing="false" onAction="#handleGenerateTest" text="Examinare personal deservent" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Ajutor">

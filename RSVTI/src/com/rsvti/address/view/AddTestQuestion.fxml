@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.AddTestQuestionController">
+   <children>
+      <GridPane layoutX="58.0" layoutY="93.0" prefHeight="509.0" prefWidth="614.0" vgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="276.0" minWidth="10.0" prefWidth="133.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="508.0" minWidth="10.0" prefWidth="502.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="137.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="82.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Enunț" />
+            <Label text="Răspuns" GridPane.rowIndex="1" />
+            <Label text="Răspuns" GridPane.rowIndex="2" />
+            <Label text="Răspuns" GridPane.rowIndex="3" />
+            <TextArea fx:id="questionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+            <TextArea fx:id="firstAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea fx:id="secondAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextArea fx:id="thirdAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Pentru" GridPane.rowIndex="4" />
+            <ComboBox fx:id="questionTypeComboBox" prefHeight="31.0" prefWidth="238.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+      </GridPane>
+      <TableView fx:id="testTable" layoutX="700.0" layoutY="93.0" prefHeight="509.0" prefWidth="461.0">
+        <columns>
+          <TableColumn fx:id="questionColumn" prefWidth="325.0" text="Întrebare" />
+            <TableColumn fx:id="questionTypeColumn" prefWidth="134.0" text="Tip" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Button layoutX="435.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleSaveTestQuestion" text="Salvează" />
+      <Button layoutX="703.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleDeleteTestQuestion" text="Șterge" />
+      <Button layoutX="539.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleEmptyAreas" text="Golește câmpurile" />
+   </children>
+</AnchorPane>

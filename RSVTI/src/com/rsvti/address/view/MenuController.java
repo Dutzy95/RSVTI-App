@@ -29,6 +29,11 @@ public class MenuController {
 	}
 	
 	@FXML
+	private void handleAddTestQuestion() {
+		javaFxMain.addTestQuestions();
+	}
+	
+	@FXML
 	public void handleFileClose() {
 		System.exit(0);
 	}
@@ -46,6 +51,11 @@ public class MenuController {
 	@FXML
 	private void handleViewDueDateOverview() {
 		javaFxMain.showDueDateOverview();
+	}
+	
+	@FXML
+	private void handleGenerateTest() {
+		javaFxMain.generateTest();
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
