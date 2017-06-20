@@ -27,5 +27,7 @@ public class Constants {
 	
 	public static final String DISABLED_COLOR = "lightgray";
 	
+	public static final String GENERATED_FILE_FONT_FAMILY = "Times New Roman";
+	
 	public static List<String> publicHolidays = Arrays.asList("1-1", "2-1", "24-1", "1-5", "1-6", "15-8", "30-11", "1-12", "25-12", "26-12");
 }
