@@ -96,7 +96,9 @@ public class Generator {
 			file.mkdir();
 			file = new File(jarFilePath + "tests\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
 					+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
+			
 			FileOutputStream output = new FileOutputStream(file);
+			
 			
 			XWPFDocument document = new XWPFDocument();
 			XWPFParagraph paragraph = document.createParagraph();
@@ -181,6 +183,16 @@ public class Generator {
 			}
 			
 			document.write(output);
+			
+			//Save to backup directory if there is one selected
+			if(!DBServices.getBackupPath().equals("")) {
+				File backupFile = new File(DBServices.getBackupPath() + "\\" + employeeDetails.getFirmName());
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
+				FileOutputStream backupOutput = new FileOutputStream(backupFile);
+				document.write(backupOutput);
+			}
 			document.close();
 		} catch(Exception e) {
 			e.printStackTrace();

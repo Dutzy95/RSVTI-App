@@ -33,6 +33,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import com.rsvti.database.services.DBServices;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -59,7 +61,8 @@ public class Utils {
                                 //TODO: make custom list of national holidays that are not on fixed days
                                 //Could not use Calendar.SATURDAY and Calendar.SUNDAY because they are 7 respectively 1, because SUNDAY is first day of week
                                 if (item.getDayOfWeek().getValue() == 6 || item.getDayOfWeek().getValue() == 7 ||
-                                		Constants.publicHolidays.contains((item.getDayOfMonth() + "-" + item.getMonthValue()))) {
+                                		Constants.publicHolidays.contains((item.getDayOfMonth() + "-" + item.getMonthValue())) ||
+                                		DBServices.getVariableVacationDates().contains(java.sql.Date.valueOf(item))) {
                                         setDisable(true);
                                         setStyle("-fx-background-color: " + Constants.DISABLED_COLOR + ";");
                                 }   

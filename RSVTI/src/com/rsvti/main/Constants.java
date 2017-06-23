@@ -10,6 +10,7 @@ public class Constants {
 	public static final String XML_FIRMS_FILE_NAME = "database/RSVTI_database.xml";
 	public static final String XML_RIG_PARAMETERS_FILE_NAME = "database/RigParameters.xml";
 	public static final String XML_TEST_DATA_FILE_NAME = "database/TestData.xml";
+	public static final String XML_CUSTOM_SETTINGS_FILE_NAME = "database/CustomSettings.xml";
 	public static final String ERROR_LOG_FILE = "errlog.txt";
 	
 	public static final String APP_NAME = "RSVTI App";

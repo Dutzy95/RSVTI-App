@@ -68,7 +68,15 @@ public class GenerateTestController {
 		for(EmployeeDueDateDetails index : selection) {
 			files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index));
 		}
-		Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Test", "Generararea s-a terminat cu succes", "Fisierele se pot găsi in docs/tests.\nDoriți să vizualizați fișierele generate?");
+		
+		String bodyMessage;
+		if(DBServices.getBackupPath().equals("")) {
+			bodyMessage = "Fisierele se pot găsi in docs/tests.\nDoriți să vizualizați fișierele generate?";
+		} else {
+			bodyMessage = "Fisierele se pot găsi in docs/tests. Sau în " + DBServices.getBackupPath() + "\nDoriți să vizualizați fișierele generate?";
+		}
+		
+		Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Test", "Generararea s-a terminat cu succes", bodyMessage);
 		if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 			for(File file : files) {
 				try {

@@ -18,6 +18,7 @@ import com.rsvti.address.view.GenerateTestController;
 import com.rsvti.address.view.HomeController;
 import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
+import com.rsvti.address.view.SettingsController;
 import com.rsvti.address.view.StartImageController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
@@ -388,6 +389,29 @@ public class JavaFxMain extends Application {
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
+	}
+	
+	public void showSettings() {
+		try {
+			// Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/Settings.fxml"));
+	        AnchorPane settings = (AnchorPane) loader.load();
+	
+	        Stage stage = new Stage();
+	        stage.setTitle("Setări");
+	        stage.initModality(Modality.WINDOW_MODAL);
+	        stage.initOwner(primaryStage);
+	        Scene scene = new Scene(settings);
+	        stage.setScene(scene);
+            
+	        stage.showAndWait();
+            
+	        SettingsController settingsController = loader.getController();
+	        settingsController.setJavaFxMain(this);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public JavaFxMain() {

@@ -34,6 +34,11 @@ public class MenuController {
 	}
 	
 	@FXML
+	private void handleShowSettings() {
+		javaFxMain.showSettings();
+	}
+	
+	@FXML
 	public void handleFileClose() {
 		System.exit(0);
 	}

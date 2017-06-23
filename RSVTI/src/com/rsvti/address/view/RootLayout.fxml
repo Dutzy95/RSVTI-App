@@ -15,6 +15,9 @@
                   <MenuItem mnemonicParsing="false" onAction="#handleAddFirm" text="Adaugă firmă" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddRigParameters" text="Adaugă parametru pentru utilaj" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddTestQuestion" text="Adaugă întrebare test" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleShowSettings" text="Setări" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" onAction="#handleFileClose" text="Închide aplicația" />
             </items>
           </Menu>

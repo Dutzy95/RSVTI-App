@@ -59,6 +59,8 @@ public class DBServices {
 					ps.println("<?xml version=\"1.0\"?><parameters></parameters>");
 				} else if(filepath.contains("TestData.xml")) {
 					ps.println("<?xml version=\"1.0\"?><test></test>");
+				} else if(filepath.contains("CustomSettings.xml")) {
+					ps.println("<?xml version=\"1.0\"?><custom><variable_dates></variable_dates></custom>");
 				} else {
 					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
@@ -586,6 +588,92 @@ public class DBServices {
 				deleteEntry(questionToUpdate);
 				saveEntry(newQuestion);
 			}
+		}
+	}
+	
+	public static void saveEntry(Date variableDate) {
+		Element variableDates = (Element) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//variable_dates", XPathConstants.NODE);
+		
+		Element date = document.createElement("date");
+		date.appendChild(document.createTextNode(new SimpleDateFormat(Constants.DATE_FORMAT).format(variableDate)));
+		variableDates.appendChild(date);
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteEntry(Date variableDate) {
+		Element variableDatesElement = (Element) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//variable_dates", XPathConstants.NODE);
+		NodeList dates = (NodeList) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date", XPathConstants.NODESET);
+		
+		for(int i = 0; i < dates.getLength(); i++) {
+			if(dates.item(i).getTextContent().equals(new SimpleDateFormat(Constants.DATE_FORMAT).format(variableDate))) {
+				variableDatesElement.removeChild(dates.item(i));
+			}
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static List<Date> getVariableVacationDates() {
+		List<Date> dates = new ArrayList<Date>();
+		
+		NodeList dateNodes = (NodeList) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date", XPathConstants.NODESET);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+		
+		for(int i = 0; i < dateNodes.getLength(); i++) {
+			try {
+				dates.add(dateFormat.parse(dateNodes.item(i).getTextContent()));
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dates;
+	}
+	
+	public static void saveBackupPath(String backupPath) {
+		openFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
+		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backupPath", XPathConstants.NODE);
+		Element backupPathElement = document.createElement("backupPath");
+		backupPathElement.appendChild(document.createTextNode(backupPath));
+		if(backupPathNode == null) {
+			document.getDocumentElement().appendChild(backupPathElement);
+		} else {
+			document.getDocumentElement().replaceChild(backupPathElement, backupPathNode);
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String getBackupPath() {
+		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backupPath", XPathConstants.NODE);
+		if(backupPathNode == null) {
+			return "";
+		} else {
+			return backupPathNode.getFirstChild().getTextContent();
 		}
 	}
 }
