@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
+import javax.xml.xpath.XPathConstants;
+
+import org.w3c.dom.Node;
 
 import com.rsvti.address.view.AddEmployeesToRigController;
 import com.rsvti.address.view.AddFirmController;
@@ -14,6 +17,7 @@ import com.rsvti.address.view.AddTestQuestionController;
 import com.rsvti.address.view.DueDateOverviewController;
 import com.rsvti.address.view.EmployeeOverviewController;
 import com.rsvti.address.view.FirmOverviewController;
+import com.rsvti.address.view.GenerateTableController;
 import com.rsvti.address.view.GenerateTestController;
 import com.rsvti.address.view.HomeController;
 import com.rsvti.address.view.MenuController;
@@ -22,6 +26,8 @@ import com.rsvti.address.view.SettingsController;
 import com.rsvti.address.view.StartImageController;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.services.DBServices;
+import com.rsvti.database.services.EntityBuilder;
 import com.rsvti.generator.Generator;
 import com.rsvti.main.Data;
 import com.rsvti.main.Utils;
@@ -414,6 +420,28 @@ public class JavaFxMain extends Application {
 		}
 	}
 	
+	public void generateTable() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/GenerateTable.fxml"));
+	        AnchorPane generateTable = (AnchorPane) loader.load();
+
+	        Tab generateTableTab = new Tab("Genereaza tabel");
+	        generateTableTab.setContent(generateTable);
+	        generateTableTab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(generateTableTab);
+            tabPane.getSelectionModel().select(generateTableTab);
+            
+            GenerateTableController generateTableController = loader.getController();
+            generateTableController.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 	public JavaFxMain() {
     }
 	
@@ -459,6 +487,7 @@ public class JavaFxMain extends Application {
 		Utils.createFolderHierarchy();
 //		Generator.generateWordFile();
 //		Generator.generateTest(5, "manevrant");
+		Generator.generateExcelTable(EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id=1]", XPathConstants.NODE)));
 		Data.populate();
 		launch(args);
 	}

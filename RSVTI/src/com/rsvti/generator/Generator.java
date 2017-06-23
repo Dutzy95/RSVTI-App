@@ -1,6 +1,7 @@
 package com.rsvti.generator;
 
 import java.awt.Desktop;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FontFamily;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -18,6 +29,8 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder;
 
 import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.Firm;
+import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.main.Constants;
@@ -92,9 +105,9 @@ public class Generator {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
-			file = new File(jarFilePath + "tests\\" + employeeDetails.getFirmName());
+			file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName());
 			file.mkdir();
-			file = new File(jarFilePath + "tests\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+			file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
 					+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
 			
 			FileOutputStream output = new FileOutputStream(file);
@@ -186,9 +199,11 @@ public class Generator {
 			
 			//Save to backup directory if there is one selected
 			if(!DBServices.getBackupPath().equals("")) {
-				File backupFile = new File(DBServices.getBackupPath() + "\\" + employeeDetails.getFirmName());
+				File backupFile = new File(DBServices.getBackupPath() + "\\procese verbale" + employeeDetails.getFirmName());
 				backupFile.mkdir();
-				backupFile = new File(DBServices.getBackupPath() + "\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\" + employeeDetails.getFirmName());
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
 						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
 				FileOutputStream backupOutput = new FileOutputStream(backupFile);
 				document.write(backupOutput);
@@ -198,5 +213,113 @@ public class Generator {
 			e.printStackTrace();
 		}
 		return file;
+	}
+	
+	public static File generateExcelTable(Firm firm) {
+		File file = null;
+		
+		try {
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			XSSFSheet sheet = workbook.createSheet("Utilaje");
+			
+			Object[] rigs = firm.getRigs().toArray();
+			
+			int rowCount = 0;
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+			
+			String jarFilePath = Utils.getJarFilePath();
+			file = new File(jarFilePath + "docs\\tabele utilaje\\" + firm.getFirmName() + ".xlsx");
+			
+			XSSFFont titleFont = workbook.createFont();
+			titleFont.setBold(true);
+			titleFont.setFontName(Constants.GENERATED_FILE_FONT_FAMILY);
+			titleFont.setFontHeight(12);
+			
+			XSSFFont bodyFont = workbook.createFont();
+			titleFont.setFontName(Constants.GENERATED_FILE_FONT_FAMILY);
+			titleFont.setFontHeight(11);
+			
+			Row row = sheet.createRow(rowCount++);
+			
+			Cell cell = row.createCell(0);
+			cell.setCellValue("Nume utilaj");
+			cell.setCellStyle(getCellStyle(sheet, titleFont, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THIN));
+			cell = row.createCell(1);
+			cell.setCellValue("Data inspecției");
+			cell.setCellStyle(getCellStyle(sheet, titleFont, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THIN, BorderStyle.THIN));
+			cell = row.createCell(2);
+			cell.setCellValue("Perioada prelungirii");
+			cell.setCellStyle(getCellStyle(sheet, titleFont, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THIN, BorderStyle.THIN));
+			cell = row.createCell(3);
+			cell.setCellValue("Data scadenței");
+			cell.setCellStyle(getCellStyle(sheet, titleFont, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THIN, BorderStyle.THICK));
+			
+			for(int i = 0; i < rigs.length-1; i++) {
+				row = sheet.createRow(rowCount++);
+				
+				cell = row.createCell(0);
+				cell.setCellValue(((Rig) rigs[i]).getRigName());
+				cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK));
+				cell = row.createCell(1);
+				cell.setCellValue(dateFormat.format(((Rig) rigs[i]).getRevisionDate()));
+				cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK));
+				cell = row.createCell(2);
+				int authorizationExtension = ((Rig) rigs[i]).getAuthorizationExtension();
+				cell.setCellValue(authorizationExtension + (authorizationExtension > 1 ? " ani" : " an"));
+				cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK));
+				cell = row.createCell(3);
+				cell.setCellValue(dateFormat.format(((Rig) rigs[i]).getDueDate()));
+				cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK));
+			}
+			
+			//bottom row of cells
+			row = sheet.createRow(rowCount++);
+			
+			cell = row.createCell(0);
+			cell.setCellValue(((Rig) rigs[rigs.length-1]).getRigName());
+			cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THICK));
+			cell = row.createCell(1);
+			cell.setCellValue(dateFormat.format(((Rig) rigs[rigs.length-1]).getRevisionDate()));
+			cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THICK));
+			cell = row.createCell(2);
+			int authorizationExtension = ((Rig) rigs[rigs.length-1]).getAuthorizationExtension();
+			cell.setCellValue(authorizationExtension + (authorizationExtension > 1 ? " ani" : " an"));
+			cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THICK));
+			cell = row.createCell(3);
+			cell.setCellValue(dateFormat.format(((Rig) rigs[rigs.length-1]).getDueDate()));
+			cell.setCellStyle(getCellStyle(sheet, bodyFont, BorderStyle.THIN, BorderStyle.THICK, BorderStyle.THICK, BorderStyle.THICK));
+			
+			for(int i = 0; i < 4; i++) {
+				sheet.setColumnWidth(i, 20*256);
+			}
+			
+			FileOutputStream output = new FileOutputStream(file);
+			workbook.write(output);
+			if(!DBServices.getBackupPath().equals("")) {
+				File backupFile = new File(DBServices.getBackupPath() + "\\tabele utilaje");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\tabele utilaje\\" + firm.getFirmName() + ".xlsx");
+				FileOutputStream backupOutput = new FileOutputStream(backupFile);
+				workbook.write(backupOutput);
+			}
+			
+			workbook.close();
+			
+		} catch(Exception e) { 
+			e.printStackTrace();
+		}
+		return file;
+	}
+	
+	private static CellStyle getCellStyle(XSSFSheet sheet, XSSFFont font, BorderStyle top, BorderStyle bottom, BorderStyle left, BorderStyle right) {
+		CellStyle style = sheet.getWorkbook().createCellStyle();
+		style.setAlignment(HorizontalAlignment.CENTER);
+		style.setFont(font);
+		style.setBorderBottom(bottom);
+		style.setBorderTop(top);
+		style.setBorderLeft(left);
+		style.setBorderRight(right);
+		return style;
 	}
 }

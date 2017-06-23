@@ -63,6 +63,11 @@ public class MenuController {
 		javaFxMain.generateTest();
 	}
 	
+	@FXML
+	private void handleGenerateTable() {
+		javaFxMain.generateTable();
+	}
+	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
 	}

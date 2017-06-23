@@ -182,7 +182,11 @@ public class Utils {
 			file.mkdir();
 			file = new File(jarFilePath + "docs");
 			file.mkdir();
-			file = new File(jarFilePath + "tests");
+			file = new File(jarFilePath + "docs\\procese verbale");
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\teste");
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
 			file = new File(jarFilePath + "images");
 			file.mkdir();
