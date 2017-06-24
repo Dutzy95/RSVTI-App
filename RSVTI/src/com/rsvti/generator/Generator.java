@@ -237,8 +237,8 @@ public class Generator {
 			titleFont.setFontHeight(12);
 			
 			XSSFFont bodyFont = workbook.createFont();
-			titleFont.setFontName(Constants.GENERATED_FILE_FONT_FAMILY);
-			titleFont.setFontHeight(11);
+			bodyFont.setFontName(Constants.GENERATED_FILE_FONT_FAMILY);
+			bodyFont.setFontHeight(11);
 			
 			Row row = sheet.createRow(rowCount++);
 			

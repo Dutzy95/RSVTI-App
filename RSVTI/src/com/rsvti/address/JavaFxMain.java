@@ -485,9 +485,6 @@ public class JavaFxMain extends Application {
 //		Utils.setErrorLog();
 //		Utils.setStartup();
 		Utils.createFolderHierarchy();
-//		Generator.generateWordFile();
-//		Generator.generateTest(5, "manevrant");
-		Generator.generateExcelTable(EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id=1]", XPathConstants.NODE)));
 		Data.populate();
 		launch(args);
 	}

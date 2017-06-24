@@ -56,9 +56,9 @@ public class GenerateTableController {
 		
 		String bodyMessage;
 		if(DBServices.getBackupPath().equals("")) {
-			bodyMessage = "Fisierele se pot găsi in docs/tabele utilaje.\nDoriți să vizualizați fișierele generate?";
+			bodyMessage = "Fisierele se pot găsi in docs\\tabele utilaje.\nDoriți să vizualizați fișierele generate?";
 		} else {
-			bodyMessage = "Fisierele se pot găsi in docs/tabele utilaje. Sau în " + DBServices.getBackupPath() + "/tabele utilaje\nDoriți să vizualizați fișierele generate?";
+			bodyMessage = "Fisierele se pot găsi in docs\\tabele utilaje. Sau în " + DBServices.getBackupPath() + "\\tabele utilaje\nDoriți să vizualizați fișierele generate?";
 		}
 		
 		Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Tabel", "Generararea s-a terminat cu succes", bodyMessage);
