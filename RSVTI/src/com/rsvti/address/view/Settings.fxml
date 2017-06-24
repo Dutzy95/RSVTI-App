@@ -8,16 +8,18 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.SettingsController">
    <children>
-      <GridPane layoutX="30.0" layoutY="62.0" prefHeight="202.0" prefWidth="653.0">
+      <GridPane layoutX="28.0" layoutY="62.0" prefHeight="327.0" prefWidth="655.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="131.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="383.0" minWidth="10.0" prefWidth="277.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="210.0" minWidth="10.0" prefWidth="210.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="37.0" minHeight="9.0" prefHeight="9.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="59.0" minHeight="0.0" prefHeight="21.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="192.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="173.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Cale auxiliară pentru fisierele generate:" wrapText="true" />
@@ -38,6 +40,12 @@
                   <Insets left="15.0" />
                </padding>
             </TilePane>
+            <Label text="Intervalul de afișare a datelor scadente pe pagina principală" wrapText="true" GridPane.rowIndex="4" />
+            <ComboBox fx:id="homeDateIntervalUnit" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Separator prefWidth="200.0" GridPane.rowIndex="3" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="homeDateIntervalField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>

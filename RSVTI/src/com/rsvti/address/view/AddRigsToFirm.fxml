@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.AddRigsToFirmController">
+<AnchorPane prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.AddRigsToFirmController">
    <children>
       <GridPane layoutX="48.0" layoutY="31.0" prefHeight="109.0" prefWidth="700.0">
         <columnConstraints>
@@ -34,7 +34,7 @@
             <ComboBox fx:id="authorizationExtension" prefHeight="31.0" prefWidth="207.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <TableView fx:id="importedParameterTable" layoutX="35.0" layoutY="183.0" prefHeight="282.0" prefWidth="212.0">
+      <TableView fx:id="importedParameterTable" layoutX="35.0" layoutY="159.0" prefHeight="282.0" prefWidth="212.0">
         <columns>
           <TableColumn fx:id="importedParameterColumn" prefWidth="75.0" text="Parametru" />
         </columns>
@@ -42,22 +42,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label layoutX="785.0" layoutY="46.0" text="Personal deservent">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <TableView fx:id="employeeTable" layoutX="769.0" layoutY="85.0" prefHeight="301.0" prefWidth="200.0">
-        <columns>
-          <TableColumn fx:id="employeeLastNameColumn" prefWidth="75.0" text="Nume" />
-          <TableColumn fx:id="employeeFirstNameColumn" prefWidth="75.0" text="Prenume" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <Button layoutX="803.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleAddEmployee" text="Adaugă personal" />
-      <TableView fx:id="chosenParametersTable" layoutX="351.0" layoutY="183.0" prefHeight="282.0" prefWidth="397.0">
+      <TableView fx:id="chosenParametersTable" layoutX="351.0" layoutY="159.0" prefHeight="282.0" prefWidth="397.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -67,12 +52,12 @@
             <TableColumn fx:id="chosenParameterMeasuringUnitColumn" prefWidth="75.0" text="Unitate de&#10;măsură" />
          </columns>
       </TableView>
-      <VBox layoutX="278.0" layoutY="290.0" prefHeight="69.0" prefWidth="41.0" spacing="6.0">
+      <VBox layoutX="278.0" layoutY="266.0" prefHeight="69.0" prefWidth="41.0" spacing="6.0">
          <children>
             <Button mnemonicParsing="false" onAction="#handleArrowRight" text="-&gt;" />
             <Button mnemonicParsing="false" onAction="#handleArrowLeft" text="&lt;-" />
          </children>
       </VBox>
-      <Button layoutX="830.0" layoutY="434.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+      <Button layoutX="409.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
    </children>
 </AnchorPane>

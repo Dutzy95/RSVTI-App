@@ -42,30 +42,30 @@ public class Data {
 			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", 
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
-			Rig liftingRig1 = new Rig("macara", date.getTime(), Arrays.asList(employee1,employee2), "de ridicat");
+			Rig liftingRig1 = new Rig("macara", date.getTime(), "de ridicat");
 			liftingRig1.setAuthorizationExtension(1);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
 			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
-					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1)), false);
+					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1), Arrays.asList(employee1,employee2)), false);
 			
 			date.set(2005, 12, 26);
-			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), Arrays.asList(employee3), "de ridicat");
+			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), "de ridicat");
 			liftingRig2.setAuthorizationExtension(2);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
 			date.set(2010, 7, 20);
-			Rig pressureRig = new Rig("cazan", date.getTime(), Arrays.asList(employee1,employee3), "sub presiune");
+			Rig pressureRig = new Rig("cazan", date.getTime(), "sub presiune");
 			pressureRig.setAuthorizationExtension(1);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			
 			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig)), false);
+					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3)), false);
 			
 			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 0]", XPathConstants.NODE));
 			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[parent::firma[@id = 0]]", XPathConstants.NODE));

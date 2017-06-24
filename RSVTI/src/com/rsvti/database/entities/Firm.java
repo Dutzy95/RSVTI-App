@@ -15,9 +15,10 @@ public class Firm {
 	private String ibanCode;
 	private Administrator administrator;
 	private List<Rig> rigs;
+	private List<Employee> employees;
 	
 	public Firm(String firmName, String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
-			String bankName, String ibanCode, Administrator administrator, List<Rig> rigs) {
+			String bankName, String ibanCode, Administrator administrator, List<Rig> rigs, List<Employee> employees) {
 		this.setFirmName(firmName);
 		this.registrationNumber = registrationNumber;
 		this.fiscalCode = fiscalCode;
@@ -29,6 +30,7 @@ public class Firm {
 		this.ibanCode = ibanCode; 
 		this.administrator = administrator;
 		this.rigs = rigs;
+		this.employees = employees;
 	}
 	
 	@Override
@@ -140,5 +142,13 @@ public class Firm {
 
 	public void setFirmName(String firmName) {
 		this.firmName = firmName;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
 	}
 }

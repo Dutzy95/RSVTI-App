@@ -51,8 +51,6 @@ public class DueDateOverviewController {
 	@FXML
 	private TableColumn<EmployeeDueDateDetails,String> employeeLastNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeRigColumn;
-	@FXML
 	private TableColumn<EmployeeDueDateDetails,String> employeeFirmNameColumn;
 	@FXML
 	private TableColumn<EmployeeDueDateDetails,String> employeeDueDateColumn;
@@ -93,7 +91,6 @@ public class DueDateOverviewController {
 		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
 		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));
-		employeeRigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
 		employeeFirmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 		employeeDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
 		employeeTable.setRowFactory( tv -> {
@@ -101,7 +98,7 @@ public class DueDateOverviewController {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		        	EmployeeDueDateDetails rowData = row.getItem();
-		            javaFxMain.showAddUpdateEmployeesToRig(rowData.getEmployee(), false, true, rowData.getFirmName() + " - " + rowData.getRig().getRigName());
+		            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName());
 		        }
 		    });
 		    return row ;
@@ -145,7 +142,7 @@ public class DueDateOverviewController {
 		DBServices.updateRigForFirm(firmName, rigToUpdate, newRig);
 	}
 	
-	public void updateEmployeeTable(String firmAndRigName, Employee employeeToUpdate, Employee newEmployee) {
+	public void updateEmployeeTable(String firmName, Employee employeeToUpdate, Employee newEmployee) {
 		List<EmployeeDueDateDetails> beforeUpdate = employeeTable.getItems();
 		for(EmployeeDueDateDetails index : beforeUpdate) {
 			if(index.getEmployee().equals(employeeToUpdate)) {
@@ -154,7 +151,7 @@ public class DueDateOverviewController {
 			}
 		}
 		employeeTable.refresh();
-		DBServices.updateEmployeeForRig(firmAndRigName, employeeToUpdate, newEmployee);
+		DBServices.updateEmployeeForFirm(firmName, employeeToUpdate, newEmployee);
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

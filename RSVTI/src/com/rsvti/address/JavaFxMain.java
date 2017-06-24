@@ -9,7 +9,7 @@ import javax.xml.xpath.XPathConstants;
 
 import org.w3c.dom.Node;
 
-import com.rsvti.address.view.AddEmployeesToRigController;
+import com.rsvti.address.view.AddEmployeesToFirmController;
 import com.rsvti.address.view.AddFirmController;
 import com.rsvti.address.view.AddRigParameterController;
 import com.rsvti.address.view.AddRigsToFirmController;
@@ -55,8 +55,8 @@ public class JavaFxMain extends Application {
 	private static Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabPane;
-	private Stage addUpdateEmployeesToRigStage;
-	private AddEmployeesToRigController addUpdateEmployeesToRigController;
+	private Stage addUpdateEmployeesToFirmStage;
+	private AddEmployeesToFirmController addUpdateEmployeesToFirmController;
 	private AddRigsToFirmController addUpdateRigsToFirmController;
 	private Stage addUpdateRigsToFirmStage;
 	private AddFirmController addFirmController;
@@ -296,34 +296,34 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddUpdateEmployeesToRig(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
+	public void showAddUpdateEmployeesToFirm(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
 		try {
 	        // Load the fxml file and create a new stage for the popup dialog.
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToRig.fxml"));
-	        AnchorPane addUpdateEmployeesToRig = (AnchorPane) loader.load();
+	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToFirm.fxml"));
+	        AnchorPane addUpdateEmployeesToFirm = (AnchorPane) loader.load();
 	        
-	        AddEmployeesToRigController controller = loader.getController();
+	        AddEmployeesToFirmController controller = loader.getController();
 	        controller.setJavaFxMain(this);
-	        controller.setFirmAndRigName(stageName);
+	        controller.setFirmName(stageName);
 	        controller.setIsDueDateUpdate(isDueDateUpdate);
 
-	        addUpdateEmployeesToRigController = loader.getController();
-            addUpdateEmployeesToRigController.setJavaFxMain(this);
-            addUpdateEmployeesToRigController.setIsUpdate(isUpdate);
+	        addUpdateEmployeesToFirmController = loader.getController();
+            addUpdateEmployeesToFirmController.setJavaFxMain(this);
+            addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
             
             if(employee != null) {
-            	addUpdateEmployeesToRigController.showEmployeeDetails(employee);
+            	addUpdateEmployeesToFirmController.showEmployeeDetails(employee);
             }
             
-            addUpdateEmployeesToRigStage = new Stage();
-	        addUpdateEmployeesToRigStage.setTitle(stageName);
-	        addUpdateEmployeesToRigStage.initModality(Modality.WINDOW_MODAL);
-	        addUpdateEmployeesToRigStage.initOwner(primaryStage);
-	        Scene scene = new Scene(addUpdateEmployeesToRig);
-	        addUpdateEmployeesToRigStage.setScene(scene);
+            addUpdateEmployeesToFirmStage = new Stage();
+	        addUpdateEmployeesToFirmStage.setTitle(stageName);
+	        addUpdateEmployeesToFirmStage.initModality(Modality.WINDOW_MODAL);
+	        addUpdateEmployeesToFirmStage.initOwner(primaryStage);
+	        Scene scene = new Scene(addUpdateEmployeesToFirm);
+	        addUpdateEmployeesToFirmStage.setScene(scene);
             
-            addUpdateEmployeesToRigStage.showAndWait();
+            addUpdateEmployeesToFirmStage.showAndWait();
             
             
 	    } catch (IOException e) {
@@ -453,12 +453,12 @@ public class JavaFxMain extends Application {
 		return tabPane;
 	}
 	
-	public Stage getAddEmployeesToRigStage() {
-		return addUpdateEmployeesToRigStage;
+	public Stage getAddEmployeesToFirmStage() {
+		return addUpdateEmployeesToFirmStage;
 	}
 	
-	public AddEmployeesToRigController getAddEmployeesToRigController() {
-		return addUpdateEmployeesToRigController;
+	public AddEmployeesToFirmController getAddEmployeesToRigController() {
+		return addUpdateEmployeesToFirmController;
 	}
 	
 	public AddRigsToFirmController getAddRigsToFirmController() {

@@ -38,7 +38,6 @@
                         <TableColumn fx:id="parameterMeasuringUnit" prefWidth="143.0" text="Unitate de măsură" />
                     </columns>
                   </TableView>
-                  <Button fx:id="employeeOverviewButton" layoutX="476.0" layoutY="618.0" mnemonicParsing="false" onAction="#handleOpenEmployeeOverview" text="Personal deservent" />
                </children></AnchorPane>
         </items>
       </SplitPane>

@@ -195,51 +195,53 @@ public class DBServices {
 				node.setAttribute("mUnit", rigParameterIndex.getMeasuringUnit());
 				rig.appendChild(node);
 			}
-			for(Employee employeeIndex : rigIndex.getEmployees()) {
-				
-				Element employee = document.createElement("angajat");
-				employee.setAttribute("title", employeeIndex.getTitle());
-				
-				Element employeeFirstName = document.createElement("nume");
-				employeeFirstName.appendChild(document.createTextNode(employeeIndex.getFirstName()));
-				employee.appendChild(employeeFirstName);
-				
-				Element employeeLastName = document.createElement("prenume");
-				employeeLastName.appendChild(document.createTextNode(employeeIndex.getLastName()));
-				employee.appendChild(employeeLastName);
-				
-				Element employeeIdCode = document.createElement("serie_buletin");
-				employeeIdCode.appendChild(document.createTextNode(employeeIndex.getIdCode()));
-				employee.appendChild(employeeIdCode);
-				
-				Element employeeIdNumber = document.createElement("numar_buletin");
-				employeeIdNumber.appendChild(document.createTextNode(employeeIndex.getIdNumber()));
-				employee.appendChild(employeeIdNumber);
-				
-				Element personalIdentificationNumber = document.createElement("CNP");
-				personalIdentificationNumber.appendChild(document.createTextNode(employeeIndex.getPersonalIdentificationNumber()));
-				employee.appendChild(personalIdentificationNumber);
-				
-				EmployeeAuthorization authorization = employeeIndex.getAuthorization();
-				Element authorizationElement = document.createElement("autorizatie");
-				
-				Element authorizationNumber = document.createElement("numar_autorizatie");
-				authorizationNumber.appendChild(document.createTextNode(authorization.getAuthorizationNumber()));
-				authorizationElement.appendChild(authorizationNumber);
-				
-				Element obtainingDate = document.createElement("data_obtinerii");
-				obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
-				authorizationElement.appendChild(obtainingDate);
-				
-				Element employeeDueDate = document.createElement("data_scadenta");
-				employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
-				authorizationElement.appendChild(employeeDueDate);
-				
-				employee.appendChild(authorizationElement);
-				
-				rig.appendChild(employee);
-			}
+			
 			firma.appendChild(rig);
+		}
+		
+		for(Employee employeeIndex : firm.getEmployees()) {
+			
+			Element employee = document.createElement("angajat");
+			employee.setAttribute("title", employeeIndex.getTitle());
+			
+			Element employeeFirstName = document.createElement("nume");
+			employeeFirstName.appendChild(document.createTextNode(employeeIndex.getFirstName()));
+			employee.appendChild(employeeFirstName);
+			
+			Element employeeLastName = document.createElement("prenume");
+			employeeLastName.appendChild(document.createTextNode(employeeIndex.getLastName()));
+			employee.appendChild(employeeLastName);
+			
+			Element employeeIdCode = document.createElement("serie_buletin");
+			employeeIdCode.appendChild(document.createTextNode(employeeIndex.getIdCode()));
+			employee.appendChild(employeeIdCode);
+			
+			Element employeeIdNumber = document.createElement("numar_buletin");
+			employeeIdNumber.appendChild(document.createTextNode(employeeIndex.getIdNumber()));
+			employee.appendChild(employeeIdNumber);
+			
+			Element personalIdentificationNumber = document.createElement("CNP");
+			personalIdentificationNumber.appendChild(document.createTextNode(employeeIndex.getPersonalIdentificationNumber()));
+			employee.appendChild(personalIdentificationNumber);
+			
+			EmployeeAuthorization authorization = employeeIndex.getAuthorization();
+			Element authorizationElement = document.createElement("autorizatie");
+			
+			Element authorizationNumber = document.createElement("numar_autorizatie");
+			authorizationNumber.appendChild(document.createTextNode(authorization.getAuthorizationNumber()));
+			authorizationElement.appendChild(authorizationNumber);
+			
+			Element obtainingDate = document.createElement("data_obtinerii");
+			obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
+			authorizationElement.appendChild(obtainingDate);
+			
+			Element employeeDueDate = document.createElement("data_scadenta");
+			employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
+			authorizationElement.appendChild(employeeDueDate);
+			
+			employee.appendChild(authorizationElement);
+			
+			firma.appendChild(employee);
 		}
 		
 		root.appendChild(firma);
@@ -279,20 +281,14 @@ public class DBServices {
 		saveEntry(firm, true);
 	}
 	
-	public static void updateEmployeeForRig(String firmAndRigName, Employee employeeToUpdate, Employee newEmployee) {
+	public static void updateEmployeeForFirm(String firmName, Employee employeeToUpdate, Employee newEmployee) {
 		setIndexes();
-		String firmName = firmAndRigName.split("-")[0].trim();
-		String rigName = firmAndRigName.split("-")[1].trim();
 		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
-		for(int i = 0; i < firm.getRigs().size(); i++) {
-			if(firm.getRigs().get(i).getRigName().equals(rigName)) {
-				for(int j = 0; j < firm.getRigs().get(i).getEmployees().size(); j++) {
-					if(firm.getRigs().get(i).getEmployees().get(j).equals(employeeToUpdate)) {
-						firm.getRigs().get(i).getEmployees().set(j, newEmployee);
-					}
+		for(int i = 0; i < firm.getEmployees().size(); i++) {
+				if(firm.getEmployees().get(i).equals(employeeToUpdate)) {
+					firm.getEmployees().set(i, newEmployee);
 				}
-			}
 		}
 		saveEntry(firm, true);
 	}
@@ -451,13 +447,10 @@ public class DBServices {
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
-			for(int j = 0; j < firm.getRigs().size(); j++) {
-				Rig rig = firm.getRigs().get(j);
-				for(int k = 0; k < rig.getEmployees().size(); k++) {
-					Date dueDate = rig.getEmployees().get(k).getAuthorization().getDueDate();
-					if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
-						selectedEmployees.add(new EmployeeDueDateDetails(rig.getEmployees().get(k), rig, firm.getFirmName(), firm.getAddress(), dueDate));
-					}
+			for(int j = 0; j < firm.getEmployees().size(); j++) {
+				Date dueDate = firm.getEmployees().get(j).getAuthorization().getDueDate();
+				if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
+					selectedEmployees.add(new EmployeeDueDateDetails(firm.getEmployees().get(j), firm.getFirmName(), firm.getAddress(), dueDate));
 				}
 			}
 		}
@@ -647,7 +640,6 @@ public class DBServices {
 	}
 	
 	public static void saveBackupPath(String backupPath) {
-		openFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backupPath", XPathConstants.NODE);
 		Element backupPathElement = document.createElement("backupPath");
 		backupPathElement.appendChild(document.createTextNode(backupPath));
@@ -674,6 +666,41 @@ public class DBServices {
 			return "";
 		} else {
 			return backupPathNode.getFirstChild().getTextContent();
+		}
+	}
+	
+	public static void saveHomeDateDisplayInterval(int numberOf, int unit) {
+		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//dateInterval", XPathConstants.NODE);
+		Element homeDateDisplayIntervalElement = document.createElement("dateInterval");
+		Element numberOfUnitsElement = document.createElement("numberOfUnits");
+		numberOfUnitsElement.appendChild(document.createTextNode(numberOf + ""));
+		Element unitElement = document.createElement("unit");
+		unitElement.appendChild(document.createTextNode(unit + ""));
+		homeDateDisplayIntervalElement.appendChild(numberOfUnitsElement);
+		homeDateDisplayIntervalElement.appendChild(unitElement);
+		if(homeDateDisplayIntervalNode == null) {
+			document.getDocumentElement().appendChild(homeDateDisplayIntervalElement);
+		} else {
+			document.getDocumentElement().replaceChild(homeDateDisplayIntervalElement, homeDateDisplayIntervalNode);
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String getHomeDateDisplayInterval() {
+		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//dateInterval", XPathConstants.NODE);
+		if(homeDateDisplayIntervalNode == null) {
+			return "";
+		} else {
+			return homeDateDisplayIntervalNode.getFirstChild().getTextContent() + " " + homeDateDisplayIntervalNode.getChildNodes().item(1).getTextContent();
 		}
 	}
 }

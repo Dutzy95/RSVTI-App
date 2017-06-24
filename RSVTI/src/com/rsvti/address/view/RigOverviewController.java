@@ -45,12 +45,7 @@ public class RigOverviewController {
 	@FXML
 	private TableColumn<ParameterDetails ,String> parameterMeasuringUnit;
 	
-	@FXML
-	private Button employeeOverviewButton;
-	
 	private JavaFxMain javaFxMain;
-	
-	private Stage stage;
 	
 	@FXML
 	private List<Rig> rigList;
@@ -63,7 +58,6 @@ public class RigOverviewController {
 	}
 	
 	private void showRigDetails(Rig rig) {
-		employeeOverviewButton.setDisable(false);
 		if(rig != null) {
 			rigNameLabel.setText(rig.getRigName());
 			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
@@ -87,17 +81,7 @@ public class RigOverviewController {
 		
 		showRigDetails(null);
 		
-		employeeOverviewButton.setDisable(true);
-		
 		rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showRigDetails(newValue));
-	}
-	
-	@FXML
-	private void handleOpenEmployeeOverview() {
-		int selectedIndex = rigTable.getSelectionModel().getSelectedIndex();
-		if(selectedIndex >= 0 ) {
-			javaFxMain.showEmployeeOverview(rigTable.getItems().get(selectedIndex).getEmployees());
-		}
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

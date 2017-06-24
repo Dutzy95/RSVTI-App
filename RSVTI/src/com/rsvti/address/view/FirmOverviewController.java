@@ -58,6 +58,8 @@ public class FirmOverviewController {
 	@FXML
 	private Button rigOverviewButton;
 	@FXML
+	private Button employeeOverviewButton;
+	@FXML
 	private Button deleteFirmButton;
 	
 	private JavaFxMain javaFxMain;
@@ -77,12 +79,14 @@ public class FirmOverviewController {
 		firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigOverviewButton.setDisable(true);
 		deleteFirmButton.setDisable(true);
+		employeeOverviewButton.setDisable(true);
 		
 	}
 	
 	private void showFirmDetails(Firm firm) {
 		rigOverviewButton.setDisable(false);
 		deleteFirmButton.setDisable(false);
+		employeeOverviewButton.setDisable(false);
 		if(firm != null) {
 			firmNameLabel.setText(firm.getFirmName());
 			registrationNumberLabel.setText(firm.getRegistrationNumber());
@@ -130,6 +134,14 @@ public class FirmOverviewController {
 		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 		if(selectedIndex >= 0) {
 			javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
+		}
+	}
+	
+	@FXML
+	private void handleOpenEmployeeOverview() {
+		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
+		if(selectedIndex >= 0 ) {
+			javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getEmployees());
 		}
 	}
 	

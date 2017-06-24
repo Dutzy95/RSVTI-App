@@ -96,8 +96,9 @@
                         <Font size="29.0" />
                      </font>
                   </Label>
-                  <Button fx:id="rigOverviewButton" layoutX="573.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje..." />
+                  <Button fx:id="rigOverviewButton" layoutX="398.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje" />
                   <Button fx:id="deleteFirmButton" layoutX="680.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleDeleteFirm" prefWidth="100.0" text="Șterge" />
+                  <Button fx:id="employeeOverviewButton" layoutX="516.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenEmployeeOverview" text="Personal deservent" />
                </children></AnchorPane>
         </items>
       </SplitPane>

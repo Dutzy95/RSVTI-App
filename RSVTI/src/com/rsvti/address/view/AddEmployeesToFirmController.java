@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
-public class AddEmployeesToRigController {
+public class AddEmployeesToFirmController {
 
 	@FXML
 	private JavaFxMain javaFxMain;
@@ -40,7 +40,7 @@ public class AddEmployeesToRigController {
 	private Employee employeeToUpdate;
 	private boolean isUpdate = false;
 	private boolean isDueDateUpdate = false;
-	private String firmAndRigName;
+	private String firmName;
 	
 	@FXML
 	private void initialize() {
@@ -53,7 +53,7 @@ public class AddEmployeesToRigController {
 	@FXML
 	private void handleSave() {
 		if(isDueDateUpdate) {
-			javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmAndRigName, employeeToUpdate, 
+			javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmName, employeeToUpdate, 
 															new Employee(firstNameField.getText(),
 																		 lastNameField.getText(),
 																		 idCodeField.getText(), 
@@ -66,7 +66,7 @@ public class AddEmployeesToRigController {
 			
 		} else {
 			if(isUpdate) {
-				javaFxMain.getAddRigsToFirmController().updateEmployeeList(
+				javaFxMain.getAddFirmController().updateEmployeeList(
 						employeeToUpdate, true, new Employee(firstNameField.getText(),
 															 lastNameField.getText(),
 															 idCodeField.getText(), 
@@ -78,7 +78,7 @@ public class AddEmployeesToRigController {
 														    	titleField.getText()));
 			} else {
 				try {
-				javaFxMain.getAddRigsToFirmController().updateEmployeeList(
+				javaFxMain.getAddFirmController().updateEmployeeList(
 						new Employee(firstNameField.getText(),
 									 lastNameField.getText(),
 									 idCodeField.getText(), 
@@ -95,7 +95,7 @@ public class AddEmployeesToRigController {
 				}
 			}
 		}
-		javaFxMain.getAddEmployeesToRigStage().close();
+		javaFxMain.getAddEmployeesToFirmStage().close();
 		isDueDateUpdate = false;
 		isUpdate = false;
 	}
@@ -122,8 +122,8 @@ public class AddEmployeesToRigController {
 		this.isDueDateUpdate = isDueDateUpdate;
 	}
 	
-	public void setFirmAndRigName(String firmAndRigName) {
-		this.firmAndRigName = firmAndRigName;
+	public void setFirmName(String firmName) {
+		this.firmName = firmName;
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

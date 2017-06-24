@@ -11,23 +11,21 @@ public class Rig{
 	private List<ParameterDetails> parameters;
 	private Date revisionDate;
 	private int authorizationExtension;
-	private List<Employee> employees;
+
 	private String type;
 	
-	public Rig(String rigName, Date revisionDate, List<Employee> employees, String type) {
+	public Rig(String rigName, Date revisionDate, String type) {
 		this.setRigName(rigName);
 		parameters = new ArrayList<ParameterDetails>();
 		this.revisionDate = revisionDate;
-		this.setEmployees(employees);
 		this.setType(type);
 		this.setAuthorizationExtension(1);
 	}
 	
-	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, List<Employee> employees, String type) {
+	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
 		this.setRevisionDate(revisionDate);
-		this.setEmployees(employees);
 		this.setType(type);
 		this.setAuthorizationExtension(1);
 	}
@@ -51,14 +49,6 @@ public class Rig{
 
 	public void setRevisionDate(Date dueDate) {
 		this.revisionDate = dueDate;
-	}
-
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
 	}
 
 	public String getRigName() {

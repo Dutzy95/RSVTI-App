@@ -56,6 +56,15 @@ public class AddFirmController {
 	@FXML
 	private TableColumn<Rig,String> rigColumn;
 	
+	@FXML
+	private TableView<Employee> employeeTable;
+	@FXML
+	private TableColumn<Employee,String> employeeLastNameColumn;
+	@FXML
+	private TableColumn<Employee,String> employeeFirstNameColumn;
+	
+	private List<Employee> employeeList = new ArrayList<Employee>();
+	
 	private List<Rig> rigList = new ArrayList<Rig>();
 	
 	@FXML
@@ -81,6 +90,21 @@ public class AddFirmController {
 		});
 		rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
+		
+		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
+		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
+		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
+		employeeTable.setRowFactory( tv -> {
+		    TableRow<Employee> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		            Employee rowData = row.getItem();
+		            javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, "Editează personal");
+		        }
+		    });
+		    return row ;
+		});
 	}
 	
 	@FXML
@@ -101,13 +125,18 @@ public class AddFirmController {
 						adminIdCodeField.getText(),
 						adminIdNumberField.getText(),
 						adminPhoneNumberField.getText()),
-				rigTable.getItems()), false);
+				rigTable.getItems(), employeeTable.getItems()), false);
 		javaFxMain.getTabPane().getTabs().remove(javaFxMain.getAddFirmTab());
 	}
 	
 	@FXML
 	private void handleAddRig() {
 		javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj");
+	}
+	
+	@FXML
+	private void handleAddEmployee() {
+		javaFxMain.showAddUpdateEmployeesToFirm(null, false, false,"Adaugă personal");
 	}
 	
 	public void updateRigTable(Rig rig, boolean isUpdate, Rig updatedRig) {
@@ -121,6 +150,19 @@ public class AddFirmController {
 			rigList.add(rig);
 		}
 		rigTable.setItems(FXCollections.observableArrayList(rigList));
+	}
+	
+	public void updateEmployeeList(Employee employee, boolean isUpdate, Employee updatedEmployee) {
+		if(isUpdate) {
+			for(int i = 0; i < employeeList.size(); i++) {
+				if(employeeList.get(i).equals(employee)) {
+					employeeList.set(i, updatedEmployee);
+				}
+			}
+		} else {
+			employeeList.add(employee);
+		}
+		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

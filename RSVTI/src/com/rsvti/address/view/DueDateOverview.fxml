@@ -59,7 +59,6 @@
                   <TableColumn fx:id="employeeLastNameColumn" prefWidth="75.0" text="Nume" />
                   <TableColumn fx:id="employeeFirstNameColumn" prefWidth="75.0" text="Prenume" />
                </columns></TableColumn>
-            <TableColumn fx:id="employeeRigColumn" prefWidth="75.0" text="Utilaj" />
             <TableColumn fx:id="employeeFirmNameColumn" prefWidth="75.0" text="Firma" />
             <TableColumn fx:id="employeeDueDateColumn" prefWidth="75.0" text="Data scadenței" />
          </columns>

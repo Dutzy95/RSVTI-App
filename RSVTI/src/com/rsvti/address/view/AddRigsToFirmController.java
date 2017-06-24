@@ -61,15 +61,6 @@ public class AddRigsToFirmController {
 	@FXML
 	private Label dueDateLabel;
 	
-	@FXML
-	private TableView<Employee> employeeTable;
-	@FXML
-	private TableColumn<Employee,String> employeeLastNameColumn;
-	@FXML
-	private TableColumn<Employee,String> employeeFirstNameColumn;
-	
-	private List<Employee> employeeList = new ArrayList<Employee>();
-	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 	
 	private boolean isUpdate = false;
@@ -115,21 +106,6 @@ public class AddRigsToFirmController {
 				filterSelectedParameters(selectedItem);
 				importedParameterTable.refresh();
 			}
-		});
-		
-		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
-		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
-		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
-		employeeTable.setRowFactory( tv -> {
-		    TableRow<Employee> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		            Employee rowData = row.getItem();
-		            javaFxMain.showAddUpdateEmployeesToRig(rowData, true, false, "Editează personal");
-		        }
-		    });
-		    return row ;
 		});
 		
 		authorizationExtension.setItems(FXCollections.observableArrayList("Nu extinde", "1 an", "2 ani", "3 ani", "4 ani", "5 ani"));
@@ -201,31 +177,12 @@ public class AddRigsToFirmController {
 		}
 	}
 	
-	public void updateEmployeeList(Employee employee, boolean isUpdate, Employee updatedEmployee) {
-		if(isUpdate) {
-			for(int i = 0; i < employeeList.size(); i++) {
-				if(employeeList.get(i).equals(employee)) {
-					employeeList.set(i, updatedEmployee);
-				}
-			}
-		} else {
-			employeeList.add(employee);
-		}
-		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
-	}
-	
-	@FXML
-	private void handleAddEmployee() {
-		javaFxMain.showAddUpdateEmployeesToRig(null, false, false,"Adaugă personal");
-	}
-	
 	@FXML
 	private void handleSave() {
 		if(isDueDateUpdate) {
 			Rig newRig = new Rig(rigNameField.getText(), 
 					 chosenParametersTable.getItems(), 
-					 java.sql.Date.valueOf(revisionDate.getValue()), 
-				 	 employeeTable.getItems(), 
+					 java.sql.Date.valueOf(revisionDate.getValue()),  
 					 rigType.getValue());
 			newRig.setAuthorizationExtension(selectedExtensionValue);
 			javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
@@ -234,15 +191,13 @@ public class AddRigsToFirmController {
 				Rig newRig = new Rig(rigNameField.getText(), 
 									 chosenParametersTable.getItems(), 
 									 java.sql.Date.valueOf(revisionDate.getValue()), 
-								 	 employeeTable.getItems(), 
 									 rigType.getValue());
 				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
 			} else {
 				Rig newRig = new Rig(rigNameField.getText(), 
 									 chosenParametersTable.getItems(), 
-									 java.sql.Date.valueOf(revisionDate.getValue()), 
-								 	 employeeTable.getItems(), 
+									 java.sql.Date.valueOf(revisionDate.getValue()),  
 									 rigType.getValue());
 				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
@@ -260,7 +215,6 @@ public class AddRigsToFirmController {
 		dueDateLabel.setText(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate().toString());
 		rigType.setValue(rig.getType());
 		chosenParametersTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
-		employeeTable.setItems(FXCollections.observableArrayList(rig.getEmployees()));
 		filterSelectedParameters("de ridicat");
 		revisionDate.setValue(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate());
 		authorizationExtension.getSelectionModel().select(rig.getAuthorizationExtension() - 1);
