@@ -9,6 +9,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
@@ -16,7 +17,6 @@ import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
-import com.rsvti.main.Constants;
 
 public class EntityBuilder {
 
@@ -35,7 +35,7 @@ public class EntityBuilder {
 		
 		List<Rig> rigs = new ArrayList<Rig>();
 		List<Employee> employees = new ArrayList<Employee>();
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		
 		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
 			Node rigEmployeeNode = node.getChildNodes().item(k);
@@ -45,12 +45,7 @@ public class EntityBuilder {
 				
 				String rigName = rigEmployeeNode.getChildNodes().item(0).getTextContent();
 				
-				Date revisionDate = new Date();
-				try {
-					revisionDate = format.parse(rigEmployeeNode.getChildNodes().item(1).getTextContent());
-				} catch(ParseException pe) {
-					pe.printStackTrace();
-				}
+				Date revisionDate = new Date(Long.parseLong(rigEmployeeNode.getChildNodes().item(1).getTextContent()));
 				
 				int authorizationExtension = Integer.parseInt(rigEmployeeNode.getChildNodes().item(2).getTextContent());
 				
@@ -74,23 +69,20 @@ public class EntityBuilder {
 				for(int n = 0; n < employeeAuthorizationNode.getChildNodes().getLength(); n++) {
 					employeeAuthorisationParameters.add(employeeAuthorizationNode.getChildNodes().item(n).getTextContent());
 				}
-				try {
-					employees.add(new Employee(
-							employeeParameters.get(0),
-							employeeParameters.get(1),
-							employeeParameters.get(2),
-							employeeParameters.get(3),
-							employeeParameters.get(4),
-							new EmployeeAuthorization(
-									employeeAuthorisationParameters.get(0),
-									format.parse(employeeAuthorisationParameters.get(1)),
-									format.parse(employeeAuthorisationParameters.get(1))
-									),
-							rigEmployeeNode.getAttributes().getNamedItem("title").getTextContent()
-							));
-				} catch(ParseException pe) {
-					pe.printStackTrace();
-				}
+				
+				employees.add(new Employee(
+						employeeParameters.get(0),
+						employeeParameters.get(1),
+						employeeParameters.get(2),
+						employeeParameters.get(3),
+						employeeParameters.get(4),
+						new EmployeeAuthorization(
+								employeeAuthorisationParameters.get(0),
+								new Date(Long.parseLong(employeeAuthorisationParameters.get(1))),
+								new Date(Long.parseLong(employeeAuthorisationParameters.get(2)))
+								),
+						rigEmployeeNode.getAttributes().getNamedItem("title").getTextContent()
+						));
 			}
 		}
 		
@@ -121,13 +113,9 @@ public class EntityBuilder {
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
 		
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-		Date dueDate = new Date();
-		try {
-			dueDate = format.parse(node.getChildNodes().item(1).getTextContent());
-		} catch(ParseException pe) {
-			pe.printStackTrace();
-		}
+		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
+		
+		Date revisionDate = new Date(Long.parseLong(node.getChildNodes().item(1).getTextContent()));
 		
 		int authorizationExtension = Integer.parseInt(node.getChildNodes().item(2).getTextContent());
 		
@@ -135,14 +123,14 @@ public class EntityBuilder {
 		for(int i = 3; i < node.getChildNodes().getLength(); i++) {
 			parameters.add(new ParameterDetails(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 		}
-		Rig rig = new Rig(rigName, parameters, dueDate, type);
+		Rig rig = new Rig(rigName, parameters, revisionDate, type);
 		rig.setAuthorizationExtension(authorizationExtension);
 		return rig;
 	}
 	
 	public static Employee buildEmployeeFromXml(Node node) {
 		ArrayList<String> employeeParameters = new ArrayList<String>();
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		
 		for(int i = 0; i < node.getChildNodes().getLength()-1; i++) {
 			employeeParameters.add(node.getChildNodes().item(i).getTextContent());
@@ -153,24 +141,20 @@ public class EntityBuilder {
 		for(int j = 0; j < employeeAuthorizationNode.getChildNodes().getLength(); j++) {
 			employeeAuthorsationParameters.add(employeeAuthorizationNode.getChildNodes().item(j).getTextContent());
 		}
-		try {
-			return new Employee(
-					employeeParameters.get(0),
-					employeeParameters.get(1),
-					employeeParameters.get(2),
-					employeeParameters.get(3),
-					employeeParameters.get(4),
-					new EmployeeAuthorization(
-							employeeAuthorsationParameters.get(0),
-							format.parse(employeeAuthorsationParameters.get(1)),
-							format.parse(employeeAuthorsationParameters.get(1))
-							),
-					node.getAttributes().getNamedItem("title").getTextContent()
-					);
-		} catch(ParseException pe) {
-			pe.printStackTrace();
-			return null;
-		}
+		
+		return new Employee(
+				employeeParameters.get(0),
+				employeeParameters.get(1),
+				employeeParameters.get(2),
+				employeeParameters.get(3),
+				employeeParameters.get(4),
+				new EmployeeAuthorization(
+						employeeAuthorsationParameters.get(0),
+						new Date(Long.parseLong(employeeAuthorsationParameters.get(1))),
+						new Date(Long.parseLong(employeeAuthorsationParameters.get(2)))
+						),
+				node.getAttributes().getNamedItem("title").getTextContent()
+				);
 	}
 	
 	public static List<Firm> buildFirmListFormXml(NodeList nodeList) {

@@ -11,9 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.main.Constants;
-import com.rsvti.main.Utils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -49,7 +49,10 @@ public class SettingsController {
 	@FXML
 	private ComboBox<String> homeDateIntervalUnit;
 	
-	private SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+	@FXML
+	private ComboBox<String> dateFormatChooser;
+	
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
 	public SettingsController() {
 	}
@@ -60,23 +63,26 @@ public class SettingsController {
 		Utils.setDisplayFormatForDatePicker(datePicker);
 		datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
 		filePathField.setText(DBServices.getBackupPath());
-		homeDateIntervalField.setText(DBServices.getHomeDateDisplayInterval().split(" ")[0]);
-		switch(Integer.parseInt(DBServices.getHomeDateDisplayInterval().split(" ")[1])) {
-		case Calendar.DATE : {
-			homeDateIntervalUnit.getSelectionModel().select(0);
-			break;
-		}
-		case Calendar.MONTH : {
-			homeDateIntervalUnit.getSelectionModel().select(1);
-			break;
-		}
-		case Calendar.YEAR : {
-			homeDateIntervalUnit.getSelectionModel().select(2);
-			break;
-		}
-		}
 		homeDateIntervalUnit.setItems(FXCollections.observableArrayList(Arrays.asList("zile", "luni", "ani")));
-		homeDateIntervalUnit.getSelectionModel().select(0);
+		homeDateIntervalField.setText(DBServices.getHomeDateDisplayInterval().split(" ")[0]);
+		if(!DBServices.getHomeDateDisplayInterval().equals("")) {
+			switch(Integer.parseInt(DBServices.getHomeDateDisplayInterval().split(" ")[1])) {
+			case Calendar.DATE : {
+				homeDateIntervalUnit.getSelectionModel().select(0);
+				break;
+			}
+			case Calendar.MONTH : {
+				homeDateIntervalUnit.getSelectionModel().select(1);
+				break;
+			}
+			case Calendar.YEAR : {
+				homeDateIntervalUnit.getSelectionModel().select(2);
+				break;
+			}
+			}
+		} else {
+			homeDateIntervalUnit.getSelectionModel().select(0);
+		}
 		homeDateIntervalUnit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -116,6 +122,38 @@ public class SettingsController {
 					}
 				}
 		});
+		
+		Calendar calendar = Calendar.getInstance();
+		List<String> patterns = Arrays.asList(
+				"dd-MM-yyyy",
+				"dd-MMM-yyyy",
+				"dd-MMMM-yyyy",
+				"dd-MMMM-yy",
+				"dd/MM/yyyy",
+				"dd/MMM/yyyy",
+				"dd/MMMM/yyyy",
+				"dd/MMMM/yy",
+				"dd MM yyyy",
+				"dd MMM yyyy",
+				"dd MMMM yyyy",
+				"dd MMMM yy");
+		List<String> formattedDates = new ArrayList<String>();
+		for(String index : patterns) {
+			formattedDates.add(new SimpleDateFormat(index).format(calendar.getTime()));
+		}
+		dateFormatChooser.setItems(FXCollections.observableArrayList(formattedDates));
+		dateFormatChooser.getSelectionModel().select(new SimpleDateFormat(DBServices.getDatePattern()).format(calendar.getTime()));
+		dateFormatChooser.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				DBServices.saveDatePattern(patterns.get(dateFormatChooser.getSelectionModel().getSelectedIndex()));
+				//refresh settings stage in real time
+				Utils.setDisabledDaysForDatePicker(datePicker);
+				Utils.setDisplayFormatForDatePicker(datePicker);
+				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+				datesListView.refresh();
+			}
+		});
 	}
 	
 	@FXML
@@ -140,7 +178,8 @@ public class SettingsController {
 	}
 	
 	private List<String> datesToStrings(List<Date> dates) {
-		List<String> dateStrings = new ArrayList<String>(); 
+		List<String> dateStrings = new ArrayList<String>();
+		dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 		for(Date index : dates) {
 			dateStrings.add(dateFormat.format(index));
 		}

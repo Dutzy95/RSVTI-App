@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
-import com.rsvti.main.Utils;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;

@@ -1,4 +1,4 @@
-package com.rsvti.main;
+package com.rsvti.common;
 
 import java.io.File;
 import java.util.Arrays;
@@ -31,19 +31,19 @@ public class Data {
 			new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME).delete();
 			
 			Calendar date = Calendar.getInstance();
-			date.set(2000, 4, 12);
+			date.set(2017, 6, 18);
 			
 			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", 
 					new EmployeeAuthorization("123948273", date.getTime(), date.getTime()), "stivuitorist");
-			date.set(2020, 4, 6);
+			date.set(2017, 7, 12);
 			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", 
 					new EmployeeAuthorization("56732894", date.getTime(), date.getTime()), "macaragist");
-			date.set(2017, 6, 20);
+			date.set(2017, 7, 21);
 			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", 
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
 			Rig liftingRig1 = new Rig("macara", date.getTime(), "de ridicat");
-			liftingRig1.setAuthorizationExtension(1);
+			liftingRig1.setAuthorizationExtension(0);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
@@ -51,13 +51,13 @@ public class Data {
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
 					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1), Arrays.asList(employee1,employee2)), false);
 			
-			date.set(2005, 12, 26);
+			date.set(2016, 8, 25);
 			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), "de ridicat");
-			liftingRig2.setAuthorizationExtension(2);
+			liftingRig2.setAuthorizationExtension(1);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
-			date.set(2010, 7, 20);
+			date.set(2016, 5, 30);
 			Rig pressureRig = new Rig("cazan", date.getTime(), "sub presiune");
 			pressureRig.setAuthorizationExtension(1);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
@@ -67,8 +67,8 @@ public class Data {
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3)), false);
 			
-			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 0]", XPathConstants.NODE));
-			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[parent::firma[@id = 0]]", XPathConstants.NODE));
+//			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 0]", XPathConstants.NODE));
+//			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[parent::firma[@id = 0]]", XPathConstants.NODE));
 //			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[@title = \"macaragist\" and parent::instalatie[parent::firma[@id = 0]]]", XPathConstants.NODE));
 			
 //			DBServices.deleteEntry(new Firm("CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
-import com.rsvti.main.Constants;
-import com.rsvti.main.Utils;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

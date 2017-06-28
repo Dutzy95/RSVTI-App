@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.main.Constants;
-import com.rsvti.main.Utils;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -61,7 +61,7 @@ public class AddRigsToFirmController {
 	@FXML
 	private Label dueDateLabel;
 	
-	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
 	private boolean isUpdate = false;
 	private boolean isDueDateUpdate = false;
@@ -217,7 +217,7 @@ public class AddRigsToFirmController {
 		chosenParametersTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 		filterSelectedParameters("de ridicat");
 		revisionDate.setValue(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate());
-		authorizationExtension.getSelectionModel().select(rig.getAuthorizationExtension() - 1);
+		authorizationExtension.getSelectionModel().select(rig.getAuthorizationExtension());
 		dueDateLabel.setText(simpleDateFormat.format(rig.getDueDate()));
 	}
 	

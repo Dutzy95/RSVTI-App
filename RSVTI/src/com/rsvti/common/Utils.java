@@ -1,9 +1,7 @@
-package com.rsvti.main;
+package com.rsvti.common;
 
 import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
 import java.awt.Image;
-import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -13,9 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -26,20 +22,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
 
 import com.rsvti.database.services.DBServices;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
@@ -58,7 +52,6 @@ public class Utils {
                             public void updateItem(LocalDate item, boolean empty) {
                                 super.updateItem(item, empty);
                                
-                                //TODO: make custom list of national holidays that are not on fixed days
                                 //Could not use Calendar.SATURDAY and Calendar.SUNDAY because they are 7 respectively 1, because SUNDAY is first day of week
                                 if (item.getDayOfWeek().getValue() == 6 || item.getDayOfWeek().getValue() == 7 ||
                                 		Constants.publicHolidays.contains((item.getDayOfMonth() + "-" + item.getMonthValue())) ||
@@ -66,20 +59,17 @@ public class Utils {
                                         setDisable(true);
                                         setStyle("-fx-background-color: " + Constants.DISABLED_COLOR + ";");
                                 }   
-                        }
-                    };
-                }
-            };
+                            }
+                        };
+                    }
+            	};
             datePicker.setDayCellFactory(dayCellFactory);
 	}
 	
 	public static void setDisplayFormatForDatePicker(DatePicker datePicker) {
-		Locale locale = new Locale("ro", "RO");
-		Locale.setDefault(locale);
-		
 		StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
             DateTimeFormatter dateFormatter = 
-                DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+                DateTimeFormatter.ofPattern(DBServices.getDatePattern());
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {
@@ -98,7 +88,7 @@ public class Utils {
             }
         };             
         datePicker.setConverter(converter);
-        datePicker.setPromptText(Constants.DATE_FORMAT_RO);
+        datePicker.setPromptText(DBServices.getRomanianDatePattern());
         datePicker.setShowWeekNumbers(true);
 	}
 	
@@ -186,6 +176,8 @@ public class Utils {
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste");
 			file.mkdir();
+			file = new File(jarFilePath + "docs\\pdf");
+			file.mkdir();
 			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
 			file = new File(jarFilePath + "images");
@@ -218,8 +210,8 @@ public class Utils {
 			
 			final PopupMenu popup = new PopupMenu();
 			
-	        MenuItem show = new MenuItem("Show");
-	        MenuItem exit = new MenuItem("Exit");
+	        MenuItem show = new MenuItem("Afișare");
+	        MenuItem exit = new MenuItem("Ieșire");
 	        
 	        exit.addActionListener(new ActionListener() {
 				@Override

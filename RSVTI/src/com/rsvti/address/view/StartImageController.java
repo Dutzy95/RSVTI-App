@@ -2,7 +2,7 @@ package com.rsvti.address.view;
 
 import java.io.File;
 
-import com.rsvti.main.Utils;
+import com.rsvti.common.Utils;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
-import com.rsvti.main.Constants;
+import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -60,8 +61,8 @@ public class RigOverviewController {
 	private void showRigDetails(Rig rig) {
 		if(rig != null) {
 			rigNameLabel.setText(rig.getRigName());
-			SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
-			dueDateLabel.setText(format.format(rig.getRevisionDate()));
+			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
+			dueDateLabel.setText(format.format(rig.getDueDate()));
 			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 			rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));

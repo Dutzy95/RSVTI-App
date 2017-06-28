@@ -4,8 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Employee;
-import com.rsvti.main.Constants;
+import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -63,7 +64,7 @@ public class EmployeeOverviewController {
 		personalIdentificationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPersonalIdentificationNumber()));
 		titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
 		authorizationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAuthorization().getAuthorizationNumber()));
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		authorizationObtainingDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getObtainingDate())));
 		authorizationDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getDueDate())));
 	}

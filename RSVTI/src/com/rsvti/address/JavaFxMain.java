@@ -1,12 +1,17 @@
 package com.rsvti.address;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 import javax.xml.xpath.XPathConstants;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.w3c.dom.Node;
 
 import com.rsvti.address.view.AddEmployeesToFirmController;
@@ -24,13 +29,14 @@ import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.address.view.SettingsController;
 import com.rsvti.address.view.StartImageController;
+import com.rsvti.common.Constants;
+import com.rsvti.common.Data;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.database.services.EntityBuilder;
 import com.rsvti.generator.Generator;
-import com.rsvti.main.Data;
-import com.rsvti.main.Utils;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -64,6 +70,7 @@ public class JavaFxMain extends Application {
 	private DueDateOverviewController dueDateOverviewController;
 	private PauseTransition delay = new PauseTransition(Duration.seconds(3));
 	private PauseTransition delay1 = new PauseTransition(Duration.seconds(3));
+	private HomeController homeController;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -133,7 +140,7 @@ public class JavaFxMain extends Application {
             loader.setLocation(JavaFxMain.class.getResource("view/Home.fxml"));
             BorderPane home = (BorderPane) loader.load();
 
-            HomeController controller = loader.getController();
+            homeController = loader.getController();
             
             Tab tab = new Tab("Acasă");
             tab.setContent(home);
@@ -286,6 +293,7 @@ public class JavaFxMain extends Application {
 	        addUpdateRigsToFirmStage.setTitle(stageName);
 	        addUpdateRigsToFirmStage.initModality(Modality.WINDOW_MODAL);
 	        addUpdateRigsToFirmStage.initOwner(primaryStage);
+	        addUpdateRigsToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(addUpdateRigsToFirm);
 	        addUpdateRigsToFirmStage.setScene(scene);
             
@@ -320,6 +328,7 @@ public class JavaFxMain extends Application {
 	        addUpdateEmployeesToFirmStage.setTitle(stageName);
 	        addUpdateEmployeesToFirmStage.initModality(Modality.WINDOW_MODAL);
 	        addUpdateEmployeesToFirmStage.initOwner(primaryStage);
+	        addUpdateEmployeesToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(addUpdateEmployeesToFirm);
 	        addUpdateEmployeesToFirmStage.setScene(scene);
             
@@ -408,9 +417,18 @@ public class JavaFxMain extends Application {
 	        stage.setTitle("Setări");
 	        stage.initModality(Modality.WINDOW_MODAL);
 	        stage.initOwner(primaryStage);
+	        stage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(settings);
 	        stage.setScene(scene);
             
+	        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	        	@Override
+	        	public void handle(WindowEvent e) {
+	        		homeController.refresh();
+	        		stage.close();
+	        	}
+			});
+	        
 	        stage.showAndWait();
             
 	        SettingsController settingsController = loader.getController();
@@ -482,6 +500,8 @@ public class JavaFxMain extends Application {
 	}
 
 	public static void main(String[] args) {
+		Locale locale = new Locale("ro", "RO");
+		Locale.setDefault(locale);
 //		Utils.setErrorLog();
 //		Utils.setStartup();
 		Utils.createFolderHierarchy();

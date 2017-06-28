@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
@@ -37,8 +40,6 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
-import com.rsvti.main.Constants;
-import com.rsvti.main.Utils;
 
 public class DBServices {
 	
@@ -94,10 +95,9 @@ public class DBServices {
 	}
 	
 	public static void saveEntry(Firm firm, boolean update) {
-		openFile(Constants.XML_FIRMS_FILE_NAME);
+		//TODO setIndexes() no longer needed?
 		setIndexes();
-		
-		SimpleDateFormat format = new SimpleDateFormat(Constants.DATE_FORMAT);
+		openFile(Constants.XML_FIRMS_FILE_NAME);
 		
 		Element root = document.getDocumentElement();
 		
@@ -182,7 +182,7 @@ public class DBServices {
 			rig.appendChild(rigName);
 			
 			Element revisionDate = document.createElement("data_reviziei");
-			revisionDate.appendChild(document.createTextNode(format.format(rigIndex.getRevisionDate())));
+			revisionDate.appendChild(document.createTextNode(rigIndex.getRevisionDate().getTime() + ""));
 			rig.appendChild(revisionDate);
 			
 			Element authorizationExtension = document.createElement("extinderea_autorizatiei");
@@ -232,11 +232,11 @@ public class DBServices {
 			authorizationElement.appendChild(authorizationNumber);
 			
 			Element obtainingDate = document.createElement("data_obtinerii");
-			obtainingDate.appendChild(document.createTextNode(format.format(authorization.getObtainingDate())));
+			obtainingDate.appendChild(document.createTextNode(authorization.getObtainingDate().getTime() + ""));
 			authorizationElement.appendChild(obtainingDate);
 			
 			Element employeeDueDate = document.createElement("data_scadenta");
-			employeeDueDate.appendChild(document.createTextNode(format.format(authorization.getDueDate())));
+			employeeDueDate.appendChild(document.createTextNode(authorization.getDueDate().getTime() + ""));
 			authorizationElement.appendChild(employeeDueDate);
 			
 			employee.appendChild(authorizationElement);
@@ -449,7 +449,8 @@ public class DBServices {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
 			for(int j = 0; j < firm.getEmployees().size(); j++) {
 				Date dueDate = firm.getEmployees().get(j).getAuthorization().getDueDate();
-				if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
+				if(resetTimeForDate(dueDate).equals(resetTimeForDate(beginDate)) || resetTimeForDate(dueDate).equals(resetTimeForDate(endDate)) || 
+						(resetTimeForDate(dueDate).after(resetTimeForDate(beginDate)) && resetTimeForDate(dueDate).before(resetTimeForDate(endDate)))) {
 					selectedEmployees.add(new EmployeeDueDateDetails(firm.getEmployees().get(j), firm.getFirmName(), firm.getAddress(), dueDate));
 				}
 			}
@@ -463,13 +464,25 @@ public class DBServices {
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
 			for(int j = 0; j < firm.getRigs().size(); j++) {
-				Date dueDate = firm.getRigs().get(j).getDueDate(); 
-				if(dueDate.equals(beginDate) || dueDate.equals(endDate) || (dueDate.after(beginDate) && dueDate.before(endDate))) {
+				Date dueDate = firm.getRigs().get(j).getDueDate();
+				if(resetTimeForDate(dueDate).equals(resetTimeForDate(beginDate)) || resetTimeForDate(dueDate).equals(resetTimeForDate(endDate)) || 
+						(resetTimeForDate(dueDate).after(resetTimeForDate(beginDate)) && resetTimeForDate(dueDate).before(resetTimeForDate(endDate)))) {
 					selectedRigs.add(new RigDueDateDetails(firm.getRigs().get(j), firm.getFirmName(), dueDate));
 				}
 			}
 		}
 		return selectedRigs;
+	}
+	
+	private static Date resetTimeForDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		return calendar.getTime();
 	}
 	
 	public static int getLastFirmIndex() {
@@ -588,7 +601,7 @@ public class DBServices {
 		Element variableDates = (Element) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//variable_dates", XPathConstants.NODE);
 		
 		Element date = document.createElement("date");
-		date.appendChild(document.createTextNode(new SimpleDateFormat(Constants.DATE_FORMAT).format(variableDate)));
+		date.appendChild(document.createTextNode(variableDate.getTime() + ""));
 		variableDates.appendChild(date);
 		
 		try {
@@ -607,7 +620,7 @@ public class DBServices {
 		NodeList dates = (NodeList) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date", XPathConstants.NODESET);
 		
 		for(int i = 0; i < dates.getLength(); i++) {
-			if(dates.item(i).getTextContent().equals(new SimpleDateFormat(Constants.DATE_FORMAT).format(variableDate))) {
+			if(dates.item(i).getTextContent().equals(variableDate.getTime() + "")) {
 				variableDatesElement.removeChild(dates.item(i));
 			}
 		}
@@ -627,11 +640,10 @@ public class DBServices {
 		List<Date> dates = new ArrayList<Date>();
 		
 		NodeList dateNodes = (NodeList) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date", XPathConstants.NODESET);
-		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 		
 		for(int i = 0; i < dateNodes.getLength(); i++) {
 			try {
-				dates.add(dateFormat.parse(dateNodes.item(i).getTextContent()));
+				dates.add(new Date(Long.parseLong(dateNodes.item(i).getTextContent())));
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -701,6 +713,45 @@ public class DBServices {
 			return "";
 		} else {
 			return homeDateDisplayIntervalNode.getFirstChild().getTextContent() + " " + homeDateDisplayIntervalNode.getChildNodes().item(1).getTextContent();
+		}
+	}
+	
+	public static void saveDatePattern(String datePattern) {
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
+		Element datePatternElement = document.createElement("datePattern");
+		datePatternElement.appendChild(document.createTextNode(datePattern));
+		if(datePatternNode == null) {
+			document.getDocumentElement().appendChild(datePatternElement);
+		} else {
+			document.getDocumentElement().replaceChild(datePatternElement, datePatternNode);
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String getDatePattern() {
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
+		if(datePatternNode == null) {
+			return "dd-MM-yyyy";
+		} else {
+			return datePatternNode.getFirstChild().getTextContent();
+		}
+	}
+	
+	public static String getRomanianDatePattern() {
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
+		if(datePatternNode == null) {
+			return "zz-ll-aaaa";
+		} else {
+			return datePatternNode.getFirstChild().getTextContent().replaceAll("d", "z").replaceAll("M", "l").replaceAll("y", "a");
 		}
 	}
 }

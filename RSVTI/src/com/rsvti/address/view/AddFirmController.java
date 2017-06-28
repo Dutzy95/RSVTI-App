@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.main.Constants;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

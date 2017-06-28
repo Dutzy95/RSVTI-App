@@ -1,9 +1,9 @@
 package com.rsvti.address.view;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.main.Constants;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

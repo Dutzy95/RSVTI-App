@@ -1,22 +1,17 @@
 package com.rsvti.generator;
 
-import java.awt.Desktop;
-import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FontFamily;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -24,17 +19,14 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder;
 
+import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.main.Constants;
-import com.rsvti.main.Utils;
 
 public class Generator {
 	
@@ -45,7 +37,7 @@ public class Generator {
 			
 			XWPFDocument document = new XWPFDocument();
 			
-			String currentDate = new SimpleDateFormat(Constants.DATE_FORMAT).format(Calendar.getInstance().getTime());
+			String currentDate = new SimpleDateFormat(DBServices.getDatePattern()).format(Calendar.getInstance().getTime());
 			File file = new File(jarFilePath + "docs\\" + currentDate);
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\" + currentDate + "\\" + "MyWordDocument.docx");
@@ -114,6 +106,8 @@ public class Generator {
 			
 			
 			XWPFDocument document = new XWPFDocument();
+			document.createStyles();
+			document.createHeaderFooterPolicy();
 			XWPFParagraph paragraph = document.createParagraph();
 			XWPFRun run = paragraph.createRun();
 			
@@ -209,6 +203,7 @@ public class Generator {
 				document.write(backupOutput);
 			}
 			document.close();
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -226,7 +221,7 @@ public class Generator {
 			
 			int rowCount = 0;
 			
-			SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 			
 			String jarFilePath = Utils.getJarFilePath();
 			file = new File(jarFilePath + "docs\\tabele utilaje\\" + firm.getFirmName() + ".xlsx");
