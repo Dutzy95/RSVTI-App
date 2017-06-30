@@ -79,7 +79,7 @@ public class JavaFxMain extends Application {
         
         this.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
         
-        Platform.setImplicitExit(false);
+//        Platform.setImplicitExit(false);
 //		Utils.setTray(primaryStage);
 		
 //		initApp();

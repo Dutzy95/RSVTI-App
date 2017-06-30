@@ -69,12 +69,12 @@ public class Generator {
 			run.setFontFamily("Garamond");
 			paragraph.setAlignment(ParagraphAlignment.BOTH);
 			
-			final int INCH_TO_POINTS = 72;
+//			final int INCH_TO_POINTS = 72;
 			//if aspect ratio is needed use img.getHeight() and img.getWidth()
-	//		BufferedImage img = ImageIO.read(MyApp.class.getResourceAsStream(("/coffee-cup-icon.png")));
+//			BufferedImage img = ImageIO.read(MyApp.class.getResourceAsStream(("/coffee-cup-icon.png")));
 			paragraph = document.createParagraph();
 			run = paragraph.createRun();
-	//		run.addPicture(MyApp.class.getResourceAsStream(("/coffee-cup-icon.png")), Document.PICTURE_TYPE_PNG, "/coffee-cup-icon.png", Units.pixelToEMU(Units.pointsToPixel(2 * INCH_TO_POINTS)), Units.pixelToEMU(Units.pointsToPixel(2 * INCH_TO_POINTS)));
+//			run.addPicture(MyApp.class.getResourceAsStream(("/coffee-cup-icon.png")), Document.PICTURE_TYPE_PNG, "/coffee-cup-icon.png", Units.pixelToEMU(Units.pointsToPixel(2 * INCH_TO_POINTS)), Units.pixelToEMU(Units.pointsToPixel(2 * INCH_TO_POINTS)));
 			paragraph.setAlignment(ParagraphAlignment.CENTER);
 			
 			document.write(output);
@@ -93,7 +93,7 @@ public class Generator {
 		}
 	}
 	
-	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails) {
+	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails, boolean generatePdf) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
@@ -189,6 +189,11 @@ public class Generator {
 				run.addBreak();
 			}
 			
+			//Generate PDF if needed
+			if(generatePdf) {
+				//generate PDF
+			}
+			
 			document.write(output);
 			
 			//Save to backup directory if there is one selected
@@ -202,6 +207,7 @@ public class Generator {
 				FileOutputStream backupOutput = new FileOutputStream(backupFile);
 				document.write(backupOutput);
 			}
+			
 			document.close();
 			
 		} catch(Exception e) {

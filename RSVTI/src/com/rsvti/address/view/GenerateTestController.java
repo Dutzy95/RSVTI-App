@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -42,6 +43,8 @@ public class GenerateTestController {
 	
 	@FXML
 	private TextField numberOfQuestionsField;
+	@FXML
+	private CheckBox generatePdf;
 	
 	@FXML
 	private Button generateButton;
@@ -66,7 +69,7 @@ public class GenerateTestController {
 		List<EmployeeDueDateDetails> selection = employeeTable.getSelectionModel().getSelectedItems();
 		List<File> files = new ArrayList<File>();
 		for(EmployeeDueDateDetails index : selection) {
-			files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index));
+			files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index, generatePdf.isSelected()));
 		}
 		
 		String bodyMessage;
