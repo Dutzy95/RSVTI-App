@@ -35,6 +35,7 @@ import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.entities.Firm;
+import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
@@ -62,6 +63,8 @@ public class DBServices {
 					ps.println("<?xml version=\"1.0\"?><test></test>");
 				} else if(filepath.contains("CustomSettings.xml")) {
 					ps.println("<?xml version=\"1.0\"?><custom><variable_dates></variable_dates></custom>");
+				} else if(filepath.contains("LoggedTests.xml")) {
+					ps.println("<?xml version=\"1.0\"?><log></log>");
 				} else {
 					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
@@ -740,7 +743,7 @@ public class DBServices {
 	public static String getDatePattern() {
 		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
 		if(datePatternNode == null) {
-			return "dd-MM-yyyy";
+			return Constants.DEFAULT_DATE_FORMAT;
 		} else {
 			return datePatternNode.getFirstChild().getTextContent();
 		}
@@ -753,5 +756,40 @@ public class DBServices {
 		} else {
 			return datePatternNode.getFirstChild().getTextContent().replaceAll("d", "z").replaceAll("M", "l").replaceAll("y", "a");
 		}
+	}
+	
+	public static void saveEntry(LoggedTest loggedTest) {
+		openFile(Constants.XML_LOGGED_TESTS_FILE_NAME);
+		
+		Element rootElement = document.getDocumentElement();
+		
+		Element loggedTestElement = document.createElement("test");
+		
+		loggedTestElement.setAttribute("nume_angajat", loggedTest.getEmployeeLastName());
+		loggedTestElement.setAttribute("prenume_angajat", loggedTest.getEmployeeFirstName());
+		loggedTestElement.setAttribute("titlu_angajat", loggedTest.getEmployeeTitle());
+		loggedTestElement.setAttribute("nume_firma", loggedTest.getFirmName());
+		loggedTestElement.setAttribute("data_si_ora_generarii", loggedTest.getGenerationDateAndTime().getTime() + "");
+		
+		rootElement.appendChild(loggedTestElement);
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_LOGGED_TESTS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static List<LoggedTest> getAllLoggedTests() {
+		NodeList loggedTestNodes = (NodeList) executeXmlQuery(Constants.XML_LOGGED_TESTS_FILE_NAME, "//test", XPathConstants.NODESET);
+		List<LoggedTest> loggedTests = new ArrayList<LoggedTest>();
+		for(int i = 0; i < loggedTestNodes.getLength(); i++) {
+			loggedTests.add(EntityBuilder.buildLoggedTestFormXml(loggedTestNodes.item(i)));
+		}
+		return loggedTests;
 	}
 }

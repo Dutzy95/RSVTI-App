@@ -116,7 +116,7 @@ public class Utils {
 					File file = new File(jarFilePath + Constants.ERROR_LOG_FILE);
 					System.setErr(new PrintStream(file));
 					
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_EXTENDED);
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern() + " HH:mm:ss");
 					Calendar refreshIntervalBegin = Calendar.getInstance();
 					refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
 					while(true) {
@@ -175,6 +175,8 @@ public class Utils {
 			file = new File(jarFilePath + "docs\\procese verbale");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste");
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\teste\\logs");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\pdf");
 			file.mkdir();

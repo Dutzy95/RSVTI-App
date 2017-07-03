@@ -29,6 +29,7 @@ import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.address.view.SettingsController;
 import com.rsvti.address.view.StartImageController;
+import com.rsvti.address.view.TestLogOverviewController;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
@@ -455,6 +456,27 @@ public class JavaFxMain extends Application {
             
             GenerateTableController generateTableController = loader.getController();
             generateTableController.setJavaFxMain(this);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void showTestLogs() {
+		try {
+	        // Load the fxml file and create a new stage for the popup dialog.
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(JavaFxMain.class.getResource("view/TestLogOverview.fxml"));
+	        AnchorPane tableOverview = (AnchorPane) loader.load();
+
+	        Tab tableOverviewTab = new Tab("Genereaza tabel");
+	        tableOverviewTab.setContent(tableOverview);
+	        tableOverviewTab.setClosable(true);
+            
+            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.getTabs().add(tableOverviewTab);
+            tabPane.getSelectionModel().select(tableOverviewTab);
+            
+            TestLogOverviewController testLogOverviewController = loader.getController();
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

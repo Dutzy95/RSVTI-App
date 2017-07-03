@@ -59,6 +59,11 @@ public class MenuController {
 	}
 	
 	@FXML
+	private void handleViewTestLogs() {
+		javaFxMain.showTestLogs();
+	}
+	
+	@FXML
 	private void handleGenerateTest() {
 		javaFxMain.generateTest();
 	}

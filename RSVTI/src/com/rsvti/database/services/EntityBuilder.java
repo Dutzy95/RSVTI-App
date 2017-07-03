@@ -14,6 +14,7 @@ import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.entities.Firm;
+import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
@@ -192,5 +193,15 @@ public class EntityBuilder {
 		}
 		
 		return new TestQuestion(text, answers, type);
+	}
+	
+	public static LoggedTest buildLoggedTestFormXml(Node node) {
+		return new LoggedTest(
+				node.getAttributes().getNamedItem("prenume_angajat").getTextContent(), 
+				node.getAttributes().getNamedItem("nume_angajat").getTextContent(), 
+				node.getAttributes().getNamedItem("titlu_angajat").getTextContent(), 
+				node.getAttributes().getNamedItem("nume_firma").getTextContent(), 
+				new Date(Long.parseLong(node.getAttributes().getNamedItem("data_si_ora_generarii").getTextContent()))
+				);
 	}
 }

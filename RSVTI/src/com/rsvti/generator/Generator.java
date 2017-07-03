@@ -3,6 +3,7 @@ package com.rsvti.generator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.entities.Firm;
+import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
@@ -189,6 +191,8 @@ public class Generator {
 				run.addBreak();
 			}
 			
+			logGeneratedTest(document, employeeDetails);
+			
 			//Generate PDF if needed
 			if(generatePdf) {
 				//generate PDF
@@ -214,6 +218,32 @@ public class Generator {
 			e.printStackTrace();
 		}
 		return file;
+	}
+	
+	private static void logGeneratedTest(XWPFDocument document, EmployeeDueDateDetails employeeDetails) {
+		
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+			SimpleDateFormat extendedDateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT + " HH.mm.ss");
+			String jarFilePath = Utils.getJarFilePath();
+			File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(Calendar.getInstance().getTime()) + "");
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(Calendar.getInstance().getTime())  + "\\"
+					+ employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + " " + employeeDetails.getEmployee().getTitle() 
+					+ " " + extendedDateFormat.format(Calendar.getInstance().getTime()) + ".docx");
+			
+			document.write(new FileOutputStream(file));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		DBServices.saveEntry(
+				new LoggedTest(
+					employeeDetails.getEmployee().getFirstName(), 
+					employeeDetails.getEmployee().getLastName(),
+					employeeDetails.getEmployee().getTitle(),
+					employeeDetails.getFirmName(), 
+					Calendar.getInstance().getTime()
+				));
 	}
 	
 	public static File generateExcelTable(Firm firm) {

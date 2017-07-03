@@ -27,6 +27,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#handleViewFirms" text="Firme" />
                   <MenuItem mnemonicParsing="false" onAction="#handleViewRigs" text="Utilaje" />
                   <MenuItem mnemonicParsing="false" onAction="#handleViewDueDateOverview" text="Date scadente" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewTestLogs" text="Istoric teste" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Generează">
