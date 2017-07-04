@@ -2,7 +2,6 @@ package com.rsvti.database.services;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

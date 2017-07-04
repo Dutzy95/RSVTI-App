@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.rsvti.database.services.DBServices;
-
 public class Constants {
 
 	public static final String XML_FIRMS_FILE_NAME = "database/RSVTI_database.xml";

@@ -1,22 +1,12 @@
 package com.rsvti.address;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.SwingUtilities;
-import javax.xml.xpath.XPathConstants;
-
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.w3c.dom.Node;
-
 import com.rsvti.address.view.AddEmployeesToFirmController;
 import com.rsvti.address.view.AddFirmController;
-import com.rsvti.address.view.AddRigParameterController;
 import com.rsvti.address.view.AddRigsToFirmController;
 import com.rsvti.address.view.AddTestQuestionController;
 import com.rsvti.address.view.DueDateOverviewController;
@@ -28,20 +18,13 @@ import com.rsvti.address.view.HomeController;
 import com.rsvti.address.view.MenuController;
 import com.rsvti.address.view.RigOverviewController;
 import com.rsvti.address.view.SettingsController;
-import com.rsvti.address.view.StartImageController;
-import com.rsvti.address.view.TestLogOverviewController;
-import com.rsvti.common.Constants;
 import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
-import com.rsvti.database.services.DBServices;
-import com.rsvti.database.services.EntityBuilder;
-import com.rsvti.generator.Generator;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -75,10 +58,10 @@ public class JavaFxMain extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("RSVTI App");
+		JavaFxMain.primaryStage = primaryStage;
+		JavaFxMain.primaryStage.setTitle("RSVTI App");
         
-        this.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+		JavaFxMain.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
         
 //        Platform.setImplicitExit(false);
 //		Utils.setTray(primaryStage);
@@ -97,7 +80,7 @@ public class JavaFxMain extends Application {
 	        AnchorPane pane = (AnchorPane) loader.load();
 	        Scene scene = new Scene(pane);
 	        
-	        StartImageController controller = loader.getController();
+	        loader.getController();
 	        
 	        Stage stage = new Stage();
 	        stage.setScene(scene);
@@ -178,7 +161,7 @@ public class JavaFxMain extends Application {
 	
 	public void showRigOverview(String firmName, List<Rig> rigList) {
 	    try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/RigOverview.fxml"));
 	        AnchorPane rigOverview = (AnchorPane) loader.load();
@@ -186,7 +169,6 @@ public class JavaFxMain extends Application {
 	        // Set the person into the controller.
 	        RigOverviewController controller = loader.getController();
 	        controller.setRigList(rigList);
-	        controller.setJavaFxMain(this);
 	        
 	        Tab tab = new Tab(firmName);
             tab.setContent(rigOverview);
@@ -203,7 +185,7 @@ public class JavaFxMain extends Application {
 	
 	public void showEmployeeOverview(List<Employee> employeeList) {
 	    try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/EmployeeOverview.fxml"));
 	        AnchorPane employeeOverview = (AnchorPane) loader.load();
@@ -219,7 +201,6 @@ public class JavaFxMain extends Application {
 	        // Set the person into the controller.
 	        EmployeeOverviewController controller = loader.getController();
 	        controller.setEmployeeList(employeeList);
-	        controller.setJavaFxMain(this);
 
 	    } catch (IOException e) {
 	        e.printStackTrace();
@@ -228,7 +209,7 @@ public class JavaFxMain extends Application {
 	
 	public void addFirm() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddFirm.fxml"));
 	        AnchorPane addFirm = (AnchorPane) loader.load();
@@ -250,7 +231,7 @@ public class JavaFxMain extends Application {
 	
 	public void addRigParameter() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigParameter.fxml"));
 	        AnchorPane addRigParameter = (AnchorPane) loader.load();
@@ -263,8 +244,7 @@ public class JavaFxMain extends Application {
             tabPane.getTabs().add(addRigParameterTab);
             tabPane.getSelectionModel().select(addRigParameterTab);
             
-            AddRigParameterController addRigParameterController = loader.getController();
-            addRigParameterController.setJavaFxMain(this);
+            loader.getController();
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
@@ -272,7 +252,7 @@ public class JavaFxMain extends Application {
 	
 	public void showAddUpdateRigsToFirm(Rig rig, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
 	        AnchorPane addUpdateRigsToFirm = (AnchorPane) loader.load();
@@ -307,7 +287,7 @@ public class JavaFxMain extends Application {
 	
 	public void showAddUpdateEmployeesToFirm(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToFirm.fxml"));
 	        AnchorPane addUpdateEmployeesToFirm = (AnchorPane) loader.load();
@@ -343,7 +323,7 @@ public class JavaFxMain extends Application {
 	
 	public void showDueDateOverview() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/DueDateOverview.fxml"));
 	        AnchorPane dueDateOverview = (AnchorPane) loader.load();
@@ -365,7 +345,7 @@ public class JavaFxMain extends Application {
 	
 	public void addTestQuestions() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddTestQuestion.fxml"));
 	        AnchorPane addTestQuestion = (AnchorPane) loader.load();
@@ -387,7 +367,7 @@ public class JavaFxMain extends Application {
 	
 	public void generateTest() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/GenerateTest.fxml"));
 	        AnchorPane generateTest = (AnchorPane) loader.load();
@@ -409,7 +389,7 @@ public class JavaFxMain extends Application {
 	
 	public void showSettings() {
 		try {
-			// Load the fxml file and create a new stage for the popup dialog.
+			
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/Settings.fxml"));
 	        AnchorPane settings = (AnchorPane) loader.load();
@@ -441,7 +421,7 @@ public class JavaFxMain extends Application {
 	
 	public void generateTable() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/GenerateTable.fxml"));
 	        AnchorPane generateTable = (AnchorPane) loader.load();
@@ -463,7 +443,7 @@ public class JavaFxMain extends Application {
 	
 	public void showTestLogs() {
 		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
+	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/TestLogOverview.fxml"));
 	        AnchorPane tableOverview = (AnchorPane) loader.load();
@@ -476,7 +456,7 @@ public class JavaFxMain extends Application {
             tabPane.getTabs().add(tableOverviewTab);
             tabPane.getSelectionModel().select(tableOverviewTab);
             
-            TestLogOverviewController testLogOverviewController = loader.getController();
+            loader.getController();
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }

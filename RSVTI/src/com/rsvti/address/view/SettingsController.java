@@ -1,9 +1,7 @@
 package com.rsvti.address.view;
 
-import java.awt.event.InputMethodEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,16 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
-import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.services.DBServices;
 
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -28,7 +21,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class SettingsController {
@@ -53,9 +45,6 @@ public class SettingsController {
 	private ComboBox<String> dateFormatChooser;
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
-	
-	public SettingsController() {
-	}
 	
 	@FXML
 	private void initialize() {

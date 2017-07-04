@@ -3,7 +3,6 @@ package com.rsvti.address.view;
 import java.awt.Desktop;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
-import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
 
@@ -22,6 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,9 +50,6 @@ public class GenerateTestController {
 	@FXML
 	private Button generateButton;
 	
-	public GenerateTestController() {
-	}
-	
 	@FXML
 	private void initialize() {
 		employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
@@ -64,6 +60,7 @@ public class GenerateTestController {
 		generateButton.setDisable(true);
 		employeeTable.getSelectionModel().selectedItemProperty().addListener(event -> {generateButton.setDisable(false);});
 		employeeTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 	}
 	
 	@FXML

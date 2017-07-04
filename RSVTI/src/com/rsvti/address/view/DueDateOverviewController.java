@@ -1,9 +1,8 @@
 package com.rsvti.address.view;
 
-import java.util.Date;
-import java.util.List;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
@@ -19,12 +18,12 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 
 public class DueDateOverviewController {
 
@@ -57,10 +56,6 @@ public class DueDateOverviewController {
 	
 	@FXML
 	private JavaFxMain javaFxMain;
-	
-	public DueDateOverviewController() {
-		
-	}
 	
 	@FXML
 	private void initialize() {

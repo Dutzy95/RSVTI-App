@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.services.DBServices;
@@ -18,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,9 +36,6 @@ public class GenerateTableController {
 	@FXML
 	private Button generateButton;
 	
-	public GenerateTableController() {
-	}
-	
 	@FXML
 	private void initialize() {
 		firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
@@ -44,6 +43,7 @@ public class GenerateTableController {
 		generateButton.setDisable(true);
 		firmTable.getSelectionModel().selectedItemProperty().addListener(event -> {generateButton.setDisable(false);});
 		firmTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 	}
 	
 	@FXML

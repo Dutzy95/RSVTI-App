@@ -1,12 +1,8 @@
 package com.rsvti.address.view;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
-import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
@@ -14,15 +10,11 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class RigOverviewController {
 
@@ -46,17 +38,8 @@ public class RigOverviewController {
 	@FXML
 	private TableColumn<ParameterDetails ,String> parameterMeasuringUnit;
 	
-	private JavaFxMain javaFxMain;
-	
 	@FXML
 	private List<Rig> rigList;
-	
-	public RigOverviewController() {
-		
-	}
-	
-	private void initialize() {
-	}
 	
 	private void showRigDetails(Rig rig) {
 		if(rig != null) {
@@ -83,9 +66,5 @@ public class RigOverviewController {
 		showRigDetails(null);
 		
 		rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showRigDetails(newValue));
-	}
-	
-	public void setJavaFxMain(JavaFxMain javaFxMain) {
-		this.javaFxMain = javaFxMain;
 	}
 }

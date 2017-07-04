@@ -1,7 +1,5 @@
 package com.rsvti.database.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +7,6 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
@@ -36,7 +33,6 @@ public class EntityBuilder {
 		
 		List<Rig> rigs = new ArrayList<Rig>();
 		List<Employee> employees = new ArrayList<Employee>();
-		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		
 		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
 			Node rigEmployeeNode = node.getChildNodes().item(k);
@@ -114,8 +110,6 @@ public class EntityBuilder {
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
 		
-		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
-		
 		Date revisionDate = new Date(Long.parseLong(node.getChildNodes().item(1).getTextContent()));
 		
 		int authorizationExtension = Integer.parseInt(node.getChildNodes().item(2).getTextContent());
@@ -131,7 +125,6 @@ public class EntityBuilder {
 	
 	public static Employee buildEmployeeFromXml(Node node) {
 		ArrayList<String> employeeParameters = new ArrayList<String>();
-		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		
 		for(int i = 0; i < node.getChildNodes().getLength()-1; i++) {
 			employeeParameters.add(node.getChildNodes().item(i).getTextContent());

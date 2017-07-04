@@ -3,6 +3,7 @@ package com.rsvti.address.view;
 import java.util.Arrays;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
 
@@ -10,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -17,33 +19,30 @@ import javafx.scene.control.TextArea;
 public class AddTestQuestionController {
 	
 	@FXML
-	public JavaFxMain javaFxMain;
+	private JavaFxMain javaFxMain;
 	
 	@FXML
-	public TextArea questionArea;
+	private TextArea questionArea;
 	@FXML
-	public TextArea firstAnswerArea;
+	private TextArea firstAnswerArea;
 	@FXML
-	public TextArea secondAnswerArea;
+	private TextArea secondAnswerArea;
 	@FXML
-	public TextArea thirdAnswerArea;
+	private TextArea thirdAnswerArea;
 	
 	@FXML
-	public TableView<TestQuestion> testTable;
+	private TableView<TestQuestion> testTable;
 	@FXML
-	public TableColumn<TestQuestion,String> questionColumn;
+	private TableColumn<TestQuestion,String> questionColumn;
 	@FXML
-	public TableColumn<TestQuestion,String> questionTypeColumn;
+	private TableColumn<TestQuestion,String> questionTypeColumn;
 	
 	@FXML
-	public ComboBox<String> questionTypeComboBox;
+	private ComboBox<String> questionTypeComboBox;
 	
 	private boolean isUpdate = false;
 	private TestQuestion questionToUpdate;
 
-	public AddTestQuestionController() {
-	}
-	
 	@FXML
 	private void initialize() {
 		testTable.setItems(FXCollections.observableArrayList(DBServices.getAllTestQuestions()));
@@ -52,6 +51,7 @@ public class AddTestQuestionController {
 		questionTypeComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("stivutorist", "macaragist", "legător de sarcină", "manevrant", "fochist")));
 		questionTypeComboBox.getSelectionModel().select(0);
 		testTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showTestDetails(newValue));
+		testTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 	}
 	
 	private void showTestDetails(TestQuestion question) {

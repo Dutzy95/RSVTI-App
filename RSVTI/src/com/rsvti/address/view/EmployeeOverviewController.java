@@ -3,7 +3,6 @@ package com.rsvti.address.view;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.services.DBServices;
@@ -43,15 +42,6 @@ public class EmployeeOverviewController {
 	@FXML
 	private List<Employee> employeeList;
 	
-	private JavaFxMain javaFxMain;
-	
-	public EmployeeOverviewController() {
-		
-	}
-	
-	private void initialize() {
-	}
-	
 	public void setEmployeeList(List<Employee> employeeList) {
 		this.employeeList = employeeList;
 		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
@@ -67,9 +57,5 @@ public class EmployeeOverviewController {
 		SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 		authorizationObtainingDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getObtainingDate())));
 		authorizationDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getDueDate())));
-	}
-	
-	public void setJavaFxMain(JavaFxMain javaFxMain) {
-		this.javaFxMain = javaFxMain;
 	}
 }

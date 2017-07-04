@@ -9,15 +9,6 @@ public class MenuController {
 	
 	private JavaFxMain javaFxMain;
 
-	public MenuController() {
-		
-	}
-	
-	@FXML
-	private void initialize() {
-		
-	}
-	
 	@FXML
 	private void handleAddFirm() {
 		javaFxMain.addFirm();

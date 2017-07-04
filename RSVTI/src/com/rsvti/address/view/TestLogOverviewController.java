@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,14 +37,12 @@ public class TestLogOverviewController {
 	@FXML
 	private Button showTestButton;
 	
-	public TestLogOverviewController() {
-	}
-	
 	@FXML
 	private void initialize() {
 		loggedTestsTable.setItems(FXCollections.observableArrayList(DBServices.getAllLoggedTests()));
 		loggedTestsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showTestButton.setDisable(false));
 		loggedTestsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		loggedTestsTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeFirstName()));
 		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeLastName()));
 		employeeTitleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeTitle()));

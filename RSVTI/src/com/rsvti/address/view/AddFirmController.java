@@ -70,10 +70,6 @@ public class AddFirmController {
 	@FXML
 	private JavaFxMain javaFxMain;
 	
-	public AddFirmController() {
-		
-	}
-	
 	@FXML
 	private void initialize() {
 		rigTable.setItems(FXCollections.observableArrayList(rigList));

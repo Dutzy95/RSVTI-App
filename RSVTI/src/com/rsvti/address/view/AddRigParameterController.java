@@ -1,6 +1,5 @@
 package com.rsvti.address.view;
 
-import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
@@ -36,8 +35,6 @@ public class AddRigParameterController {
 	@FXML
 	private Button deleteButton;
 	
-	private JavaFxMain javaFxMain;
-	
 	@FXML
 	public void initialize() {
 		parameterType.setItems(FXCollections.observableArrayList("de ridicat", "sub presiune"));
@@ -64,9 +61,5 @@ public class AddRigParameterController {
 			DBServices.deleteEntry(selectedParameter);
 			parameterTable.setItems(FXCollections.observableArrayList(DBServices.getAllRigParameters()));
 		}
-	}
-	
-	public void setJavaFxMain(JavaFxMain javaFxMain) {
-		this.javaFxMain = javaFxMain;
 	}
 }

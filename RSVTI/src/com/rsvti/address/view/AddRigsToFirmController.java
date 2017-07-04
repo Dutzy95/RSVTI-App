@@ -2,13 +2,11 @@ package com.rsvti.address.view;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
@@ -18,7 +16,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -72,9 +68,6 @@ public class AddRigsToFirmController {
 	
 	@FXML
 	private JavaFxMain javaFxMain;
-	
-	public AddRigsToFirmController() {
-	}
 	
 	@FXML
 	public void initialize() {

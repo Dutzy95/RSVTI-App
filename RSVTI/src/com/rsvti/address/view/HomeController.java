@@ -5,16 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
-import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.services.DBServices;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
@@ -25,34 +21,11 @@ public class HomeController {
 	private ImageView imageView;
 	
 	@FXML
-	private TableView<RigDueDateDetails> rigTable;
-	@FXML
-	private TableColumn<RigDueDateDetails,String> rigColumn;
-	@FXML
-	private TableColumn<RigDueDateDetails,String> firmNameColumn;
-	@FXML
-	private TableColumn<RigDueDateDetails,String> rigDueDateColumn;
-	
-	@FXML
-	private TableView<EmployeeDueDateDetails> employeeTable;
-	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeFirstNameColumn;
-	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeLastNameColumn;
-	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeFirmNameColumn;
-	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeDueDateColumn;
-	
-	@FXML
 	private BarChart<String,Number> barChart;
 	
 	private String homeDateIntervalUnitString = "";
 	private int homeDateIntervalUnit = 0;
 	private int homeDateIntervalNumberOf = 0;
-	
-	public HomeController() {
-	}
 	
 	@FXML
 	private void initialize() {
@@ -63,6 +36,7 @@ public class HomeController {
 		drawBarChart();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void drawBarChart() {
 		if(!DBServices.getHomeDateDisplayInterval().split(" ")[0].equals("")) {
 			homeDateIntervalNumberOf = Integer.parseInt(DBServices.getHomeDateDisplayInterval().split(" ")[0]);

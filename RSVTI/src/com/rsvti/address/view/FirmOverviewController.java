@@ -61,9 +61,6 @@ public class FirmOverviewController {
 	
 	private JavaFxMain javaFxMain;
 	
-	public FirmOverviewController() {
-	}
-		
 	@FXML
 	private void initialize() {
 		firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));

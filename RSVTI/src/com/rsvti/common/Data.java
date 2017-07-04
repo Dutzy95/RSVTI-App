@@ -5,10 +5,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 
-import javax.xml.xpath.XPathConstants;
-
-import org.w3c.dom.Node;
-
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
@@ -18,7 +14,6 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
-import com.rsvti.database.services.EntityBuilder;
 
 public class Data {
 
