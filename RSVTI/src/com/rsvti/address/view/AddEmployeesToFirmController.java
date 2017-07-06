@@ -6,6 +6,7 @@ import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
@@ -44,6 +45,13 @@ public class AddEmployeesToFirmController {
 		Utils.setDisplayFormatForDatePicker(authorizationObtainigDate);
 		Utils.setDisabledDaysForDatePicker(authorizationDueDate);
 		Utils.setDisplayFormatForDatePicker(authorizationDueDate);
+		authorizationNumberField.setAlignment(Pos.CENTER);
+		firstNameField.setAlignment(Pos.CENTER);
+		idCodeField.setAlignment(Pos.CENTER);
+		idNumberField.setAlignment(Pos.CENTER);
+		lastNameField.setAlignment(Pos.CENTER);
+		personalIdentificationNumberField.setAlignment(Pos.CENTER);
+		titleField.setAlignment(Pos.CENTER);
 	}
 	
 	@FXML

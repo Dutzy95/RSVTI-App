@@ -57,4 +57,14 @@ public class LoggedTest {
 	public void setEmployeeTitle(String employeeTitle) {
 		this.employeeTitle = employeeTitle;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof LoggedTest &&
+				((LoggedTest) o).getEmployeeFirstName().equals(employeeFirstName) &&
+				((LoggedTest) o).getEmployeeLastName().equals(employeeLastName) &&
+				((LoggedTest) o).getEmployeeTitle().equals(employeeTitle) &&
+				((LoggedTest) o).getFirmName().equals(firmName) &&
+				((LoggedTest) o).getGenerationDateAndTime().equals(generationDateAndTime);
+	}
 }

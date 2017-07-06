@@ -192,7 +192,7 @@ public class Generator {
 			
 			logGeneratedTest(document, employeeDetails);
 			
-			//Generate PDF if needed
+			//TODO: Generate PDF if needed
 			if(generatePdf) {
 				//generate PDF
 			}
@@ -201,11 +201,11 @@ public class Generator {
 			
 			//Save to backup directory if there is one selected
 			if(!DBServices.getBackupPath().equals("")) {
-				File backupFile = new File(DBServices.getBackupPath() + "\\procese verbale" + employeeDetails.getFirmName());
+				File backupFile = new File(DBServices.getBackupPath() + "\\teste");
 				backupFile.mkdir();
-				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\" + employeeDetails.getFirmName());
+				backupFile = new File(DBServices.getBackupPath() + "\\teste\\" + employeeDetails.getFirmName());
 				backupFile.mkdir();
-				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+				backupFile = new File(DBServices.getBackupPath() + "\\teste\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
 						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
 				FileOutputStream backupOutput = new FileOutputStream(backupFile);
 				document.write(backupOutput);

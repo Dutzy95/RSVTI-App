@@ -448,7 +448,7 @@ public class JavaFxMain extends Application {
 	        loader.setLocation(JavaFxMain.class.getResource("view/TestLogOverview.fxml"));
 	        AnchorPane tableOverview = (AnchorPane) loader.load();
 
-	        Tab tableOverviewTab = new Tab("Genereaza tabel");
+	        Tab tableOverviewTab = new Tab("Afișează istoric teste");
 	        tableOverviewTab.setContent(tableOverview);
 	        tableOverviewTab.setClosable(true);
             

@@ -16,6 +16,7 @@ import com.rsvti.generator.Generator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -61,6 +62,7 @@ public class GenerateTestController {
 		employeeTable.getSelectionModel().selectedItemProperty().addListener(event -> {generateButton.setDisable(false);});
 		employeeTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+		numberOfQuestionsField.setAlignment(Pos.CENTER);
 	}
 	
 	@FXML
@@ -88,6 +90,8 @@ public class GenerateTestController {
 				}
 			}
 		}
+		
+		Utils.synchronizeLog();
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

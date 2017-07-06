@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -43,6 +44,9 @@ public class SettingsController {
 	
 	@FXML
 	private ComboBox<String> dateFormatChooser;
+	
+	@FXML
+	private TextField maximumLogSize;
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
@@ -143,6 +147,15 @@ public class SettingsController {
 				datesListView.refresh();
 			}
 		});
+		
+		maximumLogSize.setAlignment(Pos.CENTER);
+		homeDateIntervalField.setAlignment(Pos.CENTER);
+		
+		maximumLogSize.setText(DBServices.getMaximumLogSize() + "");
+		maximumLogSize.textProperty().addListener((observable, oldValue, newValue) -> {
+			DBServices.saveMaximumLogSize(Integer.parseInt(maximumLogSize.getText()));
+			Utils.synchronizeLog();
+		});
 	}
 	
 	@FXML
@@ -180,14 +193,12 @@ public class SettingsController {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Cale auxiliară pentru fișierele generate");
 		directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		String backupPath = directoryChooser.showDialog(new Stage()).getAbsolutePath();
-		filePathField.setText(backupPath);
-		DBServices.saveBackupPath(backupPath);
-	}
-	
-	@FXML
-	private void handleSetHomeDateDisplayInterval() {
-		
+		File directory;
+		if((directory = directoryChooser.showDialog(new Stage())) != null) {
+			String backupPath = directory.getAbsolutePath();
+			filePathField.setText(backupPath);
+			DBServices.saveBackupPath(backupPath);
+		}
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

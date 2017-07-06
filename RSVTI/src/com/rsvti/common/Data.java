@@ -24,7 +24,6 @@ public class Data {
 			new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME).delete();
 			new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
 			new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME).delete();
-			new File(jarFilePath + Constants.XML_LOGGED_TESTS_FILE_NAME).delete();
 			
 			Calendar date = Calendar.getInstance();
 			date.set(2017, 6, 18);

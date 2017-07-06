@@ -216,8 +216,10 @@ public class HomeController {
 	}
 	
 	public void refresh() {
-		barChart.getData().remove(0);
-		barChart.getData().remove(0);
+		if(barChart.getData().size() > 0) {
+			barChart.getData().remove(0);
+			barChart.getData().remove(0);
+		}
 		drawBarChart();
 	}
 }

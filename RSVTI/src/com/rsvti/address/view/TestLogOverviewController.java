@@ -47,7 +47,7 @@ public class TestLogOverviewController {
 		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeLastName()));
 		employeeTitleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeTitle()));
 		firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
-		generationDateAndTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(new SimpleDateFormat(DBServices.getDatePattern() + " HH:mm:ss").format(cellData.getValue().getGenerationDateAndTime())));
+		generationDateAndTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(new SimpleDateFormat(DBServices.getDatePattern() + " HH:mm:ss.SS").format(cellData.getValue().getGenerationDateAndTime())));
 		showTestButton.setDisable(true);
 	}
 	
@@ -58,7 +58,7 @@ public class TestLogOverviewController {
 		String jarFilePath = Utils.getJarFilePath();
 		
 		for(LoggedTest loggedTest : loggedTestsTable.getSelectionModel().getSelectedItems()) {
-			File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(Calendar.getInstance().getTime())  + "\\"
+			File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(loggedTest.getGenerationDateAndTime())  + "\\"
 					+ loggedTest.getEmployeeLastName() + " " + loggedTest.getEmployeeFirstName() + " " + loggedTest.getEmployeeTitle() 
 					+ " " + extendedDateFormat.format(loggedTest.getGenerationDateAndTime()) + ".docx");
 			try {

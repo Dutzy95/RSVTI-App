@@ -22,11 +22,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
 import javafx.application.Platform;
@@ -274,5 +277,38 @@ public class Utils {
 	    } catch(AWTException awte) {
 	    	awte.printStackTrace();
 	    }
+	}
+	
+	private static LoggedTest getOldestLoggedTest() {
+		Date minimumDate = Calendar.getInstance().getTime();
+		LoggedTest test = null;
+		List<LoggedTest> tests = DBServices.getAllLoggedTests();
+		for(LoggedTest index : tests) {
+			if(index.getGenerationDateAndTime().before(minimumDate)) {
+				minimumDate = index.getGenerationDateAndTime();
+				test = index;
+			}
+		}
+		return test;
+	}
+	
+	public static void synchronizeLog() {
+		List<LoggedTest> loggedTests = DBServices.getAllLoggedTests();
+		int maxLogSize = DBServices.getMaximumLogSize();
+		if(maxLogSize < loggedTests.size()) {
+			for(int i = 0; i < loggedTests.size() - maxLogSize; i++) {
+				LoggedTest oldestLoggedTest = getOldestLoggedTest();
+				
+				DBServices.deleteEntry(oldestLoggedTest);
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+				SimpleDateFormat extendedDateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT + " HH.mm.ss");
+				String jarFilePath = Utils.getJarFilePath();
+				File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(oldestLoggedTest.getGenerationDateAndTime())  + "\\"
+						+ oldestLoggedTest.getEmployeeLastName() + " " + oldestLoggedTest.getEmployeeFirstName() + " " 
+						+ oldestLoggedTest.getEmployeeTitle() + " " + extendedDateFormat.format(oldestLoggedTest.getGenerationDateAndTime()) + ".docx");
+				file.delete();
+			}
+		}
 	}
 }

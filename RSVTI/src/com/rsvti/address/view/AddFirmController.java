@@ -14,6 +14,7 @@ import com.rsvti.database.services.DBServices;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -101,6 +102,22 @@ public class AddFirmController {
 		    });
 		    return row ;
 		});
+		
+		addressField.setAlignment(Pos.CENTER);
+		adminFirstNameField.setAlignment(Pos.CENTER);
+		adminIdCodeField.setAlignment(Pos.CENTER);
+		adminIdNumberField.setAlignment(Pos.CENTER);
+		adminLastNameField.setAlignment(Pos.CENTER);
+		adminPhoneNumberField.setAlignment(Pos.CENTER);
+		bankNameField.setAlignment(Pos.CENTER);
+		emailField.setAlignment(Pos.CENTER);
+		faxNumberField.setAlignment(Pos.CENTER);
+		firmNameField.setAlignment(Pos.CENTER);
+		fiscalCodeField.setAlignment(Pos.CENTER);
+		ibanCodeField.setAlignment(Pos.CENTER);
+		phoneNumberField.setAlignment(Pos.CENTER);
+		registrationNumberField.setAlignment(Pos.CENTER);
+		
 	}
 	
 	@FXML

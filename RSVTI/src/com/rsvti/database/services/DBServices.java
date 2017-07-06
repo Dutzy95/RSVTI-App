@@ -783,6 +783,28 @@ public class DBServices {
 		}
 	}
 	
+	public static void deleteEntry(LoggedTest loggedTest) {
+		openFile(Constants.XML_LOGGED_TESTS_FILE_NAME);
+		
+		Element rootElement = document.getDocumentElement();
+		
+		for(int i = 0; i < rootElement.getChildNodes().getLength(); i++) {
+			if(EntityBuilder.buildLoggedTestFormXml(rootElement.getChildNodes().item(i)).equals(loggedTest)) {
+				rootElement.removeChild(rootElement.getChildNodes().item(i));
+			}
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_LOGGED_TESTS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static List<LoggedTest> getAllLoggedTests() {
 		NodeList loggedTestNodes = (NodeList) executeXmlQuery(Constants.XML_LOGGED_TESTS_FILE_NAME, "//test", XPathConstants.NODESET);
 		List<LoggedTest> loggedTests = new ArrayList<LoggedTest>();
@@ -790,5 +812,35 @@ public class DBServices {
 			loggedTests.add(EntityBuilder.buildLoggedTestFormXml(loggedTestNodes.item(i)));
 		}
 		return loggedTests;
+	}
+	
+	public static void saveMaximumLogSize(int maximumLogSize) {
+		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//maxLogSize", XPathConstants.NODE);
+		Element maximumLogSizeElement = document.createElement("maxLogSize");
+		maximumLogSizeElement.appendChild(document.createTextNode(maximumLogSize + ""));
+		if(maximumLogSizeNode == null) {
+			document.getDocumentElement().appendChild(maximumLogSizeElement);
+		} else {
+			document.getDocumentElement().replaceChild(maximumLogSizeElement, maximumLogSizeNode);
+		}
+		
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static int getMaximumLogSize() {
+		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//maxLogSize", XPathConstants.NODE);
+		if(maximumLogSizeNode == null) {
+			return 999;
+		} else {
+			return Integer.parseInt(maximumLogSizeNode.getFirstChild().getTextContent());
+		}
 	}
 }
