@@ -58,6 +58,6 @@
             <Button mnemonicParsing="false" onAction="#handleArrowLeft" text="&lt;-" />
          </children>
       </VBox>
-      <Button layoutX="409.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+      <Button layoutX="362.0" layoutY="474.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
    </children>
 </AnchorPane>

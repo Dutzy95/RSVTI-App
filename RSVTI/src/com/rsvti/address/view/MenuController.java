@@ -36,7 +36,7 @@ public class MenuController {
 	
 	@FXML
 	private void handleViewRigs() {
-		javaFxMain.showRigOverview("Utilaje", DBServices.getAllRigs());
+		javaFxMain.showRigOverview(null , DBServices.getAllRigs());
 	}
 	
 	@FXML

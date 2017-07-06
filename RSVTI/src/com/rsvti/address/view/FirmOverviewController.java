@@ -135,7 +135,7 @@ public class FirmOverviewController {
 	private void handleOpenEmployeeOverview() {
 		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 		if(selectedIndex >= 0 ) {
-			javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getEmployees());
+			javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getEmployees());
 		}
 	}
 	

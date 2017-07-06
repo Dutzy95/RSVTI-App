@@ -170,8 +170,13 @@ public class JavaFxMain extends Application {
 	        RigOverviewController controller = loader.getController();
 	        controller.setRigList(rigList);
 	        
-	        Tab tab = new Tab(firmName);
-            tab.setContent(rigOverview);
+	        Tab tab;
+	        if(firmName == null) {
+	        	tab = new Tab("Utilaje");
+	        } else {
+	        	tab = new Tab("Utilaje - " + firmName);
+	        }
+	        tab.setContent(rigOverview);
             tab.setClosable(true);
             
             tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
@@ -183,14 +188,19 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showEmployeeOverview(List<Employee> employeeList) {
+	public void showEmployeeOverview(String firmName, List<Employee> employeeList) {
 	    try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/EmployeeOverview.fxml"));
 	        AnchorPane employeeOverview = (AnchorPane) loader.load();
 
-	        Tab tab = new Tab("Personal deservent");
+	        Tab tab;
+	        if(firmName == null) {
+	        	tab = new Tab("Personal deservent");
+	        } else {
+	        	tab = new Tab("Personal deservent - " + firmName);
+	        }
             tab.setContent(employeeOverview);
             tab.setClosable(true);
             
@@ -448,7 +458,7 @@ public class JavaFxMain extends Application {
 	        loader.setLocation(JavaFxMain.class.getResource("view/TestLogOverview.fxml"));
 	        AnchorPane tableOverview = (AnchorPane) loader.load();
 
-	        Tab tableOverviewTab = new Tab("Afișează istoric teste");
+	        Tab tableOverviewTab = new Tab("Istoric teste generate");
 	        tableOverviewTab.setContent(tableOverview);
 	        tableOverviewTab.setClosable(true);
             

@@ -84,6 +84,18 @@ public class DBServices {
 		}
 	}
 	
+	private static void transformXmlFile(String fileName) {
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			Result output = new StreamResult(new File(jarFilePath + fileName));
+			Source input = new DOMSource(document);
+			
+			transformer.transform(input, output);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Method that sets the number of firms and rigs, depending on whether there is some data in the xml or not.
 	 * If there isn't both indexes are 0. If there is some data in the xml it takes the last index of both firms and rigs to count
@@ -248,15 +260,7 @@ public class DBServices {
 		
 		root.appendChild(firma);
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_FIRMS_FILE_NAME);
 	}
 	
 	public static void updateEntry(Firm source, Firm replacement) {
@@ -343,15 +347,7 @@ public class DBServices {
 			}
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_FIRMS_FILE_NAME);
 	}
 	
 	/**
@@ -408,15 +404,7 @@ public class DBServices {
 		
 		rootElement.appendChild(parameterElement);
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 	}
 	
 	public static void deleteEntry(RigParameter parameter) {
@@ -433,15 +421,7 @@ public class DBServices {
 			}
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 	}
 	
 	public static List<EmployeeDueDateDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate) {
@@ -529,15 +509,7 @@ public class DBServices {
 		
 		rootElement.appendChild(questionElement);
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_TEST_DATA_FILE_NAME);
 	}
 	
 	public static List<TestQuestion> getAllTestQuestions() {
@@ -577,15 +549,7 @@ public class DBServices {
 			}
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_TEST_DATA_FILE_NAME);
 	}
 	
 	public static void updateEntry(TestQuestion questionToUpdate, TestQuestion newQuestion) {
@@ -606,15 +570,7 @@ public class DBServices {
 		date.appendChild(document.createTextNode(variableDate.getTime() + ""));
 		variableDates.appendChild(date);
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static void deleteEntry(Date variableDate) {
@@ -627,15 +583,7 @@ public class DBServices {
 			}
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static List<Date> getVariableVacationDates() {
@@ -663,15 +611,7 @@ public class DBServices {
 			document.getDocumentElement().replaceChild(backupPathElement, backupPathNode);
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static String getBackupPath() {
@@ -698,15 +638,7 @@ public class DBServices {
 			document.getDocumentElement().replaceChild(homeDateDisplayIntervalElement, homeDateDisplayIntervalNode);
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static String getHomeDateDisplayInterval() {
@@ -728,15 +660,7 @@ public class DBServices {
 			document.getDocumentElement().replaceChild(datePatternElement, datePatternNode);
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static String getDatePattern() {
@@ -772,15 +696,7 @@ public class DBServices {
 		
 		rootElement.appendChild(loggedTestElement);
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_LOGGED_TESTS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_LOGGED_TESTS_FILE_NAME);
 	}
 	
 	public static void deleteEntry(LoggedTest loggedTest) {
@@ -794,15 +710,7 @@ public class DBServices {
 			}
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_LOGGED_TESTS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_LOGGED_TESTS_FILE_NAME);
 	}
 	
 	public static List<LoggedTest> getAllLoggedTests() {
@@ -824,15 +732,7 @@ public class DBServices {
 			document.getDocumentElement().replaceChild(maximumLogSizeElement, maximumLogSizeNode);
 		}
 		
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + Constants.XML_CUSTOM_SETTINGS_FILE_NAME));
-			Source input = new DOMSource(document);
-			
-			transformer.transform(input, output);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
 	}
 	
 	public static int getMaximumLogSize() {
