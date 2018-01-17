@@ -26,14 +26,14 @@ public class Data {
 			new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME).delete();
 			
 			Calendar date = Calendar.getInstance();
-			date.set(2017, 6, 18);
+			date.set(2017, 10, 15);
 			
 			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", 
 					new EmployeeAuthorization("123948273", date.getTime(), date.getTime()), "stivuitorist");
-			date.set(2017, 7, 12);
+			date.set(2017, 10, 16);
 			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", 
 					new EmployeeAuthorization("56732894", date.getTime(), date.getTime()), "macaragist");
-			date.set(2017, 7, 21);
+			date.set(2017, 11, 21);
 			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", 
 					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
 			
@@ -46,13 +46,13 @@ public class Data {
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
 					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1), Arrays.asList(employee1,employee2)), false);
 			
-			date.set(2016, 8, 25);
+			date.set(2017, 12, 25);
 			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), "de ridicat");
 			liftingRig2.setAuthorizationExtension(1);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
-			date.set(2016, 5, 30);
+			date.set(2018, 5, 30);
 			Rig pressureRig = new Rig("cazan", date.getTime(), "sub presiune");
 			pressureRig.setAuthorizationExtension(1);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));

@@ -1,4 +1,4 @@
-package com.rsvti.address.view;
+package com.rsvti.address.controller;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
@@ -63,18 +63,21 @@ public class FirmOverviewController {
 	
 	@FXML
 	private void initialize() {
-		firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
-		registrationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRegistrationNumber()));
-		
-		showFirmDetails(null);
-		
-		firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
-		firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showFirmDetails(newValue));
-		firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		rigOverviewButton.setDisable(true);
-		deleteFirmButton.setDisable(true);
-		employeeOverviewButton.setDisable(true);
-		
+		try {
+			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
+			registrationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRegistrationNumber()));
+			
+			showFirmDetails(null);
+			
+			firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
+			firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showFirmDetails(newValue));
+			firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			rigOverviewButton.setDisable(true);
+			deleteFirmButton.setDisable(true);
+			employeeOverviewButton.setDisable(true);
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	private void showFirmDetails(Firm firm) {
@@ -116,26 +119,38 @@ public class FirmOverviewController {
 	
 	@FXML
 	private void handleDeleteFirm() {
-		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
-		if (selectedIndex >= 0) {
-			DBServices.deleteEntry(firmTable.getItems().get(selectedIndex));
-			firmTable.getItems().remove(selectedIndex);
+		try {
+			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
+			if (selectedIndex >= 0) {
+				DBServices.deleteEntry(firmTable.getItems().get(selectedIndex));
+				firmTable.getItems().remove(selectedIndex);
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
 	@FXML
 	private void handleOpenRigOverview() {
-		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
-		if(selectedIndex >= 0) {
-			javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
+		try {
+			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
+			if(selectedIndex >= 0) {
+				javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
 	@FXML
 	private void handleOpenEmployeeOverview() {
-		int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
-		if(selectedIndex >= 0 ) {
-			javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getEmployees());
+		try {
+			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
+			if(selectedIndex >= 0 ) {
+				javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getEmployees());
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	

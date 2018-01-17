@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.view.SettingsController">
+<AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.controller.SettingsController">
    <children>
       <GridPane layoutX="22.0" layoutY="62.0" prefHeight="372.0" prefWidth="661.0">
         <columnConstraints>
@@ -46,5 +46,7 @@
             <TextField fx:id="maximumLogSize" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
+      <Button layoutX="250.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleSave" text="Salvare" />
+      <Button layoutX="370.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleCancel" text="Anulare" />
    </children>
 </AnchorPane>

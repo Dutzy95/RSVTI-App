@@ -1,4 +1,4 @@
-package com.rsvti.address.view;
+package com.rsvti.address.controller;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -59,49 +59,48 @@ public class DueDateOverviewController {
 	
 	@FXML
 	private void initialize() {
-		dateFrom.setValue(LocalDate.now());
-		dateTo.setValue(LocalDate.now());
-		Utils.setDisabledDaysForDatePicker(dateFrom);
-		Utils.setDisplayFormatForDatePicker(dateFrom);
-		Utils.setDisabledDaysForDatePicker(dateTo);
-		Utils.setDisplayFormatForDatePicker(dateTo);
-		
-		rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
-		rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
-		firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
-		rigDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
-		rigTable.setRowFactory( tv -> {
-		    TableRow<RigDueDateDetails> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		        	RigDueDateDetails rowData = row.getItem();
-		            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName());
-		        }
-		    });
-		    return row ;
-		});
-		
-		employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
-		employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
-		employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));
-		employeeFirmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
-		employeeDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
-		employeeTable.setRowFactory( tv -> {
-		    TableRow<EmployeeDueDateDetails> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		        	EmployeeDueDateDetails rowData = row.getItem();
-		            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName());
-		        }
-		    });
-		    return row ;
-		});
-		
-		dateFrom.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+		try {
+			dateFrom.setValue(LocalDate.now());
+			dateTo.setValue(LocalDate.now());
+			Utils.setDisabledDaysForDatePicker(dateFrom);
+			Utils.setDisplayFormatForDatePicker(dateFrom);
+			Utils.setDisabledDaysForDatePicker(dateTo);
+			Utils.setDisplayFormatForDatePicker(dateTo);
+			
+			rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
+			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
+			rigDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
+			rigTable.setRowFactory( tv -> {
+			    TableRow<RigDueDateDetails> row = new TableRow<>();
+			    row.setOnMouseClicked(event -> {
+			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+			        	RigDueDateDetails rowData = row.getItem();
+			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName());
+			        }
+			    });
+			    return row ;
+			});
+			
+			employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+			employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
+			employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));
+			employeeFirmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
+			employeeDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
+			employeeTable.setRowFactory( tv -> {
+			    TableRow<EmployeeDueDateDetails> row = new TableRow<>();
+			    row.setOnMouseClicked(event -> {
+			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+			        	EmployeeDueDateDetails rowData = row.getItem();
+			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName());
+			        }
+			    });
+			    return row ;
+			});
+			
+			dateFrom.setOnAction(event -> {
 				if(dateTo.getValue().isAfter(dateFrom.getValue()) || dateTo.getValue().equals(dateFrom.getValue())) {
 					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
@@ -109,11 +108,8 @@ public class DueDateOverviewController {
 					dateFrom.setValue(LocalDate.now());
 					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"");
 				}
-			}
-		});
-		dateTo.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+			});
+			dateTo.setOnAction(event -> {
 				if(dateTo.getValue().isAfter(dateFrom.getValue()) || dateTo.getValue().equals(dateFrom.getValue())) {
 					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
@@ -121,8 +117,10 @@ public class DueDateOverviewController {
 					dateTo.setValue(LocalDate.now());
 					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"");
 				}
-			}
-		});
+			});
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	public void updateRigTable(String firmName, Rig rigToUpdate, Rig newRig) {

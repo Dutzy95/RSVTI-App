@@ -97,59 +97,43 @@ public class Utils {
 	
 	public static Optional<ButtonType> alert(AlertType alertType, String title, String header, String content) {
 		Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        
-        if(alertType == AlertType.INFORMATION) {
-        	ButtonType yes = new ButtonType("Da", ButtonData.YES);
-        	ButtonType no = new ButtonType("Nu", ButtonData.NO);
-        	alert.getButtonTypes().setAll(yes,no);
-        }
-
+		try {
+	        alert.setTitle(title);
+	        alert.setHeaderText(header);
+	        alert.setContentText(content);
+	        
+	        if(alertType == AlertType.INFORMATION) {
+	        	ButtonType yes = new ButtonType("Da", ButtonData.YES);
+	        	ButtonType no = new ButtonType("Nu", ButtonData.NO);
+	        	alert.getButtonTypes().setAll(yes,no);
+	        } else if(alertType == AlertType.ERROR) {
+	        	ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
+	        	alert.getButtonTypes().setAll(ok);
+	        }
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
         return alert.showAndWait();
 	}
 	
-	public static void setErrorLog() {
-		new Thread()
-		{
-		    public void run() {
-		    	try {
-					String jarFilePath = Utils.getJarFilePath();
-					File file = new File(jarFilePath + Constants.ERROR_LOG_FILE);
-					System.setErr(new PrintStream(file));
-					
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern() + " HH:mm:ss");
-					Calendar refreshIntervalBegin = Calendar.getInstance();
-					refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
-					while(true) {
-						Calendar instance = Calendar.getInstance();
-						if(instance.equals(refreshIntervalBegin) || instance.after(refreshIntervalBegin)) {
-							System.err.println("[" + simpleDateFormat.format(refreshIntervalBegin.getTime()) + "]");
-							refreshIntervalBegin.add(Constants.ERR_LOG_REFRESH_TIME_UNIT, Constants.ERR_LOG_REFRESH_INTERVAL);
-						}
-					}
+	public static void setStartup() {
+		try {
+			Path path = Paths.get("C:/Users/" + System.getProperty("user.name") + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/");
+			if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+				try {
+					String fileName = "Start" + Constants.APP_NAME + ".bat";
+					File batchFile = new File(path.toString() + "/" + fileName);
+					OutputStream output = new FileOutputStream(batchFile);
+					String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+					byte[] bytes = new String("start javaw -jar " + jarFilePath).getBytes();
+					output.write(bytes);
+					output.close();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
-		    }
-		}.start();
-	}
-	
-	public static void setStartup() {
-		Path path = Paths.get("C:/Users/" + System.getProperty("user.name") + "/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/");
-		if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
-			try {
-				String fileName = "Start" + Constants.APP_NAME + ".bat";
-				File batchFile = new File(path.toString() + "/" + fileName);
-				OutputStream output = new FileOutputStream(batchFile);
-				String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
-				byte[] bytes = new String("start javaw -jar " + jarFilePath).getBytes();
-				output.write(bytes);
-				output.close();
-			} catch(Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
@@ -163,7 +147,7 @@ public class Utils {
 		try {
 			jarFilePath = new File(Utils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
 		} catch(Exception e) {
-			e.printStackTrace();
+			DBServices.saveErrorLogEntry(e);
 		}
 		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
 	}
@@ -190,7 +174,7 @@ public class Utils {
 			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_with_text.png")), "png", new File(jarFilePath + "images/RSVTI_with_text.png"));
 			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png")), "png", new File(jarFilePath + "images/RSVTI_without_text.png"));
 		} catch(Exception e) {
-			e.printStackTrace();
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
@@ -274,41 +258,49 @@ public class Utils {
 	        popup.add(exit);
 	        
 	        trayIcon.setPopupMenu(popup);
-	    } catch(AWTException awte) {
-	    	awte.printStackTrace();
+	    } catch(Exception e) {
+	    	DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
 	private static LoggedTest getOldestLoggedTest() {
-		Date minimumDate = Calendar.getInstance().getTime();
 		LoggedTest test = null;
-		List<LoggedTest> tests = DBServices.getAllLoggedTests();
-		for(LoggedTest index : tests) {
-			if(index.getGenerationDateAndTime().before(minimumDate)) {
-				minimumDate = index.getGenerationDateAndTime();
-				test = index;
+		try {
+			Date minimumDate = Calendar.getInstance().getTime();
+			List<LoggedTest> tests = DBServices.getAllLoggedTests();
+			for(LoggedTest index : tests) {
+				if(index.getGenerationDateAndTime().before(minimumDate)) {
+					minimumDate = index.getGenerationDateAndTime();
+					test = index;
+				}
 			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 		return test;
 	}
 	
 	public static void synchronizeLog() {
-		List<LoggedTest> loggedTests = DBServices.getAllLoggedTests();
-		int maxLogSize = DBServices.getMaximumLogSize();
-		if(maxLogSize < loggedTests.size()) {
-			for(int i = 0; i < loggedTests.size() - maxLogSize; i++) {
-				LoggedTest oldestLoggedTest = getOldestLoggedTest();
-				
-				DBServices.deleteEntry(oldestLoggedTest);
-				
-				SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
-				SimpleDateFormat extendedDateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT + " HH.mm.ss");
-				String jarFilePath = Utils.getJarFilePath();
-				File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(oldestLoggedTest.getGenerationDateAndTime())  + "\\"
-						+ oldestLoggedTest.getEmployeeLastName() + " " + oldestLoggedTest.getEmployeeFirstName() + " " 
-						+ oldestLoggedTest.getEmployeeTitle() + " " + extendedDateFormat.format(oldestLoggedTest.getGenerationDateAndTime()) + ".docx");
-				file.delete();
+		try {
+			List<LoggedTest> loggedTests = DBServices.getAllLoggedTests();
+			int maxLogSize = DBServices.getMaximumLogSize();
+			if(maxLogSize < loggedTests.size()) {
+				for(int i = 0; i < loggedTests.size() - maxLogSize; i++) {
+					LoggedTest oldestLoggedTest = getOldestLoggedTest();
+					
+					DBServices.deleteEntry(oldestLoggedTest);
+					
+					SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+					SimpleDateFormat extendedDateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT + " HH.mm.ss");
+					String jarFilePath = Utils.getJarFilePath();
+					File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(oldestLoggedTest.getGenerationDateAndTime())  + "\\"
+							+ oldestLoggedTest.getEmployeeLastName() + " " + oldestLoggedTest.getEmployeeFirstName() + " " 
+							+ oldestLoggedTest.getEmployeeTitle() + " " + extendedDateFormat.format(oldestLoggedTest.getGenerationDateAndTime()) + ".docx");
+					file.delete();
+				}
 			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 }

@@ -19,6 +19,8 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+//import org.docx4j.Docx4J;
+//import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
@@ -192,11 +194,6 @@ public class Generator {
 			
 			logGeneratedTest(document, employeeDetails);
 			
-			//TODO: Generate PDF if needed
-			if(generatePdf) {
-				//generate PDF
-			}
-			
 			document.write(output);
 			
 			//Save to backup directory if there is one selected
@@ -212,6 +209,23 @@ public class Generator {
 			}
 			
 			document.close();
+			
+			//TODO: Generate PDF if needed
+			if(generatePdf) {
+				//generate PDF
+//				jarFilePath = Utils.getJarFilePath();
+//				file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName());
+//				file.mkdir();
+//				file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+//						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
+//				
+//				WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(file);
+//				file = new File(jarFilePath + "docs\\pdf\\" + employeeDetails.getFirmName());
+//				file.mkdir();
+//				file = new File(jarFilePath + "docs\\pdf\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
+//						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".pdf");
+//				Docx4J.toPDF(wordMLPackage, new FileOutputStream(file));
+			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();

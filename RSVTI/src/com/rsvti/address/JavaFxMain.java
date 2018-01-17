@@ -5,23 +5,24 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.rsvti.address.view.AddEmployeesToFirmController;
-import com.rsvti.address.view.AddFirmController;
-import com.rsvti.address.view.AddRigsToFirmController;
-import com.rsvti.address.view.AddTestQuestionController;
-import com.rsvti.address.view.DueDateOverviewController;
-import com.rsvti.address.view.EmployeeOverviewController;
-import com.rsvti.address.view.FirmOverviewController;
-import com.rsvti.address.view.GenerateTableController;
-import com.rsvti.address.view.GenerateTestController;
-import com.rsvti.address.view.HomeController;
-import com.rsvti.address.view.MenuController;
-import com.rsvti.address.view.RigOverviewController;
-import com.rsvti.address.view.SettingsController;
+import com.rsvti.address.controller.AddEmployeesToFirmController;
+import com.rsvti.address.controller.AddFirmController;
+import com.rsvti.address.controller.AddRigsToFirmController;
+import com.rsvti.address.controller.AddTestQuestionController;
+import com.rsvti.address.controller.DueDateOverviewController;
+import com.rsvti.address.controller.EmployeeOverviewController;
+import com.rsvti.address.controller.FirmOverviewController;
+import com.rsvti.address.controller.GenerateTableController;
+import com.rsvti.address.controller.GenerateTestController;
+import com.rsvti.address.controller.HomeController;
+import com.rsvti.address.controller.MenuController;
+import com.rsvti.address.controller.RigOverviewController;
+import com.rsvti.address.controller.SettingsController;
 import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.services.DBServices;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -58,18 +59,22 @@ public class JavaFxMain extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		JavaFxMain.primaryStage = primaryStage;
-		JavaFxMain.primaryStage.setTitle("RSVTI App");
-        
-		JavaFxMain.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
-        
-//        Platform.setImplicitExit(false);
-//		Utils.setTray(primaryStage);
-		
-//		initApp();
-		
-        initRootLayout();
-        showHome();
+		try {
+			JavaFxMain.primaryStage = primaryStage;
+			JavaFxMain.primaryStage.setTitle("RSVTI App");
+	        
+			JavaFxMain.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+	        
+//	        Platform.setImplicitExit(false);
+//			Utils.setTray(primaryStage);
+//			
+//			initApp();
+			
+	        initRootLayout();
+	        showHome();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	public void initApp() {
@@ -91,7 +96,7 @@ public class JavaFxMain extends Application {
 	        delay.setOnFinished( event -> stage.close() );
 	        delay.play();
 		} catch(Exception e) {
-			e.printStackTrace();
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
@@ -114,7 +119,7 @@ public class JavaFxMain extends Application {
             delay1.setOnFinished( event -> primaryStage.show() );
 	        delay1.play();
         } catch (IOException e) {
-            e.printStackTrace();
+            DBServices.saveErrorLogEntry(e);
         }
     }
 	
@@ -129,12 +134,12 @@ public class JavaFxMain extends Application {
             Tab tab = new Tab("Acasă");
             tab.setContent(home);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
+            tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
         } catch (IOException e) {
-            e.printStackTrace();
+            DBServices.saveErrorLogEntry(e);
         }
         
 	}
@@ -155,13 +160,13 @@ public class JavaFxMain extends Application {
             FirmOverviewController controller = loader.getController();
             controller.setJavaFxMain(this);
         } catch (IOException e) {
-            e.printStackTrace();
+            DBServices.saveErrorLogEntry(e);
         }
     }
 	
 	public void showRigOverview(String firmName, List<Rig> rigList) {
 	    try {
-	        
+	    	
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/RigOverview.fxml"));
 	        AnchorPane rigOverview = (AnchorPane) loader.load();
@@ -182,9 +187,9 @@ public class JavaFxMain extends Application {
             tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
-
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -213,7 +218,7 @@ public class JavaFxMain extends Application {
 	        controller.setEmployeeList(employeeList);
 
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -234,8 +239,9 @@ public class JavaFxMain extends Application {
             
             addFirmController = loader.getController();
             addFirmController.setJavaFxMain(this);
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -255,8 +261,9 @@ public class JavaFxMain extends Application {
             tabPane.getSelectionModel().select(addRigParameterTab);
             
             loader.getController();
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -291,7 +298,7 @@ public class JavaFxMain extends Application {
             addUpdateRigsToFirmStage.showAndWait();
             
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -325,9 +332,8 @@ public class JavaFxMain extends Application {
             
             addUpdateEmployeesToFirmStage.showAndWait();
             
-            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -348,8 +354,9 @@ public class JavaFxMain extends Application {
             
             dueDateOverviewController = loader.getController();
             dueDateOverviewController.setJavaFxMain(this);
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -370,8 +377,9 @@ public class JavaFxMain extends Application {
             
             AddTestQuestionController addTestQuestionController = loader.getController();
             addTestQuestionController.setJavaFxMain(this);
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -392,8 +400,9 @@ public class JavaFxMain extends Application {
             
             GenerateTestController generateTestController = loader.getController();
             generateTestController.setJavaFxMain(this);
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -420,12 +429,14 @@ public class JavaFxMain extends Application {
 	        	}
 			});
 	        
-	        stage.showAndWait();
-            
 	        SettingsController settingsController = loader.getController();
 	        settingsController.setJavaFxMain(this);
+	        settingsController.setStage(stage);
+	        
+	        stage.showAndWait();
+	        
 		} catch(Exception e) {
-			e.printStackTrace();
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
@@ -446,8 +457,9 @@ public class JavaFxMain extends Application {
             
             GenerateTableController generateTableController = loader.getController();
             generateTableController.setJavaFxMain(this);
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -467,8 +479,9 @@ public class JavaFxMain extends Application {
             tabPane.getSelectionModel().select(tableOverviewTab);
             
             loader.getController();
+            
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
 	
@@ -512,12 +525,12 @@ public class JavaFxMain extends Application {
 	}
 
 	public static void main(String[] args) {
-		Locale locale = new Locale("ro", "RO");
-		Locale.setDefault(locale);
-//		Utils.setErrorLog();
-//		Utils.setStartup();
-		Utils.createFolderHierarchy();
-		Data.populate();
-		launch(args);
+			Locale locale = new Locale("ro", "RO");
+			Locale.setDefault(locale);
+	//		Utils.setErrorLog();
+	//		Utils.setStartup();
+			Utils.createFolderHierarchy();
+			Data.populate();
+			launch(args);
 	}
 }

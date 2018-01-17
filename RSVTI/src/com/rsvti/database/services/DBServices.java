@@ -2,6 +2,9 @@ package com.rsvti.database.services;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +44,8 @@ import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
 
+import javafx.scene.control.Alert.AlertType;
+
 public class DBServices {
 	
 	private static Document document;
@@ -64,6 +69,8 @@ public class DBServices {
 					ps.println("<?xml version=\"1.0\"?><custom><variable_dates></variable_dates></custom>");
 				} else if(filepath.contains("LoggedTests.xml")) {
 					ps.println("<?xml version=\"1.0\"?><log></log>");
+				} else if(filepath.contains("Errlog.xml")) {
+					ps.println("<?xml version=\"1.0\"?><errlog></errlog>");
 				} else {
 					ps.println("<?xml version=\"1.0\"?><app></app>");
 				}
@@ -80,7 +87,7 @@ public class DBServices {
 				document = dBuilder.parse(file);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			saveErrorLogEntry(e);
 		}
 	}
 	
@@ -92,7 +99,7 @@ public class DBServices {
 			
 			transformer.transform(input, output);
 		} catch(Exception e) {
-			e.printStackTrace();
+			saveErrorLogEntry(e);
 		}
 	}
 	
@@ -742,5 +749,46 @@ public class DBServices {
 		} else {
 			return Integer.parseInt(maximumLogSizeNode.getFirstChild().getTextContent());
 		}
+	}
+	
+	public static void saveErrorLogEntry(Exception e) {
+		Calendar calendar = Calendar.getInstance();
+		String currentDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(calendar.getTime());
+		String currentTimeStamp = new SimpleDateFormat(Constants.ERRLOG_TIMESTAMP_FORMAT).format(calendar.getTime());
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String exceptionName = e.getClass().getName().substring(e.getClass().getName().lastIndexOf(".") + 1);
+		
+		openFile(Constants.XML_ERROR_LOG_FILE);
+		Element root = document.getDocumentElement();
+		Node currentDateNode = (Node) executeXmlQuery(Constants.XML_ERROR_LOG_FILE, "//_" + currentDate, XPathConstants.NODE);
+		
+		StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[2];
+		String callerClassName = stackTraceElement.getClassName();
+		String callerMethodName = stackTraceElement.getMethodName();
+		
+		if(currentDateNode == null) {
+			Element currentDateElement = document.createElement("_" + currentDate);
+			Element logEntryElement = document.createElement("_" + currentTimeStamp);
+			logEntryElement.setAttribute("exception", exceptionName);
+			logEntryElement.setAttribute("class",callerClassName.substring(callerClassName.lastIndexOf(".") + 1));
+			logEntryElement.setAttribute("method", callerMethodName);
+			logEntryElement.setTextContent("\n" + errors.toString());
+			currentDateElement.appendChild(logEntryElement);
+			root.appendChild(currentDateElement);
+		} else {
+			Element logEntryElement = document.createElement("_" + currentTimeStamp);
+			logEntryElement.setAttribute("exception", exceptionName);
+			logEntryElement.setAttribute("class",callerClassName.substring(callerClassName.lastIndexOf(".") + 1));
+			logEntryElement.setAttribute("method", callerMethodName);
+			logEntryElement.setTextContent("\n" + errors.toString());
+			currentDateNode.appendChild(logEntryElement);
+		}
+		
+		transformXmlFile(Constants.XML_ERROR_LOG_FILE);
+		
+		e.printStackTrace();
+		Utils.alert(AlertType.ERROR, "Eroare", "A apărut o eroare!", 
+				"Eroarea s-a inregistrat la data de: " + currentDate + ", ora: " + new SimpleDateFormat(Constants.DEFAULT_TIMESTAMP_FORMAT).format(calendar.getTime()));
 	}
 }

@@ -1,4 +1,4 @@
-package com.rsvti.address.view;
+package com.rsvti.address.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -42,18 +42,22 @@ public class RigOverviewController {
 	private List<Rig> rigList;
 	
 	private void showRigDetails(Rig rig) {
-		if(rig != null) {
-			rigNameLabel.setText(rig.getRigName());
-			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
-			dueDateLabel.setText(format.format(rig.getDueDate()));
-			rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
-			rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-			parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
-			parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
-		} else {
-			rigNameLabel.setText("Instalatie");
-			dueDateLabel.setText("zz-ll-aaaa");
+		try {
+			if(rig != null) {
+				rigNameLabel.setText(rig.getRigName());
+				SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
+				dueDateLabel.setText(format.format(rig.getDueDate()));
+				rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
+				rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+				parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+				parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
+				parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
+			} else {
+				rigNameLabel.setText("Instalatie");
+				dueDateLabel.setText("zz-ll-aaaa");
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
