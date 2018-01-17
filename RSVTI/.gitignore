@@ -1,4 +1,6 @@
 /bin/
-/RSVTI_database.xml
-/RigParameters.xml
-/Errlog.xml
+/*.xml
+/*.doc
+/*.docx
+/*.xls
+/*.xlsx
