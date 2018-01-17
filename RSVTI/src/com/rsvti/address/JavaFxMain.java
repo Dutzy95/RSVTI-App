@@ -421,17 +421,15 @@ public class JavaFxMain extends Application {
 	        Scene scene = new Scene(settings);
 	        stage.setScene(scene);
             
-	        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	        	@Override
-	        	public void handle(WindowEvent e) {
-	        		homeController.refresh();
-	        		stage.close();
-	        	}
+	        stage.setOnCloseRequest(e -> {
+        		homeController.refresh();
+        		stage.close();
 			});
 	        
 	        SettingsController settingsController = loader.getController();
 	        settingsController.setJavaFxMain(this);
 	        settingsController.setStage(stage);
+	        settingsController.setHomeController(homeController);
 	        
 	        stage.showAndWait();
 	        

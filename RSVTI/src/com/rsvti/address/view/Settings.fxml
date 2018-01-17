@@ -38,7 +38,7 @@
                </padding>
             </TilePane>
             <Label text="Intervalul de afișare a datelor scadente pe pagina principală:" wrapText="true" GridPane.rowIndex="2" />
-            <ComboBox fx:id="homeDateIntervalUnit" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <ComboBox fx:id="homeDateIntervalUnitComboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <TextField fx:id="homeDateIntervalField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Format dată:" GridPane.rowIndex="3" />
             <ComboBox fx:id="dateFormatChooser" prefHeight="31.0" prefWidth="304.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />

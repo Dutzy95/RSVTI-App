@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.swing.tree.VariableHeightLayoutCache;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Utils;
@@ -17,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -40,7 +45,7 @@ public class SettingsController {
 	@FXML
 	private TextField homeDateIntervalField;
 	@FXML
-	private ComboBox<String> homeDateIntervalUnit;
+	private ComboBox<String> homeDateIntervalUnitComboBox;
 	
 	@FXML
 	private ComboBox<String> dateFormatChooser;
@@ -51,8 +56,10 @@ public class SettingsController {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
 	private Stage stage;
+	private HomeController homeController;
 	
-	private String backupPath; 
+	private String backupPath;
+	private Set<Date> variableDates;
 	
 	@FXML
 	private void initialize() {
@@ -60,65 +67,41 @@ public class SettingsController {
 			Utils.setDisabledDaysForDatePicker(datePicker);
 			Utils.setDisplayFormatForDatePicker(datePicker);
 			datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+			variableDates = new HashSet<Date>(DBServices.getVariableVacationDates());
 			filePathField.setText(DBServices.getBackupPath());
-			homeDateIntervalUnit.setItems(FXCollections.observableArrayList(Arrays.asList("zile", "luni", "ani")));
+			homeDateIntervalUnitComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("zile", "luni", "ani")));
 			homeDateIntervalField.setText(DBServices.getHomeDateDisplayInterval().split(" ")[0]);
 			if(!DBServices.getHomeDateDisplayInterval().equals("")) {
 				switch(Integer.parseInt(DBServices.getHomeDateDisplayInterval().split(" ")[1])) {
 				case Calendar.DATE : {
-					homeDateIntervalUnit.getSelectionModel().select(0);
+					homeDateIntervalUnitComboBox.getSelectionModel().select(0);
 					break;
 				}
 				case Calendar.MONTH : {
-					homeDateIntervalUnit.getSelectionModel().select(1);
+					homeDateIntervalUnitComboBox.getSelectionModel().select(1);
 					break;
 				}
 				case Calendar.YEAR : {
-					homeDateIntervalUnit.getSelectionModel().select(2);
+					homeDateIntervalUnitComboBox.getSelectionModel().select(2);
 					break;
 				}
 				}
 			} else {
-				homeDateIntervalUnit.getSelectionModel().select(0);
+				homeDateIntervalUnitComboBox.getSelectionModel().select(0);
 			}
-			homeDateIntervalUnit.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					if(!homeDateIntervalField.getText().equals("")) {
-						switch(homeDateIntervalUnit.getValue()) {
-						case "zile": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(homeDateIntervalField.getText()), Calendar.DATE);
-							break;
-						}
-						case "luni": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(homeDateIntervalField.getText()), Calendar.MONTH);
-							break;
-						}
-						case "ani": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(homeDateIntervalField.getText()), Calendar.YEAR);
-							break;
-						}
-						}
-					}
-				}
-			});
+			
 			homeDateIntervalField.textProperty().addListener((observable, oldvalue, newvalue) -> {
-					if(!newvalue.equals("")) {
-						switch(homeDateIntervalUnit.getValue()) {
-						case "zile": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(newvalue), Calendar.DATE);
-							break;
-						}
-						case "luni": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(newvalue), Calendar.MONTH);
-							break;
-						}
-						case "ani": {
-							DBServices.saveHomeDateDisplayInterval(Integer.parseInt(newvalue), Calendar.YEAR);
-							break;
-						}
-						}
+				try{
+					if(Integer.parseInt(homeDateIntervalField.getText()) <= 0) {
+						Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+								"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
 					}
+				} catch (NumberFormatException nfe) {
+					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+							"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
 			});
 			
 			Calendar calendar = Calendar.getInstance();
@@ -148,7 +131,7 @@ public class SettingsController {
 					//refresh settings stage in real time
 					Utils.setDisabledDaysForDatePicker(datePicker);
 					Utils.setDisplayFormatForDatePicker(datePicker);
-					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
 					datesListView.refresh();
 				}
 			});
@@ -158,8 +141,17 @@ public class SettingsController {
 			
 			maximumLogSize.setText(DBServices.getMaximumLogSize() + "");
 			maximumLogSize.textProperty().addListener((observable, oldValue, newValue) -> {
-				DBServices.saveMaximumLogSize(Integer.parseInt(maximumLogSize.getText()));
-				Utils.synchronizeLog();
+				try {
+					if(Integer.parseInt(newValue) < 0) {
+						Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+								"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
+					}
+				} catch(NumberFormatException nfe) {
+					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+							"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
+				} catch(Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
 			});
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -170,8 +162,8 @@ public class SettingsController {
 	private void handleAddDate() {
 		try {
 			if(datePicker.getValue() != null) {
-				DBServices.saveEntry(java.sql.Date.valueOf(datePicker.getValue()));
-				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+				variableDates.add(java.sql.Date.valueOf(datePicker.getValue()));
+				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -184,11 +176,11 @@ public class SettingsController {
 			String selectedItem = datesListView.getSelectionModel().getSelectedItem();
 			if(selectedItem != null) {
 				try {
-					DBServices.deleteEntry(dateFormat.parse(datesListView.getSelectionModel().getSelectedItem()));
+					variableDates.remove(dateFormat.parse(datesListView.getSelectionModel().getSelectedItem()));
+					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
-				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -222,8 +214,73 @@ public class SettingsController {
 	
 	@FXML
 	private void handleSave() {
-		DBServices.saveBackupPath(backupPath);	//save back-up path
-		stage.close();
+		try {
+			boolean ok = true;
+			//save back-up path
+			if(backupPath != null) {
+				DBServices.saveBackupPath(backupPath);	
+			}
+			//save the variable dates added
+			variableDates.removeAll(DBServices.getVariableVacationDates());
+			for(Date index : variableDates) {
+				DBServices.saveEntry(index);
+			}
+			//set home date interval for due dates' graph
+			try {
+				int homeDateIntervalValue = Integer.parseInt(homeDateIntervalField.getText());
+				String homeDateIntervalUnit = homeDateIntervalUnitComboBox.getValue(); 
+				if(homeDateIntervalValue > 0) {
+					switch(homeDateIntervalUnit) {
+					case "zile": {
+						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.DATE);
+						break;
+					}
+					case "luni": {
+						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.MONTH);
+						break;
+					}
+					case "ani": {
+						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.YEAR);
+						break;
+					}
+					}
+					ok = true;
+				} else {
+					ok = false;
+					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+							"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
+				}
+			} catch(NumberFormatException nfe) {
+				Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+						"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
+				ok = false;
+			}
+			//set maximum log size
+			try {
+				int maxLogSize = Integer.parseInt(maximumLogSize.getText());
+				if(maxLogSize > 0) {
+					ok = true;
+					DBServices.saveMaximumLogSize(maxLogSize);
+					Utils.synchronizeLog();
+				} else {
+					ok = false;
+					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+							"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
+				}
+			} catch(NumberFormatException nfe) {
+				Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
+						"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
+				ok = false;
+			}
+			
+			
+			if(ok) {
+				homeController.refresh();
+				stage.close();
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	@FXML
@@ -237,6 +294,10 @@ public class SettingsController {
 	
 	public void setStage(Stage stage) {
 		this.stage = stage;
+	}
+	
+	public void setHomeController(HomeController homeController) {
+		this.homeController = homeController;
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
