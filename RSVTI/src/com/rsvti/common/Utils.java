@@ -1,19 +1,15 @@
 package com.rsvti.common;
 
-import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -29,6 +25,7 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
@@ -37,9 +34,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -288,5 +289,73 @@ public class Utils {
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
+	}
+	
+	public static void setTextFieldValidator(TextField textField, String allowedCharacters, String finalPattern, boolean onlyUpperCase, int maxLength, String tooltipText) {
+		Tooltip tooltip = new Tooltip();
+		tooltip.setText(tooltipText);
+		tooltip.setWrapText(true);
+		tooltip.setMaxWidth(300);
+		textField.setTooltip(tooltip);
+		Tooltip emptyTooltip = new Tooltip();
+		emptyTooltip.setText("Câmpul nu poate fi lăsat gol.");
+		
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			try {
+				if(newValue.matches(allowedCharacters)) {
+					if(newValue.length() > maxLength && maxLength != Constants.INFINITE) {
+						newValue = newValue.substring(0, maxLength);
+					}
+					if(onlyUpperCase) {
+							newValue = newValue.toUpperCase();
+					}
+					if(textField.getId().equals("ibanCodeField")) {
+						String tmp = "";
+						String text = newValue;
+						text = text.replaceAll(" ", "");
+						for(int i = 0; i < text.length(); i+=4) {
+							if(text.substring(i, text.length()).length() > 4) {
+								tmp += text.substring(i, i+4) + " ";
+							} else {
+								tmp += text.substring(i, text.length());
+							}
+						}
+						newValue = tmp;
+					}
+					textField.setText(newValue);
+				} else {
+					textField.setText(oldValue);
+				}
+			} catch(Exception e) {
+				DBServices.saveErrorLogEntry(e);
+			}
+		});
+		
+		textField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+			try {
+				if(!newPropertyValue) {
+					if(textField.getText().isEmpty()) {
+						textField.setBorder(Constants.redBorder);
+						emptyTooltip.show(JavaFxMain.primaryStage, 
+								JavaFxMain.primaryStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+								JavaFxMain.primaryStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+					} else if(!textField.getText().matches(finalPattern)) {
+						textField.setBorder(Constants.redBorder);
+						tooltip.show(JavaFxMain.primaryStage, 
+								JavaFxMain.primaryStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+								JavaFxMain.primaryStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+					} else {
+						emptyTooltip.hide();
+						tooltip.hide();
+						textField.setBorder(null);
+					}
+				} else {
+					emptyTooltip.hide();
+					tooltip.hide();
+				}
+			} catch(Exception e) {
+				DBServices.saveErrorLogEntry(e);
+			}
+		});
 	}
 }

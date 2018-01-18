@@ -5,6 +5,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+
 public class Constants {
 
 	public static final String XML_FIRMS_FILE_NAME = "database/RSVTI_database.xml";
@@ -24,6 +31,7 @@ public class Constants {
 	public static final Date HIGH_DATE = new Date(Long.valueOf("16756748482093"));	//31.12.2500
 	public static int ERR_LOG_REFRESH_TIME_UNIT = Calendar.HOUR_OF_DAY;
 	public static int ERR_LOG_REFRESH_INTERVAL = 1;
+	public static final int INFINITE = 999;
 	
 	public static String TABLE_PLACEHOLDER_MESSAGE = "Nu există conținut în tabel";
 	
@@ -42,4 +50,10 @@ public class Constants {
 			"1-12", 
 			"25-12",
 			"26-12");
+	
+	public static final Border redBorder = new Border(new BorderStroke(
+															Color.RED, 
+															BorderStrokeStyle.SOLID, 
+															new CornerRadii(2), 
+															new BorderWidths(5)));
 }

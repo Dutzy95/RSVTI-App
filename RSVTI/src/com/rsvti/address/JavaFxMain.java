@@ -1,7 +1,6 @@
 package com.rsvti.address;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,7 +25,6 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -38,12 +36,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class JavaFxMain extends Application {
 
-	private static Stage primaryStage;
+	public static Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabPane;
 	private Stage addUpdateEmployeesToFirmStage;
@@ -118,7 +115,7 @@ public class JavaFxMain extends Application {
             
             delay1.setOnFinished( event -> primaryStage.show() );
 	        delay1.play();
-        } catch (IOException e) {
+        } catch (Exception e) {
             DBServices.saveErrorLogEntry(e);
         }
     }
@@ -138,7 +135,7 @@ public class JavaFxMain extends Application {
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             DBServices.saveErrorLogEntry(e);
         }
         
@@ -159,7 +156,7 @@ public class JavaFxMain extends Application {
             
             FirmOverviewController controller = loader.getController();
             controller.setJavaFxMain(this);
-        } catch (IOException e) {
+        } catch (Exception e) {
             DBServices.saveErrorLogEntry(e);
         }
     }
@@ -188,7 +185,7 @@ public class JavaFxMain extends Application {
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -217,7 +214,7 @@ public class JavaFxMain extends Application {
 	        EmployeeOverviewController controller = loader.getController();
 	        controller.setEmployeeList(employeeList);
 
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -240,7 +237,7 @@ public class JavaFxMain extends Application {
             addFirmController = loader.getController();
             addFirmController.setJavaFxMain(this);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -262,7 +259,7 @@ public class JavaFxMain extends Application {
             
             loader.getController();
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -297,7 +294,7 @@ public class JavaFxMain extends Application {
             
             addUpdateRigsToFirmStage.showAndWait();
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -332,7 +329,7 @@ public class JavaFxMain extends Application {
             
             addUpdateEmployeesToFirmStage.showAndWait();
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -355,7 +352,7 @@ public class JavaFxMain extends Application {
             dueDateOverviewController = loader.getController();
             dueDateOverviewController.setJavaFxMain(this);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -378,7 +375,7 @@ public class JavaFxMain extends Application {
             AddTestQuestionController addTestQuestionController = loader.getController();
             addTestQuestionController.setJavaFxMain(this);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -401,7 +398,7 @@ public class JavaFxMain extends Application {
             GenerateTestController generateTestController = loader.getController();
             generateTestController.setJavaFxMain(this);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -456,7 +453,7 @@ public class JavaFxMain extends Application {
             GenerateTableController generateTableController = loader.getController();
             generateTableController.setJavaFxMain(this);
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
@@ -478,7 +475,7 @@ public class JavaFxMain extends Application {
             
             loader.getController();
             
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
 	}
