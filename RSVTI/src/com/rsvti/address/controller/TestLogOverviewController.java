@@ -40,7 +40,13 @@ public class TestLogOverviewController {
 	private void initialize() {
 		try {
 			loggedTestsTable.setItems(FXCollections.observableArrayList(DBServices.getAllLoggedTests()));
-			loggedTestsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showTestButton.setDisable(false));
+			loggedTestsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
+				try {
+					showTestButton.setDisable(false);
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
+			});
 			loggedTestsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			loggedTestsTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeFirstName()));

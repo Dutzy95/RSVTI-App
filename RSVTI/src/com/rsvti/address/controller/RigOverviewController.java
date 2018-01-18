@@ -62,13 +62,17 @@ public class RigOverviewController {
 	}
 	
 	public void setRigList(List<Rig> rigList) {
-		this.rigList = rigList;
-		rigTable.setItems(FXCollections.observableArrayList(rigList));
-		rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
-		
-		showRigDetails(null);
-		
-		rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showRigDetails(newValue));
+		try {
+			this.rigList = rigList;
+			rigTable.setItems(FXCollections.observableArrayList(rigList));
+			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
+			
+			showRigDetails(null);
+			
+			rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showRigDetails(newValue));
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 }

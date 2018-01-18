@@ -46,7 +46,13 @@ public class AddRigParameterController {
 			parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 			parameterMeasurementUnitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
 			deleteButton.setDisable(true);
-			parameterTable.getSelectionModel().selectedItemProperty().addListener((event) -> {deleteButton.setDisable(false);});
+			parameterTable.getSelectionModel().selectedItemProperty().addListener((event) -> {
+				try {
+					deleteButton.setDisable(false);
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
+			});
 			parameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			parameterMeasurementUnitField.setAlignment(Pos.CENTER);
 			parameterNameField.setAlignment(Pos.CENTER);

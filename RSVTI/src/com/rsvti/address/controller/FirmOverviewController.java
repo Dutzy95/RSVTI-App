@@ -81,39 +81,43 @@ public class FirmOverviewController {
 	}
 	
 	private void showFirmDetails(Firm firm) {
-		rigOverviewButton.setDisable(false);
-		deleteFirmButton.setDisable(false);
-		employeeOverviewButton.setDisable(false);
-		if(firm != null) {
-			firmNameLabel.setText(firm.getFirmName());
-			registrationNumberLabel.setText(firm.getRegistrationNumber());
-			fiscalCodeLabel.setText(firm.getFiscalCode());
-			addressLabel.setText(firm.getAddress());
-			phoneNumberLabel.setText(firm.getPhoneNumber());
-			faxNumberLabel.setText(firm.getFaxNumber());
-			emailLabel.setText(firm.getEmail());
-			bankNameLabel.setText(firm.getBankName());
-			ibanCodeLabel.setText(firm.getIbanCode());
-			adminFirstNameLabel.setText(firm.getAdministrator().getFirstName());
-			adminLastNameLabel.setText(firm.getAdministrator().getLastName());
-			adminIdCodeLabel.setText(firm.getAdministrator().getIdCode());
-			adminIdNumberLabel.setText(firm.getAdministrator().getIdNumber());
-			adminPhoneNumberLabel.setText(firm.getAdministrator().getPhoneNumber());
-		} else {
-			firmNameLabel.setText("");
-			registrationNumberLabel.setText("");
-			fiscalCodeLabel.setText("");
-			addressLabel.setText("");
-			phoneNumberLabel.setText("");
-			faxNumberLabel.setText("");
-			emailLabel.setText("");
-			bankNameLabel.setText("");
-			ibanCodeLabel.setText("");
-			adminFirstNameLabel.setText("");
-			adminLastNameLabel.setText("");
-			adminIdCodeLabel.setText("");
-			adminIdNumberLabel.setText("");
-			adminPhoneNumberLabel.setText("");
+		try {
+			rigOverviewButton.setDisable(false);
+			deleteFirmButton.setDisable(false);
+			employeeOverviewButton.setDisable(false);
+			if(firm != null) {
+				firmNameLabel.setText(firm.getFirmName());
+				registrationNumberLabel.setText(firm.getRegistrationNumber());
+				fiscalCodeLabel.setText(firm.getFiscalCode());
+				addressLabel.setText(firm.getAddress());
+				phoneNumberLabel.setText(firm.getPhoneNumber());
+				faxNumberLabel.setText(firm.getFaxNumber());
+				emailLabel.setText(firm.getEmail());
+				bankNameLabel.setText(firm.getBankName());
+				ibanCodeLabel.setText(firm.getIbanCode());
+				adminFirstNameLabel.setText(firm.getAdministrator().getFirstName());
+				adminLastNameLabel.setText(firm.getAdministrator().getLastName());
+				adminIdCodeLabel.setText(firm.getAdministrator().getIdCode());
+				adminIdNumberLabel.setText(firm.getAdministrator().getIdNumber());
+				adminPhoneNumberLabel.setText(firm.getAdministrator().getPhoneNumber());
+			} else {
+				firmNameLabel.setText("");
+				registrationNumberLabel.setText("");
+				fiscalCodeLabel.setText("");
+				addressLabel.setText("");
+				phoneNumberLabel.setText("");
+				faxNumberLabel.setText("");
+				emailLabel.setText("");
+				bankNameLabel.setText("");
+				ibanCodeLabel.setText("");
+				adminFirstNameLabel.setText("");
+				adminLastNameLabel.setText("");
+				adminIdCodeLabel.setText("");
+				adminIdNumberLabel.setText("");
+				adminPhoneNumberLabel.setText("");
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	

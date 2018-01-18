@@ -124,15 +124,16 @@ public class SettingsController {
 			}
 			dateFormatChooser.setItems(FXCollections.observableArrayList(formattedDates));
 			dateFormatChooser.getSelectionModel().select(new SimpleDateFormat(DBServices.getDatePattern()).format(calendar.getTime()));
-			dateFormatChooser.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
+			dateFormatChooser.setOnAction(event -> {
+				try {
 					DBServices.saveDatePattern(patterns.get(dateFormatChooser.getSelectionModel().getSelectedIndex()));
 					//refresh settings stage in real time
 					Utils.setDisabledDaysForDatePicker(datePicker);
 					Utils.setDisplayFormatForDatePicker(datePicker);
 					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
 					datesListView.refresh();
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
 				}
 			});
 			

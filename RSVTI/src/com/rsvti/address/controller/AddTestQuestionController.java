@@ -59,14 +59,18 @@ public class AddTestQuestionController {
 	}
 	
 	private void showTestDetails(TestQuestion question) {
-		if(question != null) {
-			questionArea.setText(question.getQuestion());
-			firstAnswerArea.setText(question.getAnswers().get(0));
-			secondAnswerArea.setText(question.getAnswers().get(1));
-			thirdAnswerArea.setText(question.getAnswers().get(2));
-			questionTypeComboBox.setValue(question.getType());
-			isUpdate = true;
-			questionToUpdate = question;
+		try {
+			if(question != null) {
+				questionArea.setText(question.getQuestion());
+				firstAnswerArea.setText(question.getAnswers().get(0));
+				secondAnswerArea.setText(question.getAnswers().get(1));
+				thirdAnswerArea.setText(question.getAnswers().get(2));
+				questionTypeComboBox.setValue(question.getType());
+				isUpdate = true;
+				questionToUpdate = question;
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	

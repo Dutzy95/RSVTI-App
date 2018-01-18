@@ -181,13 +181,11 @@ public class Utils {
 	public static void setTray(Stage primaryStage) {
 		try {
 			
-			primaryStage.setOnCloseRequest(event -> 
-				{Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
+			primaryStage.setOnCloseRequest(event -> {
+				Platform.runLater(() -> {
 						primaryStage.hide();
-					}
-				});});
+				});
+			});
 			
 			ImageIcon imageIcon = new ImageIcon(Utils.class.getResource("/RSVTI_without_text.png"));
 			final SystemTray tray = SystemTray.getSystemTray();
@@ -202,23 +200,14 @@ public class Utils {
 	        MenuItem show = new MenuItem("Afișare");
 	        MenuItem exit = new MenuItem("Ieșire");
 	        
-	        exit.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-				}
+	        exit.addActionListener(e -> {
+				System.exit(0);
 			});
 	        
-	        show.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Platform.runLater(new Runnable() { 
-			            @Override
-			            public void run() {
-			                primaryStage.show();
-			            }
-			        });
-				}
+	        show.addActionListener(e -> {
+				Platform.runLater(() -> {
+	                primaryStage.show();
+		        });
 			});
 	        
 	        trayIcon.addMouseListener(new MouseListener() {
@@ -242,11 +231,8 @@ public class Utils {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount() >= 2) {
-						Platform.runLater(new Runnable() { 
-				            @Override
-				            public void run() {
-				                primaryStage.show();
-				            }
+						Platform.runLater(() ->{
+			                primaryStage.show();
 				        });
 					}
 				}

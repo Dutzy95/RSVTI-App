@@ -1,6 +1,4 @@
 /bin/
-/*.xml
-/*.doc
-/*.docx
-/*.xls
-/*.xlsx
+/docs/
+/database/
+/Errlog.xml

@@ -78,16 +78,26 @@ public class HomeController {
 				((ValueAxis<Number>) barChart.getYAxis()).setTickLabelFormatter(new StringConverter<Number>() {
 					@Override
 			        public String toString(Number object) {
-						if(object.doubleValue() == Double.valueOf(object.intValue())) {
-							return object.intValue() + "";
-						} else {
-							return "";
+						String tmp = "";
+						try {
+							if(object.doubleValue() == Double.valueOf(object.intValue())) {
+								tmp = object.intValue() + "";
+							}
+						} catch (Exception e) {
+							DBServices.saveErrorLogEntry(e);
 						}
+						return tmp;
 			        }
 					
 					@Override
 					public Number fromString(String string) {
-						return Integer.parseInt(string);
+						int tmp = 0;
+						try {
+							tmp = Integer.parseInt(string);
+						} catch (Exception e) {
+							DBServices.saveErrorLogEntry(e);
+						}
+						return tmp;
 					}
 				});
 				

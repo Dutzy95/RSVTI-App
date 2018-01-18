@@ -92,14 +92,19 @@ public class AddRigsToFirmController {
 			chosenParametersTable.setEditable(true);
 			chosenParametersTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			rigType.valueProperty().addListener((ov, t, t1) -> {
+				try {
 					String selectedItem = rigType.getSelectionModel().getSelectedItem();
 					filterSelectedParameters(selectedItem);
 					importedParameterTable.refresh();
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
 			});
 			
 			authorizationExtension.setItems(FXCollections.observableArrayList("Nu extinde", "1 an", "2 ani", "3 ani", "4 ani", "5 ani"));
 			authorizationExtension.getSelectionModel().select(0);
 			authorizationExtension.valueProperty().addListener((ov, t, t1) -> {
+				try {
 					if(!authorizationExtension.getValue().equals("Nu extinde")) {
 						selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
 					} else {
@@ -108,17 +113,21 @@ public class AddRigsToFirmController {
 					if(revisionDate.getValue() != null) {
 						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 					}
+				} catch (Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
 			});
 			
-			revisionDate.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
+			revisionDate.setOnAction( e -> {
+				try {
 					if(!authorizationExtension.getValue().equals("Nu extinde")) {
 						selectedExtensionValue = authorizationExtension.getSelectionModel().getSelectedItem().charAt(0) - '0';
 					} else {
 						selectedExtensionValue = 0;
 					}
 					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
+				} catch (Exception err) {
+					DBServices.saveErrorLogEntry(err);
 				}
 			});
 			
