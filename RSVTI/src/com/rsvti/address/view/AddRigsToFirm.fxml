@@ -22,7 +22,7 @@
             <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nume" />
+            <Label text="Producător" />
             <Label text="Data scadenței" GridPane.columnIndex="3" />
             <TextField fx:id="rigNameField" GridPane.columnIndex="1" />
             <DatePicker fx:id="revisionDate" prefHeight="36.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />

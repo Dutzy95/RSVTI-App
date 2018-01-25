@@ -30,17 +30,16 @@ import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
 import javafx.application.Platform;
+import javafx.event.EventTarget;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -291,7 +290,7 @@ public class Utils {
 		}
 	}
 	
-	public static void setTextFieldValidator(TextField textField, String allowedCharacters, String finalPattern, boolean onlyUpperCase, int maxLength, String tooltipText) {
+	public static void setTextFieldValidator(TextField textField, String allowedCharacters, String finalPattern, boolean onlyUpperCase, int maxLength, String tooltipText, Stage parentStage) {
 		Tooltip tooltip = new Tooltip();
 		tooltip.setText(tooltipText);
 		tooltip.setWrapText(true);
@@ -336,14 +335,26 @@ public class Utils {
 				if(!newPropertyValue) {
 					if(textField.getText().isEmpty()) {
 						textField.setBorder(Constants.redBorder);
-						emptyTooltip.show(JavaFxMain.primaryStage, 
-								JavaFxMain.primaryStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-								JavaFxMain.primaryStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+						if(parentStage.getTitle().equals("Adaugă personal")) {
+							emptyTooltip.show(parentStage, 
+									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY());
+						} else {
+							emptyTooltip.show(parentStage, 
+									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+						}
 					} else if(!textField.getText().matches(finalPattern)) {
 						textField.setBorder(Constants.redBorder);
-						tooltip.show(JavaFxMain.primaryStage, 
-								JavaFxMain.primaryStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-								JavaFxMain.primaryStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+						if(parentStage.getTitle().equals("Adaugă personal")) {
+							tooltip.show(parentStage, 
+									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY());
+						} else {
+							tooltip.show(parentStage, 
+									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
+									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
+						}
 					} else {
 						emptyTooltip.hide();
 						tooltip.hide();

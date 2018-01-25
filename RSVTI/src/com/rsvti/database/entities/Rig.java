@@ -76,14 +76,16 @@ public class Rig{
 	}
 	
 	public static Date getDueDate(Date revisionDate, int authorizationExtension) {
+		//TODO take all vacation date into consideration (both fixed and variable)
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(revisionDate);
 		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
+		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
 		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, 2);
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
 		}
 		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
 		}
 		return calendar.getTime();
 	}

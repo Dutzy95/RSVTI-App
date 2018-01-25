@@ -14,14 +14,14 @@
    <top>
       <SplitPane dividerPositions="0.13689482470784642" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="173.0">
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="159.0" minWidth="160.0" prefHeight="159.0" prefWidth="160.0">
                <children>
                   <ImageView fx:id="imageView" fitHeight="159.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="292.0" prefWidth="985.0">
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="147.0" prefWidth="1003.0">
                <children>
-                  <Label layoutX="14.0" layoutY="6.0" prefHeight="147.0" prefWidth="1003.0" text="Responsabil cu supravegherea si verificarea tehnică a instalațiilor" textAlignment="CENTER" wrapText="true">
+                  <Label layoutX="14.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="147.0" prefWidth="1003.0" text="Responsabil cu supravegherea si verificarea tehnică a instalațiilor" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font size="50.0" />
                      </font>

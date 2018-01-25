@@ -71,11 +71,7 @@ public class TestLogOverviewController {
 				File file = new File(jarFilePath + "docs\\teste\\logs\\" + dateFormat.format(loggedTest.getGenerationDateAndTime())  + "\\"
 						+ loggedTest.getEmployeeLastName() + " " + loggedTest.getEmployeeFirstName() + " " + loggedTest.getEmployeeTitle() 
 						+ " " + extendedDateFormat.format(loggedTest.getGenerationDateAndTime()) + ".docx");
-				try {
-					Desktop.getDesktop().open(file);
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
+				Desktop.getDesktop().open(file);
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);

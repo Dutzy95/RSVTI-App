@@ -43,7 +43,7 @@ public class JavaFxMain extends Application {
 	public static Stage primaryStage;
 	private BorderPane rootLayout;
 	private TabPane tabPane;
-	private Stage addUpdateEmployeesToFirmStage;
+	public static Stage addUpdateEmployeesToFirmStage;
 	private AddEmployeesToFirmController addUpdateEmployeesToFirmController;
 	private AddRigsToFirmController addUpdateRigsToFirmController;
 	private Stage addUpdateRigsToFirmStage;
@@ -130,8 +130,9 @@ public class JavaFxMain extends Application {
             
             Tab tab = new Tab("Acasă");
             tab.setContent(home);
+            tab.setClosable(false);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+            tabPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
@@ -150,7 +151,6 @@ public class JavaFxMain extends Application {
             Tab tab = new Tab("Firme");
             tab.setContent(personOverview);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
@@ -181,7 +181,6 @@ public class JavaFxMain extends Application {
 	        tab.setContent(rigOverview);
             tab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             
@@ -206,7 +205,6 @@ public class JavaFxMain extends Application {
             tab.setContent(employeeOverview);
             tab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
 
@@ -230,7 +228,6 @@ public class JavaFxMain extends Application {
             addRigParameterTab.setContent(addFirm);
             addRigParameterTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(addRigParameterTab);
             tabPane.getSelectionModel().select(addRigParameterTab);
             
@@ -253,7 +250,6 @@ public class JavaFxMain extends Application {
             addRigParameterTab.setContent(addRigParameter);
             addRigParameterTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(addRigParameterTab);
             tabPane.getSelectionModel().select(addRigParameterTab);
             
@@ -305,19 +301,6 @@ public class JavaFxMain extends Application {
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToFirm.fxml"));
 	        AnchorPane addUpdateEmployeesToFirm = (AnchorPane) loader.load();
-	        
-	        AddEmployeesToFirmController controller = loader.getController();
-	        controller.setJavaFxMain(this);
-	        controller.setFirmName(stageName);
-	        controller.setIsDueDateUpdate(isDueDateUpdate);
-
-	        addUpdateEmployeesToFirmController = loader.getController();
-            addUpdateEmployeesToFirmController.setJavaFxMain(this);
-            addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
-            
-            if(employee != null) {
-            	addUpdateEmployeesToFirmController.showEmployeeDetails(employee);
-            }
             
             addUpdateEmployeesToFirmStage = new Stage();
 	        addUpdateEmployeesToFirmStage.setTitle(stageName);
@@ -326,6 +309,20 @@ public class JavaFxMain extends Application {
 	        addUpdateEmployeesToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(addUpdateEmployeesToFirm);
 	        addUpdateEmployeesToFirmStage.setScene(scene);
+            
+	        AddEmployeesToFirmController controller = loader.getController();
+	        controller.setJavaFxMain(this);
+	        controller.setFirmName(stageName);
+	        controller.setIsDueDateUpdate(isDueDateUpdate);
+	        controller.setValidators(addUpdateEmployeesToFirmStage);
+            
+            addUpdateEmployeesToFirmController = loader.getController();
+            addUpdateEmployeesToFirmController.setJavaFxMain(this);
+            addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
+            
+            if(employee != null) {
+            	addUpdateEmployeesToFirmController.showEmployeeDetails(employee);
+            }
             
             addUpdateEmployeesToFirmStage.showAndWait();
             
@@ -345,7 +342,6 @@ public class JavaFxMain extends Application {
 	        dueDateOverviewTab.setContent(dueDateOverview);
 	        dueDateOverviewTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(dueDateOverviewTab);
             tabPane.getSelectionModel().select(dueDateOverviewTab);
             
@@ -368,7 +364,6 @@ public class JavaFxMain extends Application {
 	        addTestQuestionTab.setContent(addTestQuestion);
 	        addTestQuestionTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(addTestQuestionTab);
             tabPane.getSelectionModel().select(addTestQuestionTab);
             
@@ -391,7 +386,6 @@ public class JavaFxMain extends Application {
 	        generateTestTab.setContent(generateTest);
 	        generateTestTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(generateTestTab);
             tabPane.getSelectionModel().select(generateTestTab);
             
@@ -446,7 +440,6 @@ public class JavaFxMain extends Application {
 	        generateTableTab.setContent(generateTable);
 	        generateTableTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(generateTableTab);
             tabPane.getSelectionModel().select(generateTableTab);
             
@@ -469,7 +462,6 @@ public class JavaFxMain extends Application {
 	        tableOverviewTab.setContent(tableOverview);
 	        tableOverviewTab.setClosable(true);
             
-            tabPane.setTabClosingPolicy(TabClosingPolicy.SELECTED_TAB);
             tabPane.getTabs().add(tableOverviewTab);
             tabPane.getSelectionModel().select(tableOverviewTab);
             
