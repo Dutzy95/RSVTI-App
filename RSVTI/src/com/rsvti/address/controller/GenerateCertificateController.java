@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
+import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
@@ -65,6 +66,9 @@ public class GenerateCertificateController {
 	private CheckBox choice4;
 	
 	@FXML
+	private ComboBox<String> rsvtiComboBox;
+	
+	@FXML
 	private void initialize() {
 		try {
 			employeeTitleComboBox.setItems(FXCollections.observableArrayList("manevrant", "legător sarcină"));
@@ -75,6 +79,13 @@ public class GenerateCertificateController {
 			Utils.setDisplayFormatForDatePicker(certificateIssueDate);
 			List<EmployeeDueDateDetails> employees = DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE); 
 			employeeTable.setItems(FXCollections.observableArrayList(getEmployeesByTitle(employees, employeeTitleComboBox.getSelectionModel().getSelectedItem())));
+			employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
+				if(employeeTable.getSelectionModel().getSelectedItem() != null) {
+					rsvtiComboBox.setItems(FXCollections.observableArrayList(getEmployeeNames(
+							DBServices.getRsvtiFromFirm(employeeTable.getSelectionModel().getSelectedItem().getFirmName()))));
+					rsvtiComboBox.getSelectionModel().select(0);
+				}
+			});
 			employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
 			employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));
 			employeeFirmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
@@ -112,6 +123,14 @@ public class GenerateCertificateController {
 		return tmp;
 	}
 	
+	private List<String> getEmployeeNames(List<Employee> employees) {
+		List<String> employeeNames = new ArrayList<String>();
+		for(Employee index : employees) {
+			employeeNames.add(index.getLastName() + " " + index.getFirstName());
+		}
+		return employeeNames;
+	}
+	
 	@FXML
 	private void handleGenerateCertificate() {
 		try {
@@ -132,7 +151,8 @@ public class GenerateCertificateController {
 						choice1.selectedProperty().get(),
 						choice2.selectedProperty().get(),
 						choice3.selectedProperty().get(),
-						choice4.selectedProperty().get());
+						choice4.selectedProperty().get(),
+						rsvtiComboBox.getSelectionModel().getSelectedItem());
 				
 				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Adeverință", "Generararea s-a terminat cu succes", bodyMessage);
 				if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {

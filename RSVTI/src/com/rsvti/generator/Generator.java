@@ -114,7 +114,7 @@ public class Generator {
 		return paragraph;
 	}
 	
-	public static void generateOneCertificate(XWPFDocument document, EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4) {
+	public static void generateOneCertificate(XWPFDocument document, EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti) {
 		SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
 		XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
 		XWPFRun run;
@@ -131,20 +131,22 @@ public class Generator {
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
 		run = createRunForCertificateParagraph(paragraph, "", false);
 		run.addTab();	//indent for paragraph beginning
-		createRunForCertificateParagraph(paragraph, "Prin prezenta se adeverește că dl ", false);
+		createRunForCertificateParagraph(paragraph, "Prin prezenta se adeverește că Dl/D-na ", false);
 		createRunForCertificateParagraph(paragraph, employee.getEmployee().getLastName() + " " + employee.getEmployee().getFirstName(), true);
-		createRunForCertificateParagraph(paragraph, " născut la data de ", false);
-		createRunForCertificateParagraph(paragraph, "01.01.2001", true);//TODO
-		createRunForCertificateParagraph(paragraph, ", domiciliat în localitatea ", false);
-		createRunForCertificateParagraph(paragraph, "Localitate", true);//TODO
+		createRunForCertificateParagraph(paragraph, " născut(ă) la data de ", false);
+		createRunForCertificateParagraph(paragraph, format.format(employee.getEmployee().getBirthDate()), true);
+		createRunForCertificateParagraph(paragraph, " în localitatea ", false);
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getBirthCity(), true);
+		createRunForCertificateParagraph(paragraph, ", domiciliat(ă) în ", false);
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getHomeAddress(), true);
 		createRunForCertificateParagraph(paragraph, ", județ ", false);
-		createRunForCertificateParagraph(paragraph, "Judet", true);//TODO
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getHomeRegion(), true);
 		createRunForCertificateParagraph(paragraph, ", CI. seria ", false);
-		createRunForCertificateParagraph(paragraph, "SR", true);//TODO
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getIdCode(), true);
 		createRunForCertificateParagraph(paragraph, ", nr. ", false);
-		createRunForCertificateParagraph(paragraph, "123456", true);//TODO
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getIdNumber(), true);
 		createRunForCertificateParagraph(paragraph, ", CNP. ", false);
-		createRunForCertificateParagraph(paragraph, "1234567890123", true);//TODO
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getPersonalIdentificationNumber(), true);
 		createRunForCertificateParagraph(paragraph, ", a fost instruit ca ", false);
 		String employeeTitle = employee.getEmployee().getTitle();
 		createRunForCertificateParagraph(paragraph, employeeTitle.toUpperCase(), false);
@@ -188,8 +190,7 @@ public class Generator {
 		String directorName = "Nume Prenume1 Prenume2";//TODO
 		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
 		run = createRunForCertificateParagraph(paragraph, "", false);
-		String rsvtiName = "Bogdan Radu Victor";//TODO
-		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-rsvtiName.length())/2) + rsvtiName + getStringOfSpaces((82/2-rsvtiName.length())/2), false);
+		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
 		document.createParagraph();	//empty line
 		document.createParagraph();	//empty line
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
@@ -198,7 +199,7 @@ public class Generator {
 		createRunForCertificateParagraph(paragraph, "Valabil un an de la data emiterii.", false);
 	}
 	
-	public static File generateCertificate(EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4) {
+	public static File generateCertificate(EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
@@ -207,9 +208,9 @@ public class Generator {
 			CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
 		    CTPageMar pageMar = sectPr.addNewPgMar();
 		    pageMar.setLeft(BigInteger.valueOf(720L));
-		    pageMar.setTop(BigInteger.valueOf(720L));
+		    pageMar.setTop(BigInteger.valueOf(500L));
 		    pageMar.setRight(BigInteger.valueOf(720L));
-		    pageMar.setBottom(BigInteger.valueOf(720L));
+		    pageMar.setBottom(BigInteger.valueOf(500L));
 			
 			String currentDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(Calendar.getInstance().getTime());
 			file = new File(jarFilePath + "docs\\adeverințe\\" + currentDate);
@@ -218,11 +219,10 @@ public class Generator {
 					employee.getEmployee().getFirstName() + ".docx");
 			FileOutputStream output = new FileOutputStream(file);
 			
-			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4);
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
 			document.createParagraph();
 			document.createParagraph();
-			document.createParagraph();
-			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4);
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
 			
 			document.write(output);
 			output.close();

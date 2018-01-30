@@ -12,6 +12,7 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -39,6 +40,16 @@ public class AddEmployeesToFirmController {
 	private DatePicker authorizationObtainigDate;
 	@FXML
 	private DatePicker authorizationDueDate;
+	@FXML
+	private DatePicker birthDate;
+	@FXML
+	private TextField birthCityField;
+	@FXML
+	private TextField homeAddressField;
+	@FXML
+	private TextField homeRegionField;
+	@FXML
+	private CheckBox rsvtiCheckbox;
 	
 	private Employee employeeToUpdate;
 	private boolean isUpdate = false;
@@ -52,6 +63,8 @@ public class AddEmployeesToFirmController {
 			Utils.setDisplayFormatForDatePicker(authorizationObtainigDate);
 			Utils.setDisabledDaysForDatePicker(authorizationDueDate);
 			Utils.setDisplayFormatForDatePicker(authorizationDueDate);
+			Utils.setDisabledDaysForDatePicker(birthDate);
+			Utils.setDisplayFormatForDatePicker(birthDate);
 			authorizationNumberField.setAlignment(Pos.CENTER);
 			firstNameField.setAlignment(Pos.CENTER);
 			idCodeField.setAlignment(Pos.CENTER);
@@ -59,6 +72,9 @@ public class AddEmployeesToFirmController {
 			lastNameField.setAlignment(Pos.CENTER);
 			personalIdentificationNumberField.setAlignment(Pos.CENTER);
 			titleField.setAlignment(Pos.CENTER);
+			birthCityField.setAlignment(Pos.CENTER);
+			homeRegionField.setAlignment(Pos.CENTER);
+			homeAddressField.setAlignment(Pos.CENTER);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -79,10 +95,17 @@ public class AddEmployeesToFirmController {
 				"Codul numeric personal este format din 13 cifre.", stage);
 		Utils.setTextFieldValidator(titleField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
 				"Numele poate conține doar litere majuscule și minuscule.", stage);
+		Utils.setTextFieldValidator(birthCityField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
+				"Localitatea poate conține doar litere majuscule și minuscule.", stage);
+		Utils.setTextFieldValidator(homeRegionField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
+				"Județul poate conține doar litere majuscule și minuscule.", stage);
+		Utils.setTextFieldValidator(homeAddressField, "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
+				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", JavaFxMain.primaryStage);
 	}
 	
 	private boolean allFieldsAreCorrect() {
-		List<TextField> fields = Arrays.asList(authorizationNumberField, firstNameField, idCodeField, idNumberField, lastNameField, personalIdentificationNumberField, titleField);
+		List<TextField> fields = Arrays.asList(authorizationNumberField, firstNameField, idCodeField, idNumberField, lastNameField, 
+				personalIdentificationNumberField, titleField, birthCityField, homeRegionField, homeAddressField);
 		
 		for(TextField index : fields) {
 			if(index.getBorder() != null) {
@@ -102,11 +125,16 @@ public class AddEmployeesToFirmController {
 																				 lastNameField.getText(),
 																				 idCodeField.getText(), 
 																				 idNumberField.getText(), 
-																				 personalIdentificationNumberField.getText(), 
+																				 personalIdentificationNumberField.getText(),
+																				 java.sql.Date.valueOf(birthDate.getValue()),
+																				 birthCityField.getText(),
+																				 homeAddressField.getText(),
+																				 homeRegionField.getText(),
 																				 new EmployeeAuthorization(authorizationNumberField.getText(), 
 																										   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
 																										   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-																			    	titleField.getText()));
+																			    	titleField.getText(),
+																			    	rsvtiCheckbox.selectedProperty().get()));
 					
 				} else {
 					if(isUpdate) {
@@ -116,10 +144,15 @@ public class AddEmployeesToFirmController {
 																	 idCodeField.getText(), 
 																	 idNumberField.getText(), 
 																	 personalIdentificationNumberField.getText(), 
+																	 java.sql.Date.valueOf(birthDate.getValue()),
+																	 birthCityField.getText(),
+																	 homeAddressField.getText(),
+																	 homeRegionField.getText(),
 																	 new EmployeeAuthorization(authorizationNumberField.getText(), 
 																							   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
 																							   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-																    	titleField.getText()));
+																    	titleField.getText(),
+																    	rsvtiCheckbox.selectedProperty().get()));
 					} else {
 						try {
 						javaFxMain.getAddFirmController().updateEmployeeList(
@@ -127,11 +160,16 @@ public class AddEmployeesToFirmController {
 											 lastNameField.getText(),
 											 idCodeField.getText(), 
 											 idNumberField.getText(), 
-											 personalIdentificationNumberField.getText(), 
+											 personalIdentificationNumberField.getText(),
+											 java.sql.Date.valueOf(birthDate.getValue()),
+											 birthCityField.getText(),
+											 homeAddressField.getText(),
+											 homeRegionField.getText(),
 											 new EmployeeAuthorization(authorizationNumberField.getText(), 
 																	   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
 																	   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-											 titleField.getText()),
+											 titleField.getText(),
+											 rsvtiCheckbox.selectedProperty().get()),
 								false,
 								null);
 						} catch(Exception e) {
@@ -160,6 +198,9 @@ public class AddEmployeesToFirmController {
 		authorizationNumberField.setText(employee.getAuthorization().getAuthorizationNumber());
 		authorizationObtainigDate.setValue(new java.sql.Date(employee.getAuthorization().getObtainingDate().getTime()).toLocalDate());
 		authorizationDueDate.setValue(new java.sql.Date(employee.getAuthorization().getDueDate().getTime()).toLocalDate());
+		birthDate.setValue(new java.sql.Date(employee.getBirthDate().getTime()).toLocalDate());
+		birthCityField.setText(employee.getBirthCity());
+		homeRegionField.setText(employee.getHomeRegion());
 	}
 	
 	public void setIsUpdate(boolean isUpdate) {

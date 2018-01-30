@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.controller.EmployeeOverviewController">
+<AnchorPane maxWidth="-Infinity" prefHeight="500.0" prefWidth="2000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.controller.EmployeeOverviewController">
    <children>
-      <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="1000.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="Nume" />
-          <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Prenume" />
-            <TableColumn prefWidth="531.0" text="Carte de identitate">
+          <TableColumn fx:id="firstNameColumn" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" resizable="false" text="Nume" />
+          <TableColumn fx:id="lastNameColumn" maxWidth="225.0" prefWidth="215.0" resizable="false" text="Prenume" />
+            <TableColumn fx:id="birthDateColumn" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Data nașterii" />
+            <TableColumn fx:id="birthCityColumn" maxWidth="100.0" minWidth="0.0" prefWidth="100.0" resizable="false" text="Localitate" />
+            <TableColumn fx:id="homeAddressColumn" maxWidth="350.0" minWidth="0.0" prefWidth="350.0" resizable="false" text="Adresă" />
+            <TableColumn fx:id="homeRegionColumn" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Județ" />
+            <TableColumn maxWidth="300.0" prefWidth="300.0" resizable="false" text="Carte de identitate">
                <columns>
-                  <TableColumn fx:id="idCodeColumn" prefWidth="89.0" text="Serie" />
-                  <TableColumn fx:id="idNumberColumn" prefWidth="224.0" text="Număr" />
-                  <TableColumn fx:id="personalIdentificationNumberColumn" prefWidth="75.0" text="CNP" />
+                  <TableColumn fx:id="idCodeColumn" maxWidth="50.0" prefWidth="50.0" resizable="false" text="Serie" />
+                  <TableColumn fx:id="idNumberColumn" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Număr" />
+                  <TableColumn fx:id="personalIdentificationNumberColumn" maxWidth="150.0" prefWidth="150.0" resizable="false" text="CNP" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="titleColumn" prefWidth="343.0" text="Titlu" />
-            <TableColumn fx:id="authorizationColumn" prefWidth="375.0" text="Autorizatie">
+            <TableColumn fx:id="titleColumn" maxWidth="175.0" prefWidth="175.0" resizable="false" text="Titlu" />
+            <TableColumn fx:id="authorizationColumn" maxWidth="370.0" prefWidth="370.0" resizable="false" text="Autorizatie">
             	<columns>
-		            <TableColumn fx:id="authorizationNumberColumn" prefWidth="116.0" text="Nr autorizație" />
-		            <TableColumn fx:id="authorizationObtainingDateColumn" minWidth="0.0" prefWidth="144.0" text="Data obținerii" />
-		            <TableColumn fx:id="authorizationDueDateColumn" prefWidth="115.0" text="Data scadentă" />
+		            <TableColumn fx:id="authorizationNumberColumn" maxWidth="120.0" prefWidth="120.0" resizable="false" text="Nr autorizație" />
+		            <TableColumn fx:id="authorizationObtainingDateColumn" maxWidth="140.0" minWidth="0.0" prefWidth="140.0" resizable="false" text="Data obținerii" />
+		            <TableColumn fx:id="authorizationDueDateColumn" maxWidth="110.0" prefWidth="110.0" resizable="false" text="Data scadentă" />
 	        	</columns>
 	        </TableColumn>
+            <TableColumn fx:id="isRsvtiColumn" maxWidth="50.0" prefWidth="50.0" resizable="false" text="RSVTI" />
         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </TableView>
    </children>
 </AnchorPane>

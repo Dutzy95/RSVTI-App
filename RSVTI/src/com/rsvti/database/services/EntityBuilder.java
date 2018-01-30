@@ -73,12 +73,17 @@ public class EntityBuilder {
 						employeeParameters.get(2),
 						employeeParameters.get(3),
 						employeeParameters.get(4),
+						new Date(Long.parseLong(employeeParameters.get(5))),
+						employeeParameters.get(6),
+						employeeParameters.get(7),
+						employeeParameters.get(8),
 						new EmployeeAuthorization(
 								employeeAuthorisationParameters.get(0),
 								new Date(Long.parseLong(employeeAuthorisationParameters.get(1))),
 								new Date(Long.parseLong(employeeAuthorisationParameters.get(2)))
 								),
-						rigEmployeeNode.getAttributes().getNamedItem("title").getTextContent()
+						rigEmployeeNode.getAttributes().getNamedItem("title").getTextContent(),
+						Boolean.parseBoolean(employeeParameters.get(9))
 						));
 			}
 		}
@@ -142,12 +147,17 @@ public class EntityBuilder {
 				employeeParameters.get(2),
 				employeeParameters.get(3),
 				employeeParameters.get(4),
+				new Date(Long.parseLong(employeeParameters.get(5))),
+				employeeParameters.get(6),
+				employeeParameters.get(7),
+				employeeParameters.get(8),
 				new EmployeeAuthorization(
 						employeeAuthorsationParameters.get(0),
 						new Date(Long.parseLong(employeeAuthorsationParameters.get(1))),
 						new Date(Long.parseLong(employeeAuthorsationParameters.get(2)))
 						),
-				node.getAttributes().getNamedItem("title").getTextContent()
+				node.getAttributes().getNamedItem("title").getTextContent(),
+				Boolean.parseBoolean(employeeParameters.get(9))
 				);
 	}
 	

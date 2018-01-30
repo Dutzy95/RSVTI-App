@@ -1,5 +1,7 @@
 package com.rsvti.database.entities;
 
+import java.util.Date;
+
 public class Employee {
 	
 	private String firstName;
@@ -9,9 +11,14 @@ public class Employee {
 	private String personalIdentificationNumber;
 	private EmployeeAuthorization authorization;
 	private String title;
+	private Date birthDate;
+	private String birthCity;
+	private String homeAddress;
+	private String homeRegion;
+	private boolean isRsvti;
 	
-	public Employee(String firstName, String lastName, String idCode, String idNumber, String personalIdentificationNumber, 
-			EmployeeAuthorization authorization, String title) {
+	public Employee(String firstName, String lastName, String idCode, String idNumber, String personalIdentificationNumber, Date birthDate, 
+			String birthCity, String homeAddress, String homeRegion, EmployeeAuthorization authorization, String title, boolean isRsvti) {
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setIdCode(idCode);
@@ -19,6 +26,11 @@ public class Employee {
 		this.setPersonalIdentificationNumber(personalIdentificationNumber);
 		this.setAuthorization(authorization);
 		this.setTitle(title);
+		this.setBirthDate(birthDate);
+		this.setBirthCity(birthCity);
+		this.setHomeRegion(homeRegion);
+		this.setHomeAddress(homeAddress);
+		this.setRsvti(isRsvti);
 	}
 
 	public String getFirstName() {
@@ -86,6 +98,46 @@ public class Employee {
 				((Employee) o).getIdNumber().equals(idNumber) &&
 				((Employee) o).getPersonalIdentificationNumber().equals(personalIdentificationNumber) &&
 				((Employee) o).getTitle().equals(title);
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public String getBirthCity() {
+		return birthCity;
+	}
+
+	public void setBirthCity(String birthCity) {
+		this.birthCity = birthCity;
+	}
+
+	public String getHomeRegion() {
+		return homeRegion;
+	}
+
+	public void setHomeRegion(String homeRegion) {
+		this.homeRegion = homeRegion;
+	}
+
+	public boolean isRsvti() {
+		return isRsvti;
+	}
+
+	public void setRsvti(boolean isRsvti) {
+		this.isRsvti = isRsvti;
+	}
+
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
 	}
 	
 }

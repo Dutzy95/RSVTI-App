@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
@@ -25,19 +26,16 @@ public class Data {
 			new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
 			new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME).delete();
 			
-			Calendar date = Calendar.getInstance();
-			date.set(2017, 10, 15);
+			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
+					new EmployeeAuthorization("123948273", addFromTodayDate(0, 0, 20), addFromTodayDate(0, 0, 25)), "manevrant", true);
+			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", getDate(1969, 2, 24), "Timisoara", "Adresa2", "Timis",
+					new EmployeeAuthorization("56732894", addFromTodayDate(0, 1, 0), addFromTodayDate(0, 1, 5)), "macaragist", false);
+			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", getDate(1980, 5, 16), "Oradea", "Adresa3", "Bihor",
+					new EmployeeAuthorization("2357234345", addFromTodayDate(0, 0, 15), addFromTodayDate(0, 0, 17)), "manevrant", true);
+			Employee employee4 = new Employee("FirstName4", "LastName4", "AR", "125489", "1234567890123", getDate(1950, 12, 4), "Arad", "Adresa4", "Arad",
+					new EmployeeAuthorization("254965846", addFromTodayDate(0, 1, 15), addFromTodayDate(0, 1, 20)), "legător sarcină", false);
 			
-			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", 
-					new EmployeeAuthorization("123948273", date.getTime(), date.getTime()), "stivuitorist");
-			date.set(2017, 10, 16);
-			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", 
-					new EmployeeAuthorization("56732894", date.getTime(), date.getTime()), "macaragist");
-			date.set(2017, 11, 21);
-			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", 
-					new EmployeeAuthorization("2357234345", date.getTime(), date.getTime()), "manevrant");
-			
-			Rig liftingRig1 = new Rig("macara", date.getTime(), "de ridicat");
+			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), "de ridicat");
 			liftingRig1.setAuthorizationExtension(0);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
@@ -46,44 +44,26 @@ public class Data {
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
 					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1), Arrays.asList(employee1,employee2)), false);
 			
-			date.set(2017, 12, 25);
-			Rig liftingRig2 = new Rig("stivuitor", date.getTime(), "de ridicat");
+			Rig liftingRig2 = new Rig("stivuitor", addFromTodayDate(0, 11, 12), "de ridicat");
 			liftingRig2.setAuthorizationExtension(1);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
-			date.set(2018, 5, 30);
-			Rig pressureRig = new Rig("cazan", date.getTime(), "sub presiune");
+			Rig pressureRig = new Rig("cazan", addFromTodayDate(1, 2, 3), "sub presiune");
 			pressureRig.setAuthorizationExtension(1);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			
 			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3)), false);
+					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4)), false);
 			
-//			EntityBuilder.buildFirmFromXml((Node) DBServices.executeXmlQuery("//firma[@id = 0]", XPathConstants.NODE));
-//			EntityBuilder.buildRigFromXml((Node) DBServices.executeXmlQuery("//instalatie[parent::firma[@id = 0]]", XPathConstants.NODE));
-//			EntityBuilder.buildEmployeeFromXml((Node) DBServices.executeXmlQuery("//angajat[@title = \"macaragist\" and parent::instalatie[parent::firma[@id = 0]]]", XPathConstants.NODE));
-			
-//			DBServices.deleteEntry(new Firm("CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
-//					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-//					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig)));
-			
-//			DBServices.updateEntry(new Firm("ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
-//					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
-//					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1)),
-//						new Firm("XYZ123", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
-//						"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-//						new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig1,pressureRig)));
-//			
 			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
 			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));
 			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima", "m"));
 			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim", "m3"));
 			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim", "m3"));
 			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima", "bar"));
-//			DBServices.deleteEntry(new RigParameter("de ridicat", "ceva"));
 			
 			DBServices.saveEntry(new TestQuestion("MLorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tincidunt lacus ac enim vestibulum, in porta nulla bibendum. Mauris malesuada sodales cursus.", Arrays.asList("raspuns11", "raspuns12", "raspuns13"),"manevrant"));
 			DBServices.saveEntry(new TestQuestion("MDonec condimentum, orci non fermentum rutrum, quam nisl maximus ante, id finibus nibh risus eget felis. Curabitur fermentum metus dignissim lectus blandit ullamcorper.", Arrays.asList("raspuns21", "raspuns22", "raspuns23"),"manevrant"));
@@ -116,5 +96,20 @@ public class Data {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Date getDate(int year, int month, int day) {
+		Calendar date = Calendar.getInstance();
+		date.clear();
+		date.set(year, month-1, day);
+		return date.getTime();
+	}
+	
+	public static Date addFromTodayDate(int year, int month, int day) {
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.YEAR, year);
+		date.add(Calendar.MONTH, month);
+		date.add(Calendar.DATE, day);
+		return date.getTime();
 	}
 }

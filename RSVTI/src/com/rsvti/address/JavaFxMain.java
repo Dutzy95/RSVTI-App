@@ -197,21 +197,23 @@ public class JavaFxMain extends Application {
 	        loader.setLocation(JavaFxMain.class.getResource("view/EmployeeOverview.fxml"));
 	        AnchorPane employeeOverview = (AnchorPane) loader.load();
 
-	        Tab tab;
+	        Stage stage = new Stage();
 	        if(firmName == null) {
-	        	tab = new Tab("Personal deservent");
+	        	stage.setTitle("Personal deservent");
 	        } else {
-	        	tab = new Tab("Personal deservent - " + firmName);
+	        	stage.setTitle("Personal deservent - " + firmName);
 	        }
-            tab.setContent(employeeOverview);
-            tab.setClosable(true);
-            
-            tabPane.getTabs().add(tab);
-            tabPane.getSelectionModel().select(tab);
-
+	        stage.initModality(Modality.WINDOW_MODAL);
+	        stage.initOwner(primaryStage);
+	        stage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+	        Scene scene = new Scene(employeeOverview);
+	        stage.setScene(scene);
+	        
 	        // Set the person into the controller.
 	        EmployeeOverviewController controller = loader.getController();
 	        controller.setEmployeeList(employeeList);
+	        
+	        stage.showAndWait();
 
 	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);

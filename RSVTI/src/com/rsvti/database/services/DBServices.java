@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.text.html.parser.Entity;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -244,6 +245,26 @@ public class DBServices {
 			Element personalIdentificationNumber = document.createElement("CNP");
 			personalIdentificationNumber.appendChild(document.createTextNode(employeeIndex.getPersonalIdentificationNumber()));
 			employee.appendChild(personalIdentificationNumber);
+			
+			Element birthDate = document.createElement("data_nasterii");
+			birthDate.appendChild(document.createTextNode(employeeIndex.getBirthDate().getTime() + ""));
+			employee.appendChild(birthDate);
+			
+			Element birthCity = document.createElement("localitate_nastere");
+			birthCity.appendChild(document.createTextNode(employeeIndex.getBirthCity()));
+			employee.appendChild(birthCity);
+			
+			Element homeAddress = document.createElement("adresa_domiciliu");
+			homeAddress.appendChild(document.createTextNode(employeeIndex.getHomeAddress()));
+			employee.appendChild(homeAddress);
+			
+			Element homeRegion = document.createElement("judet_domiciliu");
+			homeRegion.appendChild(document.createTextNode(employeeIndex.getHomeRegion()));
+			employee.appendChild(homeRegion);
+			
+			Element isRsvti = document.createElement("este_rsvti");
+			isRsvti.appendChild(document.createTextNode(employeeIndex.isRsvti() + ""));
+			employee.appendChild(isRsvti);
 			
 			EmployeeAuthorization authorization = employeeIndex.getAuthorization();
 			Element authorizationElement = document.createElement("autorizatie");
@@ -790,5 +811,10 @@ public class DBServices {
 		e.printStackTrace();
 		Utils.alert(AlertType.ERROR, "Eroare", "A apărut o eroare!", 
 				"Eroarea s-a inregistrat la data de: " + currentDate + ", ora: " + new SimpleDateFormat(Constants.DEFAULT_TIMESTAMP_FORMAT).format(calendar.getTime()));
+	}
+	
+	public static List<Employee> getRsvtiFromFirm(String firmName) {
+		NodeList employees = (NodeList) executeXmlQuery("//firma[nume_firma = '" + firmName + "']/angajat[este_rsvti = 'true']", XPathConstants.NODESET);
+		return EntityBuilder.buildEmployeeListFromXml(employees);
 	}
 }
