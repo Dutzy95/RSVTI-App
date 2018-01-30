@@ -34,6 +34,7 @@
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#handleGenerateTest" text="Examinare personal deservent" />
                   <MenuItem mnemonicParsing="false" onAction="#handleGenerateTable" text="Tabel utilaje" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleGenerateCertificate" text="Adeverință angajat" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Ajutor">

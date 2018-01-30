@@ -2,9 +2,11 @@ package com.rsvti.generator;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -15,12 +17,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.LineSpacingRule;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.VerticalAlign;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
 //import org.docx4j.Docx4J;
 //import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
@@ -90,10 +96,167 @@ public class Generator {
 		}
 	}
 	
+	public static XWPFRun createRunForCertificateParagraph(XWPFParagraph paragraph, String text, boolean bold) {
+		XWPFRun run = paragraph.createRun();
+		run.setText(text);
+		run.setBold(bold);
+		run.setFontSize(14);
+		run.setFontFamily(Constants.GENERATED_FILE_FONT_FAMILY);
+		return run;
+	}
+	
+	public static XWPFParagraph createParagraphForCertificate(XWPFDocument document, ParagraphAlignment alignment) {
+		XWPFParagraph paragraph = document.createParagraph();
+		paragraph.setAlignment(alignment);
+		paragraph.setSpacingAfter(0);
+		paragraph.setSpacingBefore(0);
+		paragraph.setSpacingLineRule(LineSpacingRule.EXACT);
+		return paragraph;
+	}
+	
+	public static void generateOneCertificate(XWPFDocument document, EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4) {
+		SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
+		XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
+		XWPFRun run;
+		createRunForCertificateParagraph(paragraph, "   " + employee.getFirmName(), false);
+		document.createParagraph();	//empty line
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+		createRunForCertificateParagraph(paragraph, "ADEVERINȚĂ", true);
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+		createRunForCertificateParagraph(paragraph, "Nr ", false);
+		createRunForCertificateParagraph(paragraph, registrationNumber + "", false);
+		createRunForCertificateParagraph(paragraph, " / ", false);
+		createRunForCertificateParagraph(paragraph, format.format(registrationDate), false);
+		document.createParagraph();	//empty line
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
+		run = createRunForCertificateParagraph(paragraph, "", false);
+		run.addTab();	//indent for paragraph beginning
+		createRunForCertificateParagraph(paragraph, "Prin prezenta se adeverește că dl ", false);
+		createRunForCertificateParagraph(paragraph, employee.getEmployee().getLastName() + " " + employee.getEmployee().getFirstName(), true);
+		createRunForCertificateParagraph(paragraph, " născut la data de ", false);
+		createRunForCertificateParagraph(paragraph, "01.01.2001", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", domiciliat în localitatea ", false);
+		createRunForCertificateParagraph(paragraph, "Localitate", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", județ ", false);
+		createRunForCertificateParagraph(paragraph, "Judet", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", CI. seria ", false);
+		createRunForCertificateParagraph(paragraph, "SR", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", nr. ", false);
+		createRunForCertificateParagraph(paragraph, "123456", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", CNP. ", false);
+		createRunForCertificateParagraph(paragraph, "1234567890123", true);//TODO
+		createRunForCertificateParagraph(paragraph, ", a fost instruit ca ", false);
+		String employeeTitle = employee.getEmployee().getTitle();
+		createRunForCertificateParagraph(paragraph, employeeTitle.toUpperCase(), false);
+		int cnt = 0;
+		if (employeeTitle.equals("manevrant")) {
+			createRunForCertificateParagraph(paragraph, " să deservească mecanismele de ridicat: ", false);
+			if(choice1) {
+				createRunForCertificateParagraph(paragraph, "transpalet hidraulic", false);
+				cnt++;
+			}
+			if(choice2) {
+				createRunForCertificateParagraph(paragraph, cnt == 1 ? ", stivuitor manual" : " stivuitor manual", false);
+				cnt++;
+			}
+			if(choice3) {
+				createRunForCertificateParagraph(paragraph, cnt >= 1 ? ", palan manual ( Q" : " palan manual ( Q", false);
+				run = createRunForCertificateParagraph(paragraph, "max", false);
+				run.setSubscript(VerticalAlign.SUBSCRIPT);
+				createRunForCertificateParagraph(paragraph, " <= 1t )", false);
+				cnt++;
+			}
+			if(choice4) {
+				createRunForCertificateParagraph(paragraph, cnt >=1 ? ",  electropalan ( Q" : " electropalan ( Q", false);
+				run = createRunForCertificateParagraph(paragraph, "max", false);
+				run.setSubscript(VerticalAlign.SUBSCRIPT);
+				createRunForCertificateParagraph(paragraph, " <= 1t )", false);
+			}
+			createRunForCertificateParagraph(paragraph, ".", false);
+		} else {
+			createRunForCertificateParagraph(paragraph, ", să deservească mașinile de ridicat stipulate în procesul verbal.", false);
+		}
+		document.createParagraph();	//empty line
+		document.createParagraph();	//empty line
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		run = createRunForCertificateParagraph(paragraph, "", false);
+		createRunForCertificateParagraph(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
+		run = createRunForCertificateParagraph(paragraph, "", false);
+		createRunForCertificateParagraph(paragraph, getStringOfSpaces(18) + "RSVTI", true);
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		run = createRunForCertificateParagraph(paragraph, "", false);
+		String directorName = "Nume Prenume1 Prenume2";//TODO
+		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
+		run = createRunForCertificateParagraph(paragraph, "", false);
+		String rsvtiName = "Bogdan Radu Victor";//TODO
+		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-rsvtiName.length())/2) + rsvtiName + getStringOfSpaces((82/2-rsvtiName.length())/2), false);
+		document.createParagraph();	//empty line
+		document.createParagraph();	//empty line
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		createRunForCertificateParagraph(paragraph, "Eliberată la data de " + format.format(issueDate), false);
+		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		createRunForCertificateParagraph(paragraph, "Valabil un an de la data emiterii.", false);
+	}
+	
+	public static File generateCertificate(EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4) {
+		File file = null;
+		try {
+			String jarFilePath = Utils.getJarFilePath();
+			
+			XWPFDocument document = new XWPFDocument();
+			CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
+		    CTPageMar pageMar = sectPr.addNewPgMar();
+		    pageMar.setLeft(BigInteger.valueOf(720L));
+		    pageMar.setTop(BigInteger.valueOf(720L));
+		    pageMar.setRight(BigInteger.valueOf(720L));
+		    pageMar.setBottom(BigInteger.valueOf(720L));
+			
+			String currentDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(Calendar.getInstance().getTime());
+			file = new File(jarFilePath + "docs\\adeverințe\\" + currentDate);
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\adeverințe\\" + currentDate + "\\Adeverință - " + employee.getEmployee().getLastName() + " " + 
+					employee.getEmployee().getFirstName() + ".docx");
+			FileOutputStream output = new FileOutputStream(file);
+			
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4);
+			document.createParagraph();
+			document.createParagraph();
+			document.createParagraph();
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4);
+			
+			document.write(output);
+			output.close();
+			
+			if(!DBServices.getBackupPath().isEmpty()) {
+				File backupFile = new File(DBServices.getBackupPath() + "\\adeverințe");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\adeverințe\\" + currentDate);
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\adeverințe\\" + currentDate + "\\Adeverință - " + employee.getEmployee().getLastName() + " " + 
+					employee.getEmployee().getFirstName() + ".docx");
+				FileOutputStream backupOutput = new FileOutputStream(backupFile);
+				document.write(backupOutput);
+			}
+			
+			document.close();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+		return file;
+	}
+	
 	private static void addTabs(XWPFRun run, int nrOfTabs) {
 		for(int i = 0; i < nrOfTabs; i++) {
 			run.addTab();
 		}
+	}
+	
+	private static String getStringOfSpaces(int nrOfSpaces) {
+		String tmp = "";
+		for(int i = 0; i < nrOfSpaces*1.5; i++) {
+			tmp += " ";
+		}
+		return tmp;
 	}
 	
 	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails, boolean generatePdf) {
@@ -209,23 +372,6 @@ public class Generator {
 			}
 			
 			document.close();
-			
-			//TODO: Generate PDF if needed
-			if(generatePdf) {
-				//generate PDF
-//				jarFilePath = Utils.getJarFilePath();
-//				file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName());
-//				file.mkdir();
-//				file = new File(jarFilePath + "docs\\teste\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
-//						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".docx");
-//				
-//				WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(file);
-//				file = new File(jarFilePath + "docs\\pdf\\" + employeeDetails.getFirmName());
-//				file.mkdir();
-//				file = new File(jarFilePath + "docs\\pdf\\" + employeeDetails.getFirmName() + "\\" + "Examinare " + employeeDetails.getEmployee().getTitle() 
-//						+ " - " + employeeDetails.getEmployee().getLastName() + " " + employeeDetails.getEmployee().getFirstName() + ".pdf");
-//				Docx4J.toPDF(wordMLPackage, new FileOutputStream(file));
-			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();

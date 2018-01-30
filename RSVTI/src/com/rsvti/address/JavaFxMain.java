@@ -11,6 +11,7 @@ import com.rsvti.address.controller.AddTestQuestionController;
 import com.rsvti.address.controller.DueDateOverviewController;
 import com.rsvti.address.controller.EmployeeOverviewController;
 import com.rsvti.address.controller.FirmOverviewController;
+import com.rsvti.address.controller.GenerateCertificateController;
 import com.rsvti.address.controller.GenerateTableController;
 import com.rsvti.address.controller.GenerateTestController;
 import com.rsvti.address.controller.HomeController;
@@ -470,6 +471,27 @@ public class JavaFxMain extends Application {
 	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }
+	}
+	
+	public void generateCertificate() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(JavaFxMain.class.getResource("view/GenerateCertificate.fxml"));
+			AnchorPane generateCertificate = (AnchorPane) loader.load();
+			
+			Tab generateCertificateTab = new Tab("Generează adeverință angajat");
+			generateCertificateTab.setContent(generateCertificate);
+			generateCertificateTab.setClosable(true);
+			
+			tabPane.getTabs().add(generateCertificateTab);
+			tabPane.getSelectionModel().select(generateCertificateTab);
+			
+			GenerateCertificateController generateCertificateController = loader.getController();
+			generateCertificateController.setJavaFxMain(this);
+			
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	public JavaFxMain() {

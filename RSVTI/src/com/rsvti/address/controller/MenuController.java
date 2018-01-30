@@ -104,6 +104,15 @@ public class MenuController {
 		}
 	}
 	
+	@FXML
+	private void handleGenerateCertificate() {
+		try {
+			javaFxMain.generateCertificate();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
 	}

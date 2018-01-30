@@ -25,6 +25,7 @@ public class Constants {
 	public static final String JAR_FILE_NAME = "RSVTIApp.jar";
 	
 	public static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy";
+	public static final String GENERATED_FILE_DATE_FORMAT = "dd.MM.yyyy";
 	public static final String DEFAULT_TIMESTAMP_FORMAT = "HH:mm:ss";
 	public static final String ERRLOG_TIMESTAMP_FORMAT = "HH.mm.ss.SSS";
 	public static final Date LOW_DATE = new Date(0);

@@ -80,9 +80,9 @@ public class GenerateTestController {
 			
 			String bodyMessage;
 			if(DBServices.getBackupPath().equals("")) {
-				bodyMessage = "Fisierele se pot găsi in docs\\teste.\nDoriți să vizualizați fișierele generate?";
+				bodyMessage = "Fișierele se pot găsi in docs\\teste.\nDoriți să vizualizați fișierele generate?";
 			} else {
-				bodyMessage = "Fisierele se pot găsi in docs\\teste. Sau în " + DBServices.getBackupPath() + "\\teste\nDoriți să vizualizați fișierele generate?";
+				bodyMessage = "Fișierele se pot găsi in docs\\teste. Sau în " + DBServices.getBackupPath() + "\\teste\nDoriți să vizualizați fișierele generate?";
 			}
 			
 			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Test", "Generararea s-a terminat cu succes", bodyMessage);
