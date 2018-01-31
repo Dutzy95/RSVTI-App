@@ -32,6 +32,5 @@
          </children>
       </GridPane>
       <Button fx:id="generateButton" layoutX="917.0" layoutY="429.0" mnemonicParsing="false" onAction="#handleGenerate" text="Generează" />
-      <CheckBox fx:id="generatePdf" layoutX="785.0" layoutY="379.0" mnemonicParsing="false" text="Generează copie PDF" />
    </children>
 </AnchorPane>

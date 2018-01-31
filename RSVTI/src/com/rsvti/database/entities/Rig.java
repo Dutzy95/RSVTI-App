@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.rsvti.common.Constants;
+import com.rsvti.database.services.DBServices;
+
 public class Rig{
 
 	private String rigName;
@@ -76,16 +79,24 @@ public class Rig{
 	}
 	
 	public static Date getDueDate(Date revisionDate, int authorizationExtension) {
-		//TODO take all vacation date into consideration (both fixed and variable)
+		//TODO take all vacation dates into consideration (both fixed and variable)
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(revisionDate);
 		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
-		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
-		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
-		}
-		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);		//only done the first time
+		List<Date> variableDates = DBServices.getVariableVacationDates();
+		while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
+				|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
+				|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+				|| variableDates.contains(calendar.getTime())) {
+			if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+					|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
+					|| variableDates.contains(calendar.getTime())) {
+				calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+			}
+			if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+				calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+			}
 		}
 		return calendar.getTime();
 	}

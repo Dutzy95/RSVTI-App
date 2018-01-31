@@ -10,15 +10,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.tree.VariableHeightLayoutCache;
-
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Utils;
 import com.rsvti.database.services.DBServices;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
@@ -59,7 +55,6 @@ public class SettingsController {
 	private HomeController homeController;
 	
 	private String backupPath;
-	private Set<Date> variableDates;
 	
 	@FXML
 	private void initialize() {
@@ -67,7 +62,6 @@ public class SettingsController {
 			Utils.setDisabledDaysForDatePicker(datePicker);
 			Utils.setDisplayFormatForDatePicker(datePicker);
 			datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
-			variableDates = new HashSet<Date>(DBServices.getVariableVacationDates());
 			filePathField.setText(DBServices.getBackupPath());
 			homeDateIntervalUnitComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("zile", "luni", "ani")));
 			homeDateIntervalField.setText(DBServices.getHomeDateDisplayInterval().split(" ")[0]);
@@ -130,7 +124,7 @@ public class SettingsController {
 					//refresh settings stage in real time
 					Utils.setDisabledDaysForDatePicker(datePicker);
 					Utils.setDisplayFormatForDatePicker(datePicker);
-					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
+					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
 					datesListView.refresh();
 				} catch (Exception e) {
 					DBServices.saveErrorLogEntry(e);
@@ -163,8 +157,9 @@ public class SettingsController {
 	private void handleAddDate() {
 		try {
 			if(datePicker.getValue() != null) {
-				variableDates.add(java.sql.Date.valueOf(datePicker.getValue()));
-				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
+				DBServices.saveEntry(java.sql.Date.valueOf(datePicker.getValue()));
+				datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+				Utils.setDisabledDaysForDatePicker(datePicker);
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -177,8 +172,9 @@ public class SettingsController {
 			String selectedItem = datesListView.getSelectionModel().getSelectedItem();
 			if(selectedItem != null) {
 				try {
-					variableDates.remove(dateFormat.parse(datesListView.getSelectionModel().getSelectedItem()));
-					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(new ArrayList<Date>(variableDates))));
+					DBServices.deleteEntry(dateFormat.parse(datesListView.getSelectionModel().getSelectedItem()));
+					datesListView.setItems(FXCollections.observableArrayList(datesToStrings(DBServices.getVariableVacationDates())));
+					Utils.setDisabledDaysForDatePicker(datePicker);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -220,11 +216,6 @@ public class SettingsController {
 			//save back-up path
 			if(backupPath != null) {
 				DBServices.saveBackupPath(backupPath);	
-			}
-			//save the variable dates added
-			variableDates.removeAll(DBServices.getVariableVacationDates());
-			for(Date index : variableDates) {
-				DBServices.saveEntry(index);
 			}
 			//set home date interval for due dates' graph
 			try {

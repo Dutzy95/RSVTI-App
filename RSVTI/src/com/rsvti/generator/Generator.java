@@ -567,7 +567,7 @@ public class Generator {
 		return file;
 	}
 	
-	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails, boolean generatePdf) {
+	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();

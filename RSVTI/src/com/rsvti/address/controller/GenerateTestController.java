@@ -45,8 +45,6 @@ public class GenerateTestController {
 	
 	@FXML
 	private TextField numberOfQuestionsField;
-	@FXML
-	private CheckBox generatePdf;
 	
 	@FXML
 	private Button generateButton;
@@ -75,7 +73,7 @@ public class GenerateTestController {
 			List<EmployeeDueDateDetails> selection = employeeTable.getSelectionModel().getSelectedItems();
 			List<File> files = new ArrayList<File>();
 			for(EmployeeDueDateDetails index : selection) {
-				files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index, generatePdf.isSelected()));
+				files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index));
 			}
 			
 			String bodyMessage;
