@@ -84,8 +84,8 @@
                         <Label text="Serie buletin" GridPane.rowIndex="2" />
                         <Label text="Numar buletin" GridPane.rowIndex="3" />
                         <Label text="Numar telefon" GridPane.rowIndex="4" />
-                        <Label fx:id="adminFirstNameLabel" text="Label" GridPane.columnIndex="1" />
-                        <Label fx:id="adminLastNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="adminLastNameLabel" text="Label" GridPane.columnIndex="1" />
+                        <Label fx:id="adminFirstNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="adminIdCodeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="adminIdNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="adminPhoneNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -96,9 +96,10 @@
                         <Font size="29.0" />
                      </font>
                   </Label>
-                  <Button fx:id="rigOverviewButton" layoutX="398.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje" />
+                  <Button fx:id="rigOverviewButton" layoutX="329.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRigOverview" prefWidth="100.0" text="Utilaje" />
                   <Button fx:id="deleteFirmButton" layoutX="680.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleDeleteFirm" prefWidth="100.0" text="Șterge" />
-                  <Button fx:id="employeeOverviewButton" layoutX="516.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenEmployeeOverview" text="Personal deservent" />
+                  <Button fx:id="employeeOverviewButton" layoutX="447.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenEmployeeOverview" text="Personal deservent" />
+                  <Button fx:id="rsvtiOverviewButton" layoutX="608.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleOpenRsvtiOverview" text="RSVTI" />
                </children></AnchorPane>
         </items>
       </SplitPane>

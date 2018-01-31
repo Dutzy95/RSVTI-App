@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import com.rsvti.address.JavaFxMain;
+import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
@@ -162,6 +164,8 @@ public class Utils {
 			file = new File(jarFilePath + "docs\\adeverințe");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\procese verbale");
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\procese verbale\\rezultate examinare");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste");
 			file.mkdir();
@@ -368,5 +372,13 @@ public class Utils {
 				DBServices.saveErrorLogEntry(e);
 			}
 		});
+	}
+	
+	public static List<String> getEmployeeNames(List<Employee> employees) {
+		List<String> employeeNames = new ArrayList<String>();
+		for(Employee index : employees) {
+			employeeNames.add(index.getLastName() + " " + index.getFirstName());
+		}
+		return employeeNames;
 	}
 }

@@ -113,6 +113,15 @@ public class MenuController {
 		}
 	}
 	
+	@FXML
+	public void handleGenerateTestResultsReport() {
+		try {
+			javaFxMain.generateTestResultsReport();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;
 	}

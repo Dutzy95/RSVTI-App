@@ -14,6 +14,7 @@ import com.rsvti.address.controller.FirmOverviewController;
 import com.rsvti.address.controller.GenerateCertificateController;
 import com.rsvti.address.controller.GenerateTableController;
 import com.rsvti.address.controller.GenerateTestController;
+import com.rsvti.address.controller.GenerateTestResultsReportController;
 import com.rsvti.address.controller.HomeController;
 import com.rsvti.address.controller.MenuController;
 import com.rsvti.address.controller.RigOverviewController;
@@ -490,6 +491,27 @@ public class JavaFxMain extends Application {
 			
 			GenerateCertificateController generateCertificateController = loader.getController();
 			generateCertificateController.setJavaFxMain(this);
+			
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	public void generateTestResultsReport() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(JavaFxMain.class.getResource("view/GenerateTestResultsReport.fxml"));
+			AnchorPane generateTestResultsReport = (AnchorPane) loader.load();
+			
+			Tab generateTestResultsReportTab = new Tab("Generează proces verbal pentru rezultate examinare");
+			generateTestResultsReportTab.setContent(generateTestResultsReport);
+			generateTestResultsReportTab.setClosable(true);
+			
+			tabPane.getTabs().add(generateTestResultsReportTab);
+			tabPane.getSelectionModel().select(generateTestResultsReportTab);
+			
+			GenerateTestResultsReportController generateTestResultsReportController = loader.getController();
+			generateTestResultsReportController.setJavaFxMain(this);
 			
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);

@@ -58,6 +58,8 @@ public class FirmOverviewController {
 	private Button employeeOverviewButton;
 	@FXML
 	private Button deleteFirmButton;
+	@FXML
+	private Button rsvtiOverviewButton;
 	
 	private JavaFxMain javaFxMain;
 	
@@ -75,6 +77,7 @@ public class FirmOverviewController {
 			rigOverviewButton.setDisable(true);
 			deleteFirmButton.setDisable(true);
 			employeeOverviewButton.setDisable(true);
+			rsvtiOverviewButton.setDisable(true);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -85,6 +88,7 @@ public class FirmOverviewController {
 			rigOverviewButton.setDisable(false);
 			deleteFirmButton.setDisable(false);
 			employeeOverviewButton.setDisable(false);
+			rsvtiOverviewButton.setDisable(false);
 			if(firm != null) {
 				firmNameLabel.setText(firm.getFirmName());
 				registrationNumberLabel.setText(firm.getRegistrationNumber());
@@ -152,6 +156,19 @@ public class FirmOverviewController {
 			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 			if(selectedIndex >= 0 ) {
 				javaFxMain.showEmployeeOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getEmployees());
+			}
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	private void handleOpenRsvtiOverview() {
+		try {
+			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
+			if(selectedIndex >= 0 ) {
+				String firmName = firmTable.getItems().get(selectedIndex).getFirmName();
+				javaFxMain.showEmployeeOverview(firmName, DBServices.getRsvtiFromFirm(firmName));
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);

@@ -817,4 +817,9 @@ public class DBServices {
 		NodeList employees = (NodeList) executeXmlQuery("//firma[nume_firma = '" + firmName + "']/angajat[este_rsvti = 'true']", XPathConstants.NODESET);
 		return EntityBuilder.buildEmployeeListFromXml(employees);
 	}
+	
+	public static String getPersonalIdentificationNumberForEmployee(String lastName, String firstName) {
+		Node personalIdentificationNumberNode = (Node) executeXmlQuery("//angajat[nume = '" + firstName + "'][prenume = '" + lastName + "']/CNP", XPathConstants.NODE);
+		return personalIdentificationNumberNode.getTextContent();
+	}
 }

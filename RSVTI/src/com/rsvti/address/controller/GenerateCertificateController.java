@@ -9,7 +9,6 @@ import java.util.Optional;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
@@ -81,7 +80,7 @@ public class GenerateCertificateController {
 			employeeTable.setItems(FXCollections.observableArrayList(getEmployeesByTitle(employees, employeeTitleComboBox.getSelectionModel().getSelectedItem())));
 			employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
 				if(employeeTable.getSelectionModel().getSelectedItem() != null) {
-					rsvtiComboBox.setItems(FXCollections.observableArrayList(getEmployeeNames(
+					rsvtiComboBox.setItems(FXCollections.observableArrayList(Utils.getEmployeeNames(
 							DBServices.getRsvtiFromFirm(employeeTable.getSelectionModel().getSelectedItem().getFirmName()))));
 					rsvtiComboBox.getSelectionModel().select(0);
 				}
@@ -123,14 +122,6 @@ public class GenerateCertificateController {
 		return tmp;
 	}
 	
-	private List<String> getEmployeeNames(List<Employee> employees) {
-		List<String> employeeNames = new ArrayList<String>();
-		for(Employee index : employees) {
-			employeeNames.add(index.getLastName() + " " + index.getFirstName());
-		}
-		return employeeNames;
-	}
-	
 	@FXML
 	private void handleGenerateCertificate() {
 		try {
@@ -139,9 +130,9 @@ public class GenerateCertificateController {
 					&& registrationDate.getValue() !=null && certificateIssueDate != null) {
 				String bodyMessage;
 				if(DBServices.getBackupPath().equals("")) {
-					bodyMessage = "Fișierul se pot găsi in docs\\adeverințe.\nDoriți să vizualizați fișierele generate?";
+					bodyMessage = "Fișierul se poate găsi in docs\\adeverințe.\nDoriți să vizualizați fișierul generat?";
 				} else {
-					bodyMessage = "Fișierul se pot găsi in docs\\adeverințe. Sau în " + DBServices.getBackupPath() + "\\adeverințe\nDoriți să vizualizați fișierele generate?";
+					bodyMessage = "Fișierul se poate găsi in docs\\adeverințe. Sau în " + DBServices.getBackupPath() + "\\adeverințe\nDoriți să vizualizați fișierul generat?";
 				}
 				File file = Generator.generateCertificate(
 						employee, 

@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="employeeTable" layoutX="56.0" layoutY="51.0" prefHeight="700.0" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-          <TableColumn fx:id="firstNameColumn" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" resizable="false" text="Nume" />
-          <TableColumn fx:id="lastNameColumn" maxWidth="225.0" prefWidth="215.0" resizable="false" text="Prenume" />
+          <TableColumn fx:id="lastNameColumn" maxWidth="150.0" minWidth="-Infinity" prefWidth="150.0" resizable="false" text="Nume" />
+          <TableColumn fx:id="firstNameColumn" maxWidth="240.0" prefWidth="240.0" resizable="false" text="Prenume" />
             <TableColumn fx:id="birthDateColumn" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Data nașterii" />
             <TableColumn fx:id="birthCityColumn" maxWidth="100.0" minWidth="0.0" prefWidth="100.0" resizable="false" text="Localitate" />
             <TableColumn fx:id="homeAddressColumn" maxWidth="350.0" minWidth="0.0" prefWidth="350.0" resizable="false" text="Adresă" />
@@ -24,7 +24,7 @@
                   <TableColumn fx:id="personalIdentificationNumberColumn" maxWidth="150.0" prefWidth="150.0" resizable="false" text="CNP" />
                </columns>
             </TableColumn>
-            <TableColumn fx:id="titleColumn" maxWidth="175.0" prefWidth="175.0" resizable="false" text="Titlu" />
+            <TableColumn fx:id="titleColumn" maxWidth="200.0" prefWidth="200.0" resizable="false" text="Titlu" />
             <TableColumn fx:id="authorizationColumn" maxWidth="370.0" prefWidth="370.0" resizable="false" text="Autorizatie">
             	<columns>
 		            <TableColumn fx:id="authorizationNumberColumn" maxWidth="120.0" prefWidth="120.0" resizable="false" text="Nr autorizație" />
@@ -32,7 +32,6 @@
 		            <TableColumn fx:id="authorizationDueDateColumn" maxWidth="110.0" prefWidth="110.0" resizable="false" text="Data scadentă" />
 	        	</columns>
 	        </TableColumn>
-            <TableColumn fx:id="isRsvtiColumn" maxWidth="50.0" prefWidth="50.0" resizable="false" text="RSVTI" />
         </columns>
          <opaqueInsets>
             <Insets />

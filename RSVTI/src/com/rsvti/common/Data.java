@@ -34,6 +34,10 @@ public class Data {
 					new EmployeeAuthorization("2357234345", addFromTodayDate(0, 0, 15), addFromTodayDate(0, 0, 17)), "manevrant", true);
 			Employee employee4 = new Employee("FirstName4", "LastName4", "AR", "125489", "1234567890123", getDate(1950, 12, 4), "Arad", "Adresa4", "Arad",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 1, 15), addFromTodayDate(0, 1, 20)), "legător sarcină", false);
+			Employee employee5 = new Employee("FirstName5", "LastName5", "AR", "57984", "197846583245", getDate(1955, 9, 3), "Arad", "Adresa5", "Arad",
+					new EmployeeAuthorization("254965846", addFromTodayDate(0, 4, 15), addFromTodayDate(0, 4, 20)), "legător sarcină", true);
+			Employee employee6 = new Employee("FirstName6", "LastName6", "MH", "479465", "13456879546", getDate(1950, 12, 4), "Severin", "Adresa6", "Severin",
+					new EmployeeAuthorization("254965846", addFromTodayDate(0, 2, 10), addFromTodayDate(0, 2, 15)), "manevrant", false);
 			
 			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), "de ridicat");
 			liftingRig1.setAuthorizationExtension(0);
@@ -56,7 +60,7 @@ public class Data {
 			
 			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4)), false);
+					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4, employee5, employee6)), false);
 			
 			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
 			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));

@@ -23,19 +23,30 @@ import org.apache.poi.xwpf.usermodel.VerticalAlign;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell.XWPFVertAlign;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
 //import org.docx4j.Docx4J;
 //import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeTestResults;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
+
+import javafx.scene.control.CheckBox;
 
 public class Generator {
 	
@@ -96,11 +107,20 @@ public class Generator {
 		}
 	}
 	
-	public static XWPFRun createRunForCertificateParagraph(XWPFParagraph paragraph, String text, boolean bold) {
+	private static XWPFRun createRunSize14TimesNR(XWPFParagraph paragraph, String text, boolean bold) {
 		XWPFRun run = paragraph.createRun();
 		run.setText(text);
 		run.setBold(bold);
 		run.setFontSize(14);
+		run.setFontFamily(Constants.GENERATED_FILE_FONT_FAMILY);
+		return run;
+	}
+	
+	private static XWPFRun createRunTimesNR(XWPFParagraph paragraph, String text, boolean bold, int fontSize) {
+		XWPFRun run = paragraph.createRun();
+		run.setText(text);
+		run.setBold(bold);
+		run.setFontSize(fontSize);
 		run.setFontFamily(Constants.GENERATED_FILE_FONT_FAMILY);
 		return run;
 	}
@@ -118,85 +138,83 @@ public class Generator {
 		SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
 		XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
 		XWPFRun run;
-		createRunForCertificateParagraph(paragraph, "   " + employee.getFirmName(), false);
+		createRunSize14TimesNR(paragraph, "   " + employee.getFirmName(), false);
 		document.createParagraph();	//empty line
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
-		createRunForCertificateParagraph(paragraph, "ADEVERINȚĂ", true);
+		createRunSize14TimesNR(paragraph, "ADEVERINȚĂ", true);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
-		createRunForCertificateParagraph(paragraph, "Nr ", false);
-		createRunForCertificateParagraph(paragraph, registrationNumber + "", false);
-		createRunForCertificateParagraph(paragraph, " / ", false);
-		createRunForCertificateParagraph(paragraph, format.format(registrationDate), false);
+		createRunSize14TimesNR(paragraph, "Nr ", false);
+		createRunSize14TimesNR(paragraph, registrationNumber + "", false);
+		createRunSize14TimesNR(paragraph, " / ", false);
+		createRunSize14TimesNR(paragraph, format.format(registrationDate), false);
 		document.createParagraph();	//empty line
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
-		run = createRunForCertificateParagraph(paragraph, "", false);
+		run = createRunSize14TimesNR(paragraph, "", false);
 		run.addTab();	//indent for paragraph beginning
-		createRunForCertificateParagraph(paragraph, "Prin prezenta se adeverește că Dl/D-na ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getLastName() + " " + employee.getEmployee().getFirstName(), true);
-		createRunForCertificateParagraph(paragraph, " născut(ă) la data de ", false);
-		createRunForCertificateParagraph(paragraph, format.format(employee.getEmployee().getBirthDate()), true);
-		createRunForCertificateParagraph(paragraph, " în localitatea ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getBirthCity(), true);
-		createRunForCertificateParagraph(paragraph, ", domiciliat(ă) în ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getHomeAddress(), true);
-		createRunForCertificateParagraph(paragraph, ", județ ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getHomeRegion(), true);
-		createRunForCertificateParagraph(paragraph, ", CI. seria ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getIdCode(), true);
-		createRunForCertificateParagraph(paragraph, ", nr. ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getIdNumber(), true);
-		createRunForCertificateParagraph(paragraph, ", CNP. ", false);
-		createRunForCertificateParagraph(paragraph, employee.getEmployee().getPersonalIdentificationNumber(), true);
-		createRunForCertificateParagraph(paragraph, ", a fost instruit ca ", false);
+		createRunSize14TimesNR(paragraph, "Prin prezenta se adeverește că Dl/D-na ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getLastName() + " " + employee.getEmployee().getFirstName(), true);
+		createRunSize14TimesNR(paragraph, " născut(ă) la data de ", false);
+		createRunSize14TimesNR(paragraph, format.format(employee.getEmployee().getBirthDate()), true);
+		createRunSize14TimesNR(paragraph, " în localitatea ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getBirthCity(), true);
+		createRunSize14TimesNR(paragraph, ", domiciliat(ă) în ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getHomeAddress(), true);
+		createRunSize14TimesNR(paragraph, ", județ ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getHomeRegion(), true);
+		createRunSize14TimesNR(paragraph, ", CI. seria ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getIdCode(), true);
+		createRunSize14TimesNR(paragraph, ", nr. ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getIdNumber(), true);
+		createRunSize14TimesNR(paragraph, ", CNP. ", false);
+		createRunSize14TimesNR(paragraph, employee.getEmployee().getPersonalIdentificationNumber(), true);
+		createRunSize14TimesNR(paragraph, ", a fost instruit ca ", false);
 		String employeeTitle = employee.getEmployee().getTitle();
-		createRunForCertificateParagraph(paragraph, employeeTitle.toUpperCase(), false);
+		createRunSize14TimesNR(paragraph, employeeTitle.toUpperCase(), false);
 		int cnt = 0;
 		if (employeeTitle.equals("manevrant")) {
-			createRunForCertificateParagraph(paragraph, " să deservească mecanismele de ridicat: ", false);
+			createRunSize14TimesNR(paragraph, " să deservească mecanismele de ridicat: ", false);
 			if(choice1) {
-				createRunForCertificateParagraph(paragraph, "transpalet hidraulic", false);
+				createRunSize14TimesNR(paragraph, "transpalet hidraulic", false);
 				cnt++;
 			}
 			if(choice2) {
-				createRunForCertificateParagraph(paragraph, cnt == 1 ? ", stivuitor manual" : " stivuitor manual", false);
+				createRunSize14TimesNR(paragraph, cnt == 1 ? ", stivuitor manual" : " stivuitor manual", false);
 				cnt++;
 			}
 			if(choice3) {
-				createRunForCertificateParagraph(paragraph, cnt >= 1 ? ", palan manual ( Q" : " palan manual ( Q", false);
-				run = createRunForCertificateParagraph(paragraph, "max", false);
+				createRunSize14TimesNR(paragraph, cnt >= 1 ? ", palan manual ( Q" : " palan manual ( Q", false);
+				run = createRunSize14TimesNR(paragraph, "max", false);
 				run.setSubscript(VerticalAlign.SUBSCRIPT);
-				createRunForCertificateParagraph(paragraph, " <= 1t )", false);
+				createRunSize14TimesNR(paragraph, " <= 1t )", false);
 				cnt++;
 			}
 			if(choice4) {
-				createRunForCertificateParagraph(paragraph, cnt >=1 ? ",  electropalan ( Q" : " electropalan ( Q", false);
-				run = createRunForCertificateParagraph(paragraph, "max", false);
+				createRunSize14TimesNR(paragraph, cnt >=1 ? ",  electropalan ( Q" : " electropalan ( Q", false);
+				run = createRunSize14TimesNR(paragraph, "max", false);
 				run.setSubscript(VerticalAlign.SUBSCRIPT);
-				createRunForCertificateParagraph(paragraph, " <= 1t )", false);
+				createRunSize14TimesNR(paragraph, " <= 1t )", false);
 			}
-			createRunForCertificateParagraph(paragraph, ".", false);
+			createRunSize14TimesNR(paragraph, ".", false);
 		} else {
-			createRunForCertificateParagraph(paragraph, ", să deservească mașinile de ridicat stipulate în procesul verbal.", false);
+			createRunSize14TimesNR(paragraph, ", să deservească mașinile de ridicat stipulate în procesul verbal.", false);
 		}
-		document.createParagraph();	//empty line
-		document.createParagraph();	//empty line
+		emptyLines(document, 2);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
-		run = createRunForCertificateParagraph(paragraph, "", false);
-		createRunForCertificateParagraph(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
-		run = createRunForCertificateParagraph(paragraph, "", false);
-		createRunForCertificateParagraph(paragraph, getStringOfSpaces(18) + "RSVTI", true);
+		run = createRunSize14TimesNR(paragraph, "", false);
+		createRunSize14TimesNR(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
+		run = createRunSize14TimesNR(paragraph, "", false);
+		createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
-		run = createRunForCertificateParagraph(paragraph, "", false);
+		run = createRunSize14TimesNR(paragraph, "", false);
 		String directorName = "Nume Prenume1 Prenume2";//TODO
-		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
-		run = createRunForCertificateParagraph(paragraph, "", false);
-		createRunForCertificateParagraph(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
-		document.createParagraph();	//empty line
-		document.createParagraph();	//empty line
+		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
+		run = createRunSize14TimesNR(paragraph, "", false);
+		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
+		emptyLines(document, 2);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
-		createRunForCertificateParagraph(paragraph, "Eliberată la data de " + format.format(issueDate), false);
+		createRunSize14TimesNR(paragraph, "Eliberată la data de " + format.format(issueDate), false);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
-		createRunForCertificateParagraph(paragraph, "Valabil un an de la data emiterii.", false);
+		createRunSize14TimesNR(paragraph, "Valabil un an de la data emiterii.", false);
 	}
 	
 	public static File generateCertificate(EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti) {
@@ -220,8 +238,7 @@ public class Generator {
 			FileOutputStream output = new FileOutputStream(file);
 			
 			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
-			document.createParagraph();
-			document.createParagraph();
+			emptyLines(document, 2);
 			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
 			
 			document.write(output);
@@ -251,12 +268,303 @@ public class Generator {
 		}
 	}
 	
+	private static void emptyLines(XWPFDocument document, int nrOfLines) {
+		for(int i = 0; i < nrOfLines; i++) {
+			document.createParagraph();
+		}
+	}
+	
 	private static String getStringOfSpaces(int nrOfSpaces) {
 		String tmp = "";
 		for(int i = 0; i < nrOfSpaces*1.5; i++) {
 			tmp += " ";
 		}
 		return tmp;
+	}
+	
+	private static void mergeCellsVertically(XWPFTable table, int col, int fromRow, int toRow) {
+        for (int rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
+            XWPFTableCell cell = table.getRow(rowIndex).getCell(col);
+            if ( rowIndex == fromRow ) {
+                // The first merged cell is set with RESTART merge value
+                cell.getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.RESTART);
+            } else {
+                // Cells which join (merge) the first one, are set with CONTINUE
+                cell.getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.CONTINUE);
+            }
+        }
+    }
+	
+	private static void mergeCellsHorizontally(XWPFTable table, int row, int fromCol, int toCol) {
+        for (int colIndex = fromCol; colIndex <= toCol; colIndex++) {
+            XWPFTableCell cell = table.getRow(row).getCell(colIndex);
+            if ( colIndex == fromCol ) {
+                // The first merged cell is set with RESTART merge value
+                cell.getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.RESTART);
+            } else {
+                // Cells which join (merge) the first one, are set with CONTINUE
+                cell.getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+            }
+        }
+    }
+	
+	private static void widenTableCells(XWPFTable table, int col, int size) {
+		for (int i = 0; i < table.getNumberOfRows(); i++) {
+			XWPFTableCell cell = table.getRow(i).getCell(col);
+			cell.getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(size));
+		}
+	}
+	
+	private static void setCellParagraph(XWPFParagraph paragraph) {
+		paragraph.setAlignment(ParagraphAlignment.CENTER);
+		paragraph.setSpacingAfter(0);
+		paragraph.setSpacingBefore(0);
+		paragraph.setSpacingLineRule(LineSpacingRule.EXACT);
+	}
+	
+	public static File generateTestResultsReport(Firm firm, String registrationNumber, Date registrationDate, String employeeTitle, 
+			List<EmployeeTestResults> employees, CheckBox choice1, CheckBox choice2, CheckBox choice3, CheckBox choice4, String rsvti) {
+		File file = null;
+		try {
+			String jarFilePath = Utils.getJarFilePath();
+			final int tableMaxLength = 15;
+			
+			XWPFDocument document = new XWPFDocument();
+			CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
+		    CTPageMar pageMar = sectPr.addNewPgMar();
+		    pageMar.setLeft(BigInteger.valueOf(720L));
+		    pageMar.setTop(BigInteger.valueOf(500L));
+		    pageMar.setRight(BigInteger.valueOf(720L));
+		    pageMar.setBottom(BigInteger.valueOf(500L));
+			
+			String currentDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(Calendar.getInstance().getTime());
+			file = new File(jarFilePath + "docs\\procese verbale\\rezultate examinare\\" + currentDate);
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\procese verbale\\rezultate examinare\\" + currentDate + "\\" + firm.getFirmName() + ".docx");
+			FileOutputStream output = new FileOutputStream(file);
+			
+			SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
+			
+			XWPFRun run;
+			XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			createRunSize14TimesNR(paragraph, firm.getFirmName(), true);
+			emptyLines(document, 5);
+			paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+			createRunSize14TimesNR(paragraph, "PROCES VERBAL NR. " + registrationNumber + " / " + format.format(registrationDate), true);
+			emptyLines(document, 1);
+			paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+			createRunSize14TimesNR(paragraph, "CU REZULTATELE OBȚINUTE LA EXAMINAREA PERIODICĂ A PERSONALULUI CA " + employeeTitle.toUpperCase() + ", PENTRU URMĂTORII CANDIDAȚI", false);
+			
+			XWPFTable table = document.createTable();
+			CTTblPr tblPr = table.getCTTbl().getTblPr();
+		    CTJc jc = (tblPr.isSetJc() ? tblPr.getJc() : tblPr.addNewJc());
+		    jc.setVal(STJc.CENTER);
+		    
+			XWPFTableRow tableTitle = table.getRow(0);
+			tableTitle.getCell(0).removeParagraph(0);
+			tableTitle.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(0).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Nr. Crt", true, 10);
+		    tableTitle.addNewTableCell().removeParagraph(0);
+		    tableTitle.getCell(1).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(1).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Numele și prenumele", true, 10);
+		    tableTitle.addNewTableCell().removeParagraph(0);
+		    tableTitle.getCell(2).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(2).addParagraph(); 
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "CNP", true, 10);
+		    tableTitle.addNewTableCell().removeParagraph(0);
+		    tableTitle.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(3).addParagraph(); 
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Nr adeverință", true, 10);
+		    tableTitle.addNewTableCell().removeParagraph(0);
+		    tableTitle.getCell(4).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(4).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Tip instalație", true, 10);
+		    tableTitle.addNewTableCell().removeParagraph(0);
+		    tableTitle.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = tableTitle.getCell(5).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Rezultatul Examinării", true, 10);
+		    tableTitle.addNewTableCell();
+		    
+		    XWPFTableRow dataRow = table.createRow();
+		    dataRow.getCell(5).removeParagraph(0);
+		    dataRow.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = dataRow.getCell(5).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Teoretic", true, 10);
+		    dataRow.getCell(6).removeParagraph(0);
+		    dataRow.getCell(6).setVerticalAlignment(XWPFVertAlign.CENTER);
+		    paragraph = dataRow.getCell(6).addParagraph();
+		    setCellParagraph(paragraph);
+		    createRunTimesNR(paragraph, "Practic", true, 10);
+		    
+		    
+			for(int i = 1; i < employees.size() + 1; i++) {
+				dataRow = table.createRow();
+				dataRow.getCell(0).removeParagraph(0);
+				dataRow.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(0).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, i + "", false, 10);
+			    dataRow.getCell(1).removeParagraph(0);
+			    dataRow.getCell(1).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(1).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, employees.get(i-1).getEmployeeName(), false, 10);
+			    dataRow.getCell(2).removeParagraph(0);
+			    dataRow.getCell(2).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(2).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, employees.get(i-1).getPersonalIdentificationNumber(), false, 10);
+			    dataRow.getCell(3).removeParagraph(0);
+			    dataRow.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(3).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, i + "", false, 10);
+			    dataRow.getCell(5).removeParagraph(0);
+			    dataRow.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(5).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, employees.get(i-1).getTheoryResult(), false, 10);
+			    dataRow.getCell(6).removeParagraph(0);
+			    dataRow.getCell(6).setVerticalAlignment(XWPFVertAlign.CENTER);
+			    paragraph = dataRow.getCell(6).addParagraph();
+			    setCellParagraph(paragraph);
+			    createRunTimesNR(paragraph, employees.get(i-1).getPractiseResult(), false, 10);
+			}
+			
+			for(int i = employees.size() + 1; i <= tableMaxLength; i++) {
+				dataRow = table.createRow();
+				dataRow.getCell(0).removeParagraph(0);
+				dataRow.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
+				paragraph = dataRow.getCell(0).addParagraph();
+				setCellParagraph(paragraph);
+				createRunTimesNR(paragraph, i + "", false, 10);
+				dataRow.getCell(3).removeParagraph(0);
+				dataRow.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
+				paragraph = dataRow.getCell(3).addParagraph();
+				setCellParagraph(paragraph);
+				createRunTimesNR(paragraph, i + "", false, 10);
+			}
+			
+			XWPFTableCell cell = table.getRow(2).getCell(4);
+			cell.removeParagraph(0);
+			cell.setVerticalAlignment(XWPFVertAlign.CENTER);
+			paragraph = cell.addParagraph();
+			setCellParagraph(paragraph);
+			int cnt = 0;
+			if(choice1.selectedProperty().get()) {
+				createRunTimesNR(paragraph, choice1.getText().toUpperCase(), false, 10);
+				cnt++;
+			}
+			if(choice2.selectedProperty().get()) {
+				if(cnt == 1) {
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+					createRunTimesNR(paragraph, " + ", false, 10);
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+				}
+				createRunTimesNR(paragraph, choice2.getText().toUpperCase(), false, 10);
+				cnt++;
+			}
+			if(choice3.selectedProperty().get()) {
+				if(cnt >= 1) {
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+					createRunTimesNR(paragraph, " + ", false, 10);
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+				}
+				if(choice3.getText().indexOf("(") > 0) {
+					createRunTimesNR(paragraph, choice3.getText().substring(0, choice3.getText().indexOf("(") - 1).toUpperCase(), false, 10);
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+					createRunTimesNR(paragraph, choice3.getText().substring(choice3.getText().indexOf("("), choice3.getText().indexOf("Q") + 1), false, 10);
+					run = createRunTimesNR(paragraph, choice3.getText().substring(choice3.getText().indexOf("Q") + 1, choice3.getText().indexOf("x") + 1), false, 10);
+					run.setSubscript(VerticalAlign.SUBSCRIPT);
+					createRunTimesNR(paragraph, choice3.getText().substring(choice3.getText().indexOf("x") + 1, choice3.getText().length()), false, 10);
+				} else {
+					createRunTimesNR(paragraph, choice3.getText().toUpperCase(), false, 10);
+				}
+				cnt++;
+			}
+			if(choice4.isVisible() && choice4.selectedProperty().get()) {
+				if(cnt >= 1) {
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+					createRunTimesNR(paragraph, " + ", false, 10);
+					paragraph = cell.addParagraph();
+					setCellParagraph(paragraph);
+				}
+				createRunTimesNR(paragraph, choice4.getText().substring(0, choice4.getText().indexOf("(") - 1).toUpperCase(), false, 10);
+				paragraph = cell.addParagraph();
+				setCellParagraph(paragraph);
+				createRunTimesNR(paragraph, choice4.getText().substring(choice4.getText().indexOf("("), choice4.getText().indexOf("Q") + 1), false, 10);
+				run = createRunTimesNR(paragraph, choice4.getText().substring(choice4.getText().indexOf("Q") + 1, choice4.getText().indexOf("x") + 1), false, 10);
+				run.setSubscript(VerticalAlign.SUBSCRIPT);
+				createRunTimesNR(paragraph, choice4.getText().substring(choice4.getText().indexOf("x") + 1, choice4.getText().length()), false, 10);
+			}
+			
+			emptyLines(document, 3);
+			paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			run = createRunSize14TimesNR(paragraph, "", false);
+			createRunSize14TimesNR(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
+			run = createRunSize14TimesNR(paragraph, "", false);
+			createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
+			paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			run = createRunSize14TimesNR(paragraph, "", false);
+			String directorName = "Nume Prenume1 Prenume2";//TODO
+			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
+			run = createRunSize14TimesNR(paragraph, "", false);
+			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
+			
+			mergeCellsHorizontally(table, 0, 5, 6);
+			mergeCellsVertically(table, 4, 2, tableMaxLength + 1);
+			mergeCellsVertically(table, 0, 0, 1);
+			mergeCellsVertically(table, 1, 0, 1);
+			mergeCellsVertically(table, 2, 0, 1);
+			mergeCellsVertically(table, 3, 0, 1);
+			mergeCellsVertically(table, 4, 0, 1);
+			widenTableCells(table, 0, 1225);
+		    widenTableCells(table, 1, 5125);
+		    widenTableCells(table, 2, 3675);
+		    widenTableCells(table, 3, 1575);
+		    widenTableCells(table, 4, 3750);
+		    widenTableCells(table, 5, 1300);
+		    widenTableCells(table, 6, 1300);
+		    table.getRow(0).setHeight(550);
+		    for(int i = 2; i < tableMaxLength + 2; i++) {
+		    	table.getRow(i).setHeight(400);
+		    }
+			
+			document.write(output);
+			output.close();
+			
+			if(!DBServices.getBackupPath().isEmpty()) {
+				File backupFile = new File(DBServices.getBackupPath() + "\\procese verbale");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\rezultate examinare");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\rezultate examinare\\" + currentDate);
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\rezultate examinare\\" + currentDate + "\\" + firm.getFirmName() + ".docx");
+				FileOutputStream backupOutput = new FileOutputStream(backupFile);
+				document.write(backupOutput);
+			}
+			
+			document.close();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+		return file;
 	}
 	
 	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails, boolean generatePdf) {

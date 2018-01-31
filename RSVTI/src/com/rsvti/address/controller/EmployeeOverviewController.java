@@ -51,8 +51,6 @@ public class EmployeeOverviewController {
 	private TableColumn<Employee, String> homeAddressColumn;
 	@FXML
 	private TableColumn<Employee, String> homeRegionColumn;
-	@FXML
-	private TableColumn<Employee, String> isRsvtiColumn;
 	
 	@FXML
 	private List<Employee> employeeList;
@@ -90,7 +88,6 @@ public class EmployeeOverviewController {
 			authorizationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAuthorization().getAuthorizationNumber()));
 			authorizationObtainingDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getObtainingDate())));
 			authorizationDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(format.format(cellData.getValue().getAuthorization().getDueDate())));
-			isRsvtiColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isRsvti() ? "da" : "nu"));
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
