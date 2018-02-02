@@ -135,6 +135,7 @@ public class GenerateTestResultsReportController {
 			employeeNameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections
 	                .observableArrayList()));
 			employeeNameColumn.setOnEditCommit(event -> {
+				event.getRowValue().setEmployeeName(event.getNewValue());
 				event.getRowValue().setPersonalIdentificationNumber(
 						DBServices.getPersonalIdentificationNumberForEmployee(
 								event.getNewValue().substring(0, event.getNewValue().indexOf(" ")),
@@ -174,7 +175,8 @@ public class GenerateTestResultsReportController {
 						choice2,
 						choice3,
 						choice4,
-						rsvtiComboBox.getSelectionModel().getSelectedItem());
+						rsvtiComboBox.getSelectionModel().getSelectedItem(),
+						firm.getExecutiveName());
 				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Rezultate Examinare", "Generararea s-a terminat cu succes", bodyMessage);
 				if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 					Desktop.getDesktop().open(file);
@@ -204,12 +206,13 @@ public class GenerateTestResultsReportController {
 	}
 	
 	private List<EmployeeTestResults> removeEmptyEmployees(List<EmployeeTestResults> employees) {
+		List<EmployeeTestResults> tmp = new ArrayList<>();
 		for(EmployeeTestResults index : employees) {
-			if(index.isEmpty()) {
-				employees.remove(index);
+			if(!index.isEmpty()) {
+				tmp.add(index);
 			}
 		}
-		return employees;
+		return tmp;
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

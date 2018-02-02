@@ -44,6 +44,8 @@ public class AddFirmController {
 	@FXML
 	private TextField ibanCodeField;
 	@FXML
+	private TextField executiveNameField;
+	@FXML
 	private TextField adminFirstNameField;
 	@FXML
 	private TextField adminLastNameField;
@@ -148,6 +150,9 @@ public class AddFirmController {
 			registrationNumberField.setAlignment(Pos.CENTER);
 			Utils.setTextFieldValidator(registrationNumberField, "[JCFjcf/0-9]*", "[JCF][0-9][0-9]/[0-9]{1,4}/[0-9]{4}",
 					true, 14, "Numărul de înregistrare este de tipul: <J sau C sau F cifra cifra>/<un numar cu maxim 4 cifre>/<un numar cu fix patru cifre>.", JavaFxMain.primaryStage);
+			executiveNameField.setAlignment(Pos.CENTER);
+			Utils.setTextFieldValidator(executiveNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
+					"Numele directorului poate conține doar litere majuscule sau minuscule.", JavaFxMain.primaryStage);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -167,6 +172,7 @@ public class AddFirmController {
 						emailField.getText(),
 						bankNameField.getText(),
 						ibanCodeField.getText(),
+						executiveNameField.getText(),
 						new Administrator(
 								adminFirstNameField.getText(),
 								adminLastNameField.getText(),

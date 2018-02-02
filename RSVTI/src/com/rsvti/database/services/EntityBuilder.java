@@ -20,11 +20,11 @@ public class EntityBuilder {
 
 	public static Firm buildFirmFromXml(Node node) {
 		ArrayList<String> firmParameterValues = new ArrayList<String>();
-		for(int i = 0; i < 9; i++) {
+		for(int i = 0; i < 10; i++) {
 			firmParameterValues.add(node.getChildNodes().item(i).getTextContent());
 		}
 		
-		Node adminNode = node.getChildNodes().item(9);
+		Node adminNode = node.getChildNodes().item(10);
 		ArrayList<String> adminParameterValues = new ArrayList<String>();
 		
 		for(int j = 0; j < adminNode.getChildNodes().getLength(); j++) {
@@ -34,25 +34,27 @@ public class EntityBuilder {
 		List<Rig> rigs = new ArrayList<Rig>();
 		List<Employee> employees = new ArrayList<Employee>();
 		
-		for(int k = 10; k < node.getChildNodes().getLength(); k++) {
+		for(int k = 11; k < node.getChildNodes().getLength(); k++) {
 			Node rigEmployeeNode = node.getChildNodes().item(k);
 			
 			if(rigEmployeeNode.getNodeName().equals("instalatie")) {
 				List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
 				
 				String rigName = rigEmployeeNode.getChildNodes().item(0).getTextContent();
-				
 				Date revisionDate = new Date(Long.parseLong(rigEmployeeNode.getChildNodes().item(1).getTextContent()));
-				
 				int authorizationExtension = Integer.parseInt(rigEmployeeNode.getChildNodes().item(2).getTextContent());
+				String productionNumber = rigEmployeeNode.getChildNodes().item(3).getTextContent();
+				int productionYear = Integer.parseInt(rigEmployeeNode.getChildNodes().item(4).getTextContent());
+				String iscirRegistrationNumber = rigEmployeeNode.getChildNodes().item(5).getTextContent();
+				boolean isValve = Boolean.parseBoolean(rigEmployeeNode.getAttributes().getNamedItem("supapa").getTextContent());
 				
 				String type = rigEmployeeNode.getAttributes().getNamedItem("type").getTextContent();
 				
-				for(int l = 3; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
+				for(int l = 6; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
 					parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 				}
 				
-				Rig rig = new Rig(rigName, parameters, revisionDate, type);
+				Rig rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber, isValve);
 				rig.setAuthorizationExtension(authorizationExtension);
 				rigs.add(rig);
 			} else {
@@ -98,6 +100,7 @@ public class EntityBuilder {
 				firmParameterValues.get(6),
 				firmParameterValues.get(7),
 				firmParameterValues.get(8),
+				firmParameterValues.get(9),
 				new Administrator(
 						adminParameterValues.get(0),
 						adminParameterValues.get(1),
@@ -114,16 +117,18 @@ public class EntityBuilder {
 		List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
-		
 		Date revisionDate = new Date(Long.parseLong(node.getChildNodes().item(1).getTextContent()));
-		
 		int authorizationExtension = Integer.parseInt(node.getChildNodes().item(2).getTextContent());
+		String productionNumber = node.getChildNodes().item(3).getTextContent();
+		int productionYear = Integer.parseInt(node.getChildNodes().item(4).getTextContent());
+		String iscirRegistrationNumber = node.getChildNodes().item(5).getTextContent();
+		boolean isValve = Boolean.parseBoolean(node.getAttributes().getNamedItem("supapa").getTextContent());
 		
 		String type = "";
-		for(int i = 3; i < node.getChildNodes().getLength(); i++) {
+		for(int i = 6; i < node.getChildNodes().getLength(); i++) {
 			parameters.add(new ParameterDetails(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
 		}
-		Rig rig = new Rig(rigName, parameters, revisionDate, type);
+		Rig rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber, isValve);
 		rig.setAuthorizationExtension(authorizationExtension);
 		return rig;
 	}

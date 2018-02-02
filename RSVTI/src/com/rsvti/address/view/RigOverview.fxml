@@ -24,20 +24,40 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label layoutX="42.0" layoutY="133.0" text="Data scadentă" />
-                  <Label fx:id="dueDateLabel" layoutX="186.0" layoutY="133.0" text="Label" />
                   <Label fx:id="rigNameLabel" layoutX="48.0" layoutY="56.0" text="Label">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="rigParameterTable" layoutX="42.0" layoutY="236.0" prefHeight="312.0" prefWidth="580.0">
+                  <TableView fx:id="rigParameterTable" layoutX="42.0" layoutY="332.0" prefHeight="312.0" prefWidth="580.0">
                     <columns>
                       <TableColumn fx:id="parameterNameColumn" prefWidth="358.0" text="Parametru" />
                       <TableColumn fx:id="parameterValueColumn" minWidth="9.0" prefWidth="78.0" text="Valoare" />
                         <TableColumn fx:id="parameterMeasuringUnit" prefWidth="143.0" text="Unitate de măsură" />
                     </columns>
                   </TableView>
+                  <GridPane layoutX="42.0" layoutY="130.0" prefHeight="153.0" prefWidth="580.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Data scadentă" />
+                        <Label fx:id="dueDateLabel" text="Label" GridPane.columnIndex="1" />
+                        <Label text="Număr fabricație" GridPane.rowIndex="1" />
+                        <Label text="An fabricație" GridPane.rowIndex="2" />
+                        <Label text="Număr înregistrare ISCIR" GridPane.rowIndex="3" />
+                        <Label fx:id="productionNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="productionYearLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="iscirRegistrationNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
                </children></AnchorPane>
         </items>
       </SplitPane>

@@ -38,7 +38,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.EmployeeTestResults;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
@@ -134,7 +134,8 @@ public class Generator {
 		return paragraph;
 	}
 	
-	public static void generateOneCertificate(XWPFDocument document, EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti) {
+	public static void generateOneCertificate(XWPFDocument document, EmployeeWithDetails employee, int registrationNumber, Date registrationDate, 
+			Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti, String executiveName) {
 		SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
 		XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
 		XWPFRun run;
@@ -206,8 +207,7 @@ public class Generator {
 		createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
 		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
 		run = createRunSize14TimesNR(paragraph, "", false);
-		String directorName = "Nume Prenume1 Prenume2";//TODO
-		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
+		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-executiveName.length())/2) + executiveName + getStringOfSpaces((82/2-executiveName.length())/2), false);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
 		emptyLines(document, 2);
@@ -217,7 +217,8 @@ public class Generator {
 		createRunSize14TimesNR(paragraph, "Valabil un an de la data emiterii.", false);
 	}
 	
-	public static File generateCertificate(EmployeeDueDateDetails employee, int registrationNumber, Date registrationDate, Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti) {
+	public static File generateCertificate(EmployeeWithDetails employee, int registrationNumber, Date registrationDate, Date issueDate, 
+			boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti, String executiveName) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
@@ -237,9 +238,9 @@ public class Generator {
 					employee.getEmployee().getFirstName() + ".docx");
 			FileOutputStream output = new FileOutputStream(file);
 			
-			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti, executiveName);
 			emptyLines(document, 2);
-			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti);
+			generateOneCertificate(document, employee, registrationNumber, registrationDate, issueDate, choice1, choice2, choice3, choice4, rsvti, executiveName);
 			
 			document.write(output);
 			output.close();
@@ -323,11 +324,11 @@ public class Generator {
 	}
 	
 	public static File generateTestResultsReport(Firm firm, String registrationNumber, Date registrationDate, String employeeTitle, 
-			List<EmployeeTestResults> employees, CheckBox choice1, CheckBox choice2, CheckBox choice3, CheckBox choice4, String rsvti) {
+			List<EmployeeTestResults> employees, CheckBox choice1, CheckBox choice2, CheckBox choice3, CheckBox choice4, String rsvti, String executiveName) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
-			final int tableMaxLength = 15;
+			final int tableMaxLength = 13;
 			
 			XWPFDocument document = new XWPFDocument();
 			CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
@@ -521,8 +522,7 @@ public class Generator {
 			createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
 			paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
 			run = createRunSize14TimesNR(paragraph, "", false);
-			String directorName = "Nume Prenume1 Prenume2";//TODO
-			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-directorName.length())/2) + directorName + getStringOfSpaces((82/2-directorName.length())/2), false);
+			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-executiveName.length())/2) + executiveName + getStringOfSpaces((82/2-executiveName.length())/2), false);
 			run = createRunSize14TimesNR(paragraph, "", false);
 			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
 			
@@ -567,7 +567,7 @@ public class Generator {
 		return file;
 	}
 	
-	public static File generateTest(int nrOfQuestions, EmployeeDueDateDetails employeeDetails) {
+	public static File generateTest(int nrOfQuestions, EmployeeWithDetails employeeDetails) {
 		File file = null;
 		try {
 			String jarFilePath = Utils.getJarFilePath();
@@ -687,7 +687,7 @@ public class Generator {
 		return file;
 	}
 	
-	private static void logGeneratedTest(XWPFDocument document, EmployeeDueDateDetails employeeDetails) {
+	private static void logGeneratedTest(XWPFDocument document, EmployeeWithDetails employeeDetails) {
 		
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);

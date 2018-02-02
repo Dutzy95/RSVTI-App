@@ -13,22 +13,19 @@ import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.VBox;
 
 public class AddRigsToFirmController {
 
@@ -57,6 +54,16 @@ public class AddRigsToFirmController {
 	private ComboBox<String> authorizationExtension;
 	@FXML
 	private Label dueDateLabel;
+	@FXML
+	private TextField productionYearField;
+	@FXML
+	private TextField productionNumberField;
+	@FXML
+	private TextField iscirRegistrationNumberField;
+	@FXML
+	private CheckBox isValveCheckBox;
+	@FXML
+	private VBox transferButtons;
 	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
@@ -75,6 +82,7 @@ public class AddRigsToFirmController {
 		try {
 			rigType.setItems(FXCollections.observableArrayList("de ridicat", "sub presiune"));
 			rigType.getSelectionModel().select(0);
+			isValveCheckBox.setVisible(false);
 			importedParameterTable.setItems(FXCollections.observableArrayList(DBServices.getRigParametersByType("de ridicat")));
 			importedParameterTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			importedParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
@@ -96,8 +104,29 @@ public class AddRigsToFirmController {
 					String selectedItem = rigType.getSelectionModel().getSelectedItem();
 					filterSelectedParameters(selectedItem);
 					importedParameterTable.refresh();
+					if(selectedItem.equals("sub presiune")) {
+						isValveCheckBox.setVisible(true);
+					} else {
+						isValveCheckBox.setVisible(false);
+					}
 				} catch (Exception e) {
 					DBServices.saveErrorLogEntry(e);
+				}
+			});
+			
+			isValveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+				if(newValue) {
+					chosenParametersTable.setVisible(false);
+					importedParameterTable.setVisible(false);
+					transferButtons.setVisible(false);
+					authorizationExtension.setDisable(true);
+					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), 1)));
+				} else {
+					chosenParametersTable.setVisible(true);
+					importedParameterTable.setVisible(true);
+					transferButtons.setVisible(true);
+					authorizationExtension.setDisable(false);
+					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 				}
 			});
 			
@@ -125,7 +154,11 @@ public class AddRigsToFirmController {
 					} else {
 						selectedExtensionValue = 0;
 					}
-					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
+					if(isValveCheckBox.selectedProperty().get()) {
+						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), 1)));
+					} else {
+						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
+					}
 				} catch (Exception err) {
 					DBServices.saveErrorLogEntry(err);
 				}
@@ -138,6 +171,9 @@ public class AddRigsToFirmController {
 			dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), selectedExtensionValue)));
 			
 			rigNameField.setAlignment(Pos.CENTER);
+			productionNumberField.setAlignment(Pos.CENTER);
+			iscirRegistrationNumberField.setAlignment(Pos.CENTER);
+			productionYearField.setAlignment(Pos.CENTER);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -192,7 +228,11 @@ public class AddRigsToFirmController {
 				Rig newRig = new Rig(rigNameField.getText(), 
 						 chosenParametersTable.getItems(), 
 						 java.sql.Date.valueOf(revisionDate.getValue()),  
-						 rigType.getValue());
+						 rigType.getValue(),
+						 productionNumberField.getText(),
+						 Integer.parseInt(productionYearField.getText()),
+						 iscirRegistrationNumberField.getText(),
+						 isValveCheckBox.selectedProperty().get());
 				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
 			} else {
@@ -200,14 +240,22 @@ public class AddRigsToFirmController {
 					Rig newRig = new Rig(rigNameField.getText(), 
 										 chosenParametersTable.getItems(), 
 										 java.sql.Date.valueOf(revisionDate.getValue()), 
-										 rigType.getValue());
+										 rigType.getValue(),
+										 productionNumberField.getText(),
+										 Integer.parseInt(productionYearField.getText()),
+										 iscirRegistrationNumberField.getText(),
+										 isValveCheckBox.selectedProperty().get());
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
 				} else {
 					Rig newRig = new Rig(rigNameField.getText(), 
 										 chosenParametersTable.getItems(), 
 										 java.sql.Date.valueOf(revisionDate.getValue()),  
-										 rigType.getValue());
+										 rigType.getValue(),
+										 productionNumberField.getText(),
+										 Integer.parseInt(productionYearField.getText()),
+										 iscirRegistrationNumberField.getText(),
+										 isValveCheckBox.selectedProperty().get());
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
 				}

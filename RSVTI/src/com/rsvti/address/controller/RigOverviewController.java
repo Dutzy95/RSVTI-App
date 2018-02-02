@@ -24,11 +24,15 @@ public class RigOverviewController {
 	private TableColumn<Rig,String> rigNameColumn;
 	
 	@FXML
-	private Label rigTypeLabel;
-	@FXML
 	private Label rigNameLabel;
 	@FXML
 	private Label dueDateLabel;
+	@FXML
+	private Label productionNumberLabel;
+	@FXML
+	private Label productionYearLabel;
+	@FXML
+	private Label iscirRegistrationNumberLabel;
 	@FXML
 	private TableView<ParameterDetails> rigParameterTable;
 	@FXML
@@ -43,18 +47,31 @@ public class RigOverviewController {
 	
 	private void showRigDetails(Rig rig) {
 		try {
+			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 			if(rig != null) {
-				rigNameLabel.setText(rig.getRigName());
-				SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
+				if(rig.isValve()) {
+					rigNameLabel.setText(rig.getRigName() + " - supapă");
+				} else {
+					rigNameLabel.setText(rig.getRigName());
+				}
 				dueDateLabel.setText(format.format(rig.getDueDate()));
+				productionNumberLabel.setText(rig.getProductionNumber());
+				productionYearLabel.setText(rig.getProductionYear() + "");
+				iscirRegistrationNumberLabel.setText(rig.getIscirRegistrationNumber());
 				rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 				rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 				parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 				parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
 				parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
+				if(rig.isValve()) {
+					rigParameterTable.setVisible(false);
+				} else {
+					rigParameterTable.setVisible(true);
+				}
+				//TODO rigType and isValve should be displayed? How?
 			} else {
 				rigNameLabel.setText("Instalatie");
-				dueDateLabel.setText("zz-ll-aaaa");
+				dueDateLabel.setText(DBServices.getDatePattern().replaceAll("d", "z").replaceAll("M","l").replaceAll("y", "a"));
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);

@@ -40,6 +40,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Număr de înregistrare" GridPane.rowIndex="1" />
@@ -60,6 +61,8 @@
                         <Label fx:id="ibanCodeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                         <Label text="Nume firma" />
                         <Label fx:id="firmNameLabel" text="Label" GridPane.columnIndex="1" />
+                        <Label fx:id="executiveNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="Director" GridPane.rowIndex="9" />
                      </children>
                   </GridPane>
                   <Label layoutX="14.0" layoutY="14.0" text="Detalii firmă">

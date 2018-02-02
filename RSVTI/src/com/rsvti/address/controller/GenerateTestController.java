@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
 
@@ -33,15 +33,15 @@ public class GenerateTestController {
 	private JavaFxMain javaFxMain;
 	
 	@FXML
-	private TableView<EmployeeDueDateDetails> employeeTable;
+	private TableView<EmployeeWithDetails> employeeTable;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> firmNameColumn;
+	private TableColumn<EmployeeWithDetails,String> firmNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> firstNameColumn;
+	private TableColumn<EmployeeWithDetails,String> firstNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> lastNameColumn;
+	private TableColumn<EmployeeWithDetails,String> lastNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> titleColumn;
+	private TableColumn<EmployeeWithDetails,String> titleColumn;
 	
 	@FXML
 	private TextField numberOfQuestionsField;
@@ -70,9 +70,9 @@ public class GenerateTestController {
 	@FXML
 	private void handleGenerate() {
 		try {
-			List<EmployeeDueDateDetails> selection = employeeTable.getSelectionModel().getSelectedItems();
+			List<EmployeeWithDetails> selection = employeeTable.getSelectionModel().getSelectedItems();
 			List<File> files = new ArrayList<File>();
-			for(EmployeeDueDateDetails index : selection) {
+			for(EmployeeWithDetails index : selection) {
 				files.add(Generator.generateTest(Integer.parseInt(numberOfQuestionsField.getText()), index));
 			}
 			

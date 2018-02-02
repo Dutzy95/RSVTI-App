@@ -29,7 +29,7 @@ public class Data {
 			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
 					new EmployeeAuthorization("123948273", addFromTodayDate(0, 0, 20), addFromTodayDate(0, 0, 25)), "manevrant", true);
 			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", getDate(1969, 2, 24), "Timisoara", "Adresa2", "Timis",
-					new EmployeeAuthorization("56732894", addFromTodayDate(0, 1, 0), addFromTodayDate(0, 1, 5)), "macaragist", false);
+					new EmployeeAuthorization("56732894", addFromTodayDate(0, 1, 0), addFromTodayDate(0, 11, 5)), "macaragist", false);
 			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", getDate(1980, 5, 16), "Oradea", "Adresa3", "Bihor",
 					new EmployeeAuthorization("2357234345", addFromTodayDate(0, 0, 15), addFromTodayDate(0, 0, 17)), "manevrant", true);
 			Employee employee4 = new Employee("FirstName4", "LastName4", "AR", "125489", "1234567890123", getDate(1950, 12, 4), "Arad", "Adresa4", "Arad",
@@ -39,28 +39,33 @@ public class Data {
 			Employee employee6 = new Employee("FirstName6", "LastName6", "MH", "479465", "13456879546", getDate(1950, 12, 4), "Severin", "Adresa6", "Severin",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 2, 10), addFromTodayDate(0, 2, 15)), "manevrant", false);
 			
-			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), "de ridicat");
+			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), "de ridicat", "1237dsa987", 2005, "32988fa0s", false);
 			liftingRig1.setAuthorizationExtension(0);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
-			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
-					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457", 
-					new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), Collections.singletonList(liftingRig1), Arrays.asList(employee1,employee2)), false);
+			Rig supapa = new Rig("Supapa1", addFromTodayDate(0, 0, 0), "sub presiune", "asd78921u", 2001, "ad81u304", true);
 			
-			Rig liftingRig2 = new Rig("stivuitor", addFromTodayDate(0, 11, 12), "de ridicat");
-			liftingRig2.setAuthorizationExtension(1);
+			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
+					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457",
+					"Vasile Vasilescu",	new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), 
+					Arrays.asList(liftingRig1, supapa), Arrays.asList(employee1,employee2)), false);
+			
+			
+			Rig liftingRig2 = new Rig("stivuitor", addFromTodayDate(0, 11, 12), "de ridicat", "ds87123hui", 2006, "das87f6723", false);
+			liftingRig2.setAuthorizationExtension(0);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
-			Rig pressureRig = new Rig("cazan", addFromTodayDate(1, 2, 3), "sub presiune");
-			pressureRig.setAuthorizationExtension(1);
+			Rig pressureRig = new Rig("cazan", addFromTodayDate(1, 2, 3), "sub presiune", "84390d7s68a97a", 2007, "432d9ssfas", false);
+			pressureRig.setAuthorizationExtension(0);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
 			
 			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
-					new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4, employee5, employee6)), false);
+					"Dan Popescu", new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), 
+					Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4, employee5, employee6)), false);
 			
 			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
 			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));

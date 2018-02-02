@@ -40,6 +40,8 @@ public class FirmOverviewController {
 	private Label bankNameLabel;
 	@FXML
 	private Label ibanCodeLabel;
+	@FXML
+	private Label executiveNameLabel;
 	
 	@FXML
 	private Label adminFirstNameLabel;
@@ -99,6 +101,7 @@ public class FirmOverviewController {
 				emailLabel.setText(firm.getEmail());
 				bankNameLabel.setText(firm.getBankName());
 				ibanCodeLabel.setText(firm.getIbanCode());
+				executiveNameLabel.setText(firm.getExecutiveName());
 				adminFirstNameLabel.setText(firm.getAdministrator().getFirstName());
 				adminLastNameLabel.setText(firm.getAdministrator().getLastName());
 				adminIdCodeLabel.setText(firm.getAdministrator().getIdCode());
@@ -114,6 +117,7 @@ public class FirmOverviewController {
 				emailLabel.setText("");
 				bankNameLabel.setText("");
 				ibanCodeLabel.setText("");
+				executiveNameLabel.setText("");
 				adminFirstNameLabel.setText("");
 				adminLastNameLabel.setText("");
 				adminIdCodeLabel.setText("");

@@ -8,7 +8,7 @@ import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.services.DBServices;
@@ -46,15 +46,15 @@ public class DueDateOverviewController {
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
 	@FXML
-	private TableView<EmployeeDueDateDetails> employeeTable;
+	private TableView<EmployeeWithDetails> employeeTable;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeFirstNameColumn;
+	private TableColumn<EmployeeWithDetails,String> employeeFirstNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeLastNameColumn;
+	private TableColumn<EmployeeWithDetails,String> employeeLastNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeFirmNameColumn;
+	private TableColumn<EmployeeWithDetails,String> employeeFirmNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails,String> employeeDueDateColumn;
+	private TableColumn<EmployeeWithDetails,String> employeeDueDateColumn;
 	
 	@FXML
 	private JavaFxMain javaFxMain;
@@ -92,10 +92,10 @@ public class DueDateOverviewController {
 			employeeFirmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 			employeeDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
 			employeeTable.setRowFactory( tv -> {
-			    TableRow<EmployeeDueDateDetails> row = new TableRow<>();
+			    TableRow<EmployeeWithDetails> row = new TableRow<>();
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-			        	EmployeeDueDateDetails rowData = row.getItem();
+			        	EmployeeWithDetails rowData = row.getItem();
 			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName());
 			        }
 			    });
@@ -138,8 +138,8 @@ public class DueDateOverviewController {
 	}
 	
 	public void updateEmployeeTable(String firmName, Employee employeeToUpdate, Employee newEmployee) {
-		List<EmployeeDueDateDetails> beforeUpdate = employeeTable.getItems();
-		for(EmployeeDueDateDetails index : beforeUpdate) {
+		List<EmployeeWithDetails> beforeUpdate = employeeTable.getItems();
+		for(EmployeeWithDetails index : beforeUpdate) {
 			if(index.getEmployee().equals(employeeToUpdate)) {
 				index.setEmployee(newEmployee);
 				index.setDueDate(newEmployee.getAuthorization().getDueDate());

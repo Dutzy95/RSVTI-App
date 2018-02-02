@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,7 +35,7 @@ import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
@@ -117,7 +116,6 @@ public class DBServices {
 	}
 	
 	public static void saveEntry(Firm firm, boolean update) {
-		//TODO setIndexes() no longer needed?
 		setIndexes();
 		openFile(Constants.XML_FIRMS_FILE_NAME);
 		
@@ -165,6 +163,10 @@ public class DBServices {
 		ibanCode.appendChild(document.createTextNode(firm.getIbanCode()));
 		firma.appendChild(ibanCode);
 		
+		Element executiveName = document.createElement("director");
+		executiveName.appendChild(document.createTextNode(firm.getExecutiveName()));
+		firma.appendChild(executiveName);
+		
 		//administrator
 		Administrator administrator = firm.getAdministrator();
 		Element adminElement = document.createElement("administrator");
@@ -196,6 +198,7 @@ public class DBServices {
 			Element rig = document.createElement("instalatie");
 			
 			rig.setAttribute("type", rigIndex.getType());
+			rig.setAttribute("supapa", rigIndex.isValve() + "");
 			
 			List<ParameterDetails> parameters = rigIndex.getParameters();
 			
@@ -210,6 +213,18 @@ public class DBServices {
 			Element authorizationExtension = document.createElement("extinderea_autorizatiei");
 			authorizationExtension.appendChild(document.createTextNode("" + rigIndex.getAuthorizationExtension()));
 			rig.appendChild(authorizationExtension);
+			
+			Element productionNumber = document.createElement("numar_fabricatie");
+			productionNumber.appendChild(document.createTextNode(rigIndex.getProductionNumber()));
+			rig.appendChild(productionNumber);
+			
+			Element productionYear = document.createElement("an_fabricatie");
+			productionYear.appendChild(document.createTextNode(rigIndex.getProductionYear() + ""));
+			rig.appendChild(productionYear);
+			
+			Element iscirRegistrationNumber = document.createElement("numar_inregistrare_iscir");
+			iscirRegistrationNumber.appendChild(document.createTextNode(rigIndex.getIscirRegistrationNumber()));
+			rig.appendChild(iscirRegistrationNumber);
 			
 			for(ParameterDetails rigParameterIndex : parameters) {
 				Element node = document.createElement(rigParameterIndex.getName());
@@ -452,8 +467,8 @@ public class DBServices {
 		transformXmlFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 	}
 	
-	public static List<EmployeeDueDateDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate) {
-		List<EmployeeDueDateDetails> selectedEmployees = new ArrayList<EmployeeDueDateDetails>();
+	public static List<EmployeeWithDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate) {
+		List<EmployeeWithDetails> selectedEmployees = new ArrayList<EmployeeWithDetails>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
@@ -461,7 +476,8 @@ public class DBServices {
 				Date dueDate = firm.getEmployees().get(j).getAuthorization().getDueDate();
 				if(resetTimeForDate(dueDate).equals(resetTimeForDate(beginDate)) || resetTimeForDate(dueDate).equals(resetTimeForDate(endDate)) || 
 						(resetTimeForDate(dueDate).after(resetTimeForDate(beginDate)) && resetTimeForDate(dueDate).before(resetTimeForDate(endDate)))) {
-					selectedEmployees.add(new EmployeeDueDateDetails(firm.getEmployees().get(j), firm.getFirmName(), firm.getAddress(), dueDate));
+					selectedEmployees.add(new EmployeeWithDetails(firm.getEmployees().get(j), firm.getFirmName(), 
+							firm.getAddress(), firm.getExecutiveName(), dueDate));
 				}
 			}
 		}
@@ -482,6 +498,17 @@ public class DBServices {
 			}
 		}
 		return selectedRigs;
+	}
+	
+	public static List<RigDueDateDetails> getValvesBetweenDateInterval(Date beginDate, Date endDate) {
+		List<RigDueDateDetails> selectedRigs = getRigsBetweenDateInterval(beginDate, endDate);
+		List<RigDueDateDetails> tmp = new ArrayList<>();
+		for(RigDueDateDetails index : selectedRigs) {
+			if(index.getRig().isValve()) {
+				tmp.add(index);
+			}
+		}
+		return tmp;
 	}
 	
 	private static Date resetTimeForDate(Date date) {

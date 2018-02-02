@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.EmployeeDueDateDetails;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.services.DBServices;
 import com.rsvti.generator.Generator;
 
@@ -43,13 +43,13 @@ public class GenerateCertificateController {
 	private DatePicker certificateIssueDate;
 	
 	@FXML
-	private TableView<EmployeeDueDateDetails> employeeTable;
+	private TableView<EmployeeWithDetails> employeeTable;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails, String> employeeFirstNameColumn;
+	private TableColumn<EmployeeWithDetails, String> employeeFirstNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails, String> employeeLastNameColumn;
+	private TableColumn<EmployeeWithDetails, String> employeeLastNameColumn;
 	@FXML
-	private TableColumn<EmployeeDueDateDetails, String> employeeFirmNameColumn;
+	private TableColumn<EmployeeWithDetails, String> employeeFirmNameColumn;
 	
 	@FXML
 	private GridPane machineChoiceGridPane;
@@ -76,7 +76,7 @@ public class GenerateCertificateController {
 			Utils.setDisplayFormatForDatePicker(registrationDate);
 			Utils.setDisabledDaysForDatePicker(certificateIssueDate);
 			Utils.setDisplayFormatForDatePicker(certificateIssueDate);
-			List<EmployeeDueDateDetails> employees = DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE); 
+			List<EmployeeWithDetails> employees = DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE); 
 			employeeTable.setItems(FXCollections.observableArrayList(getEmployeesByTitle(employees, employeeTitleComboBox.getSelectionModel().getSelectedItem())));
 			employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
 				if(employeeTable.getSelectionModel().getSelectedItem() != null) {
@@ -112,9 +112,9 @@ public class GenerateCertificateController {
 		
 	}
 	
-	private List<EmployeeDueDateDetails> getEmployeesByTitle(List<EmployeeDueDateDetails> employees, String title) {
-		List<EmployeeDueDateDetails> tmp = new ArrayList<>();
-		for(EmployeeDueDateDetails index : employees) {
+	private List<EmployeeWithDetails> getEmployeesByTitle(List<EmployeeWithDetails> employees, String title) {
+		List<EmployeeWithDetails> tmp = new ArrayList<>();
+		for(EmployeeWithDetails index : employees) {
 			if(index.getEmployee().getTitle().equals(title)) {
 				tmp.add(index);
 			}
@@ -125,7 +125,7 @@ public class GenerateCertificateController {
 	@FXML
 	private void handleGenerateCertificate() {
 		try {
-			EmployeeDueDateDetails employee = employeeTable.getSelectionModel().getSelectedItem();
+			EmployeeWithDetails employee = employeeTable.getSelectionModel().getSelectedItem();
 			if(employee != null && registrationNumberField.getBorder() == null && !registrationNumberField.getText().isEmpty()
 					&& registrationDate.getValue() !=null && certificateIssueDate != null) {
 				String bodyMessage;
@@ -143,7 +143,8 @@ public class GenerateCertificateController {
 						choice2.selectedProperty().get(),
 						choice3.selectedProperty().get(),
 						choice4.selectedProperty().get(),
-						rsvtiComboBox.getSelectionModel().getSelectedItem());
+						rsvtiComboBox.getSelectionModel().getSelectedItem(),
+						employee.getExecutiveName());
 				
 				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Adeverință", "Generararea s-a terminat cu succes", bodyMessage);
 				if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {

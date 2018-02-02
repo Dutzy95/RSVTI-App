@@ -14,23 +14,35 @@ public class Rig{
 	private List<ParameterDetails> parameters;
 	private Date revisionDate;
 	private int authorizationExtension;
+	private String productionNumber;
+	private int productionYear;
+	private String iscirRegistrationNumber;
+	private boolean isValve;
 
 	private String type;
 	
-	public Rig(String rigName, Date revisionDate, String type) {
+	public Rig(String rigName, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, boolean isValve) {
 		this.setRigName(rigName);
 		parameters = new ArrayList<ParameterDetails>();
 		this.revisionDate = revisionDate;
 		this.setType(type);
 		this.setAuthorizationExtension(1);
+		this.setProductionNumber(productionNumber);
+		this.setProductionYear(productionYear);
+		this.setIscirRegistrationNumber(iscirRegistrationNumber);
+		this.setValve(isValve);
 	}
 	
-	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type) {
+	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, boolean isValve) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
 		this.setRevisionDate(revisionDate);
 		this.setType(type);
 		this.setAuthorizationExtension(1);
+		this.setProductionNumber(productionNumber);
+		this.setProductionYear(productionYear);
+		this.setIscirRegistrationNumber(iscirRegistrationNumber);
+		this.setValve(isValve);
 	}
 	
 	/**
@@ -79,23 +91,24 @@ public class Rig{
 	}
 	
 	public static Date getDueDate(Date revisionDate, int authorizationExtension) {
-		//TODO take all vacation dates into consideration (both fixed and variable)
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(revisionDate);
 		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
-		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);		//only done the first time
-		List<Date> variableDates = DBServices.getVariableVacationDates();
-		while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
-				|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
-				|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
-				|| variableDates.contains(calendar.getTime())) {
-			if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
-					|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
+		if(authorizationExtension > 0) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+			List<Date> variableDates = DBServices.getVariableVacationDates();
+			while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
 					|| variableDates.contains(calendar.getTime())) {
-				calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
-			}
-			if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
-				calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+						|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
+						|| variableDates.contains(calendar.getTime())) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+				}
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+				}
 			}
 		}
 		return calendar.getTime();
@@ -105,11 +118,22 @@ public class Rig{
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(revisionDate);
 		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
-		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, 2);
-		}
-		if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		if(authorizationExtension > 0) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+			List<Date> variableDates = DBServices.getVariableVacationDates();
+			while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+					|| variableDates.contains(calendar.getTime())) {
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+						|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
+						|| variableDates.contains(calendar.getTime())) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+				}
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+				}
+			}
 		}
 		return calendar.getTime();
 	}
@@ -121,5 +145,37 @@ public class Rig{
 				((Rig) o).getRevisionDate().equals(revisionDate) &&
 				((Rig) o).getType().equals(type) &&
 				((Rig) o).getAuthorizationExtension() == authorizationExtension;
+	}
+
+	public String getProductionNumber() {
+		return productionNumber;
+	}
+
+	public void setProductionNumber(String productionNumber) {
+		this.productionNumber = productionNumber;
+	}
+
+	public int getProductionYear() {
+		return productionYear;
+	}
+
+	public void setProductionYear(int productionYear) {
+		this.productionYear = productionYear;
+	}
+
+	public String getIscirRegistrationNumber() {
+		return iscirRegistrationNumber;
+	}
+
+	public void setIscirRegistrationNumber(String iscirRegistrationNumber) {
+		this.iscirRegistrationNumber = iscirRegistrationNumber;
+	}
+
+	public boolean isValve() {
+		return isValve;
+	}
+
+	public void setValve(boolean isValve) {
+		this.isValve = isValve;
 	}
 }

@@ -29,6 +29,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Numele firmei">
@@ -112,6 +113,15 @@
             <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField fx:id="bankNameField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <TextField fx:id="ibanCodeField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="executiveNameField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Label layoutX="10.0" layoutY="284.0" text="Director" GridPane.rowIndex="9">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <padding>
+                  <Insets top="1.0" />
+               </padding>
+            </Label>
          </children>
       </GridPane>
       <GridPane layoutX="137.0" layoutY="473.0" prefHeight="185.0" prefWidth="582.0" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="481.0" AnchorPane.topAnchor="473.0">
