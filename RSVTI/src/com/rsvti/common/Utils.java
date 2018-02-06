@@ -26,13 +26,12 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import com.rsvti.address.JavaFxMain;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
 import javafx.application.Platform;
-import javafx.event.EventTarget;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -64,6 +63,7 @@ public class Utils {
                                         setDisable(true);
                                         setStyle("-fx-background-color: " + Constants.DISABLED_COLOR + ";");
                                 }   
+                                setAlignment(Pos.CENTER);
                             }
                         };
                     }
@@ -380,5 +380,16 @@ public class Utils {
 			employeeNames.add(index.getLastName() + " " + index.getFirstName());
 		}
 		return employeeNames;
+	}
+	
+	public static Date resetTimeForDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		return calendar.getTime();
 	}
 }

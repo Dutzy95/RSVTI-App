@@ -43,6 +43,7 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigDueDateDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
+import com.rsvti.database.entities.Valve;
 
 import javafx.scene.control.Alert.AlertType;
 
@@ -198,7 +199,6 @@ public class DBServices {
 			Element rig = document.createElement("instalatie");
 			
 			rig.setAttribute("type", rigIndex.getType());
-			rig.setAttribute("supapa", rigIndex.isValve() + "");
 			
 			List<ParameterDetails> parameters = rigIndex.getParameters();
 			
@@ -225,6 +225,20 @@ public class DBServices {
 			Element iscirRegistrationNumber = document.createElement("numar_inregistrare_iscir");
 			iscirRegistrationNumber.appendChild(document.createTextNode(rigIndex.getIscirRegistrationNumber()));
 			rig.appendChild(iscirRegistrationNumber);
+			
+			if(rigIndex.getType().equals(Constants.PRESSURE_RIG)) {
+				Element valve = document.createElement("supapa");
+				
+				Element valveDueDate = document.createElement("data_scadentei");
+				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate().getTime() + ""));
+				valve.appendChild(valveDueDate);
+				
+				Element valveRegistrationNumber = document.createElement("numar_inregistrare");
+				valveRegistrationNumber.appendChild(document.createTextNode(rigIndex.getValve().getRegistrationNumber()));
+				valve.appendChild(valveRegistrationNumber);
+				
+				rig.appendChild(valve);
+			}
 			
 			for(ParameterDetails rigParameterIndex : parameters) {
 				Element node = document.createElement(rigParameterIndex.getName());
@@ -352,12 +366,8 @@ public class DBServices {
 	}
 	
 	public static List<Rig> getAllRigs() {
-		List<Rig> rigs = new ArrayList<Rig>();
 		NodeList rigNodes = (NodeList) executeXmlQuery("//instalatie", XPathConstants.NODESET);
-		for(int i = 0; i < rigNodes.getLength(); i++) {
-			rigs.add(EntityBuilder.buildRigFromXml(rigNodes.item(i)));
-		}
-		return rigs;
+		return EntityBuilder.buildRigListFromXml(rigNodes);
 	}
 	
 	public static List<RigParameter> getAllRigParameters() {
@@ -474,8 +484,8 @@ public class DBServices {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
 			for(int j = 0; j < firm.getEmployees().size(); j++) {
 				Date dueDate = firm.getEmployees().get(j).getAuthorization().getDueDate();
-				if(resetTimeForDate(dueDate).equals(resetTimeForDate(beginDate)) || resetTimeForDate(dueDate).equals(resetTimeForDate(endDate)) || 
-						(resetTimeForDate(dueDate).after(resetTimeForDate(beginDate)) && resetTimeForDate(dueDate).before(resetTimeForDate(endDate)))) {
+				if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
+						(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
 					selectedEmployees.add(new EmployeeWithDetails(firm.getEmployees().get(j), firm.getFirmName(), 
 							firm.getAddress(), firm.getExecutiveName(), dueDate));
 				}
@@ -491,8 +501,8 @@ public class DBServices {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
 			for(int j = 0; j < firm.getRigs().size(); j++) {
 				Date dueDate = firm.getRigs().get(j).getDueDate();
-				if(resetTimeForDate(dueDate).equals(resetTimeForDate(beginDate)) || resetTimeForDate(dueDate).equals(resetTimeForDate(endDate)) || 
-						(resetTimeForDate(dueDate).after(resetTimeForDate(beginDate)) && resetTimeForDate(dueDate).before(resetTimeForDate(endDate)))) {
+				if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
+						(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
 					selectedRigs.add(new RigDueDateDetails(firm.getRigs().get(j), firm.getFirmName(), dueDate));
 				}
 			}
@@ -500,26 +510,18 @@ public class DBServices {
 		return selectedRigs;
 	}
 	
-	public static List<RigDueDateDetails> getValvesBetweenDateInterval(Date beginDate, Date endDate) {
-		List<RigDueDateDetails> selectedRigs = getRigsBetweenDateInterval(beginDate, endDate);
-		List<RigDueDateDetails> tmp = new ArrayList<>();
-		for(RigDueDateDetails index : selectedRigs) {
-			if(index.getRig().isValve()) {
+	public static List<Valve> getValvesBetweenDateInterval(Date beginDate, Date endDate) {
+		NodeList valveNodes = (NodeList) executeXmlQuery("//supapa", XPathConstants.NODESET);
+		List<Valve> valves = EntityBuilder.buildValveListFromXml(valveNodes);
+		List<Valve> tmp = new ArrayList<>();
+		for(Valve index : valves) {
+			Date dueDate = index.getDueDate();
+			if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
+					(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
 				tmp.add(index);
 			}
 		}
 		return tmp;
-	}
-	
-	private static Date resetTimeForDate(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		
-		return calendar.getTime();
 	}
 	
 	public static int getLastFirmIndex() {

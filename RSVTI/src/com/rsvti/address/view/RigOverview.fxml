@@ -24,19 +24,12 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="rigNameLabel" layoutX="48.0" layoutY="56.0" text="Label">
+                  <Label fx:id="rigNameLabel" layoutX="48.0" layoutY="33.0" text="Label">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="rigParameterTable" layoutX="42.0" layoutY="332.0" prefHeight="312.0" prefWidth="580.0">
-                    <columns>
-                      <TableColumn fx:id="parameterNameColumn" prefWidth="358.0" text="Parametru" />
-                      <TableColumn fx:id="parameterValueColumn" minWidth="9.0" prefWidth="78.0" text="Valoare" />
-                        <TableColumn fx:id="parameterMeasuringUnit" prefWidth="143.0" text="Unitate de măsură" />
-                    </columns>
-                  </TableView>
-                  <GridPane layoutX="42.0" layoutY="130.0" prefHeight="153.0" prefWidth="580.0">
+                  <GridPane layoutX="42.0" layoutY="107.0" prefHeight="153.0" prefWidth="580.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,6 +38,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -56,8 +50,38 @@
                         <Label fx:id="productionNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="productionYearLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="iscirRegistrationNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Tip" GridPane.rowIndex="4" />
+                        <Label fx:id="rigTypeLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
+                  <Label fx:id="valveTitleLabel" layoutX="42.0" layoutY="268.0" text="Supapă">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <GridPane fx:id="valveGridPane" layoutX="41.0" layoutY="313.0" prefHeight="65.0" prefWidth="580.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Data scadenței" />
+                        <Label text="Număr de înregistrare" GridPane.rowIndex="1" />
+                        <Label fx:id="valveDueDateLabel" text="Label" GridPane.columnIndex="1" />
+                        <Label fx:id="valveRegistrationNumberLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+                  <TableView fx:id="rigParameterTable" layoutX="41.0" layoutY="416.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="581.0">
+                    <columns>
+                      <TableColumn fx:id="parameterNameColumn" prefWidth="358.0" text="Parametru" />
+                      <TableColumn fx:id="parameterValueColumn" minWidth="9.0" prefWidth="78.0" text="Valoare" />
+                        <TableColumn fx:id="parameterMeasuringUnit" prefWidth="143.0" text="Unitate de măsură" />
+                    </columns>
+                  </TableView>
                </children></AnchorPane>
         </items>
       </SplitPane>

@@ -57,4 +57,7 @@ public class Constants {
 															BorderStrokeStyle.SOLID, 
 															new CornerRadii(2), 
 															new BorderWidths(5)));
+	
+	public static final String LIFTING_RIG = "de ridicat";
+	public static final String PRESSURE_RIG = "sub presiune";
 }

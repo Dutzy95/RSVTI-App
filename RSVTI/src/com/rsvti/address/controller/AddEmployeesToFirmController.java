@@ -81,8 +81,8 @@ public class AddEmployeesToFirmController {
 	}
 	
 	public void setValidators(Stage stage) {
-		//TODO validation of authorisationNumber
-		Utils.setTextFieldValidator(authorizationNumberField, "", "", true, Constants.INFINITE, "tooltip text", stage);
+		Utils.setTextFieldValidator(authorizationNumberField, "[A-Za-z0-9]*", "[A-Za-z0-9]*", true, Constants.INFINITE, 
+				"Numărul de autorizație este format din cifre și litere majuscule.", stage);
 		Utils.setTextFieldValidator(firstNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
 				"Numele poate conține doar litere majuscule și minuscule.", stage);
 		Utils.setTextFieldValidator(idCodeField, "[A-Za-z]*", "[A-Z]{2}", true, 2,
@@ -100,7 +100,7 @@ public class AddEmployeesToFirmController {
 		Utils.setTextFieldValidator(homeRegionField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
 				"Județul poate conține doar litere majuscule și minuscule.", stage);
 		Utils.setTextFieldValidator(homeAddressField, "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
-				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", JavaFxMain.primaryStage);
+				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", stage);
 	}
 	
 	private boolean allFieldsAreCorrect() {
@@ -201,6 +201,8 @@ public class AddEmployeesToFirmController {
 		birthDate.setValue(new java.sql.Date(employee.getBirthDate().getTime()).toLocalDate());
 		birthCityField.setText(employee.getBirthCity());
 		homeRegionField.setText(employee.getHomeRegion());
+		homeAddressField.setText(employee.getHomeAddress());
+		rsvtiCheckbox.selectedProperty().set(employee.isRsvti());
 	}
 	
 	public void setIsUpdate(boolean isUpdate) {

@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.GridPane;
 
 public class RigOverviewController {
 
@@ -34,6 +35,16 @@ public class RigOverviewController {
 	@FXML
 	private Label iscirRegistrationNumberLabel;
 	@FXML
+	private Label rigTypeLabel;
+	@FXML
+	private Label valveTitleLabel;
+	@FXML
+	private Label valveDueDateLabel;
+	@FXML
+	private Label valveRegistrationNumberLabel;
+	@FXML
+	private GridPane valveGridPane;
+	@FXML
 	private TableView<ParameterDetails> rigParameterTable;
 	@FXML
 	private TableColumn<ParameterDetails ,String> parameterNameColumn;
@@ -49,29 +60,35 @@ public class RigOverviewController {
 		try {
 			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 			if(rig != null) {
-				if(rig.isValve()) {
-					rigNameLabel.setText(rig.getRigName() + " - supapă");
-				} else {
-					rigNameLabel.setText(rig.getRigName());
-				}
+				rigNameLabel.setText(rig.getRigName());
 				dueDateLabel.setText(format.format(rig.getDueDate()));
 				productionNumberLabel.setText(rig.getProductionNumber());
-				productionYearLabel.setText(rig.getProductionYear() + "");
+				productionYearLabel.setText(format.format(rig.getProductionYear()));
 				iscirRegistrationNumberLabel.setText(rig.getIscirRegistrationNumber());
+				rigTypeLabel.setText(rig.getType());
 				rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 				rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 				parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 				parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
 				parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
-				if(rig.isValve()) {
-					rigParameterTable.setVisible(false);
+				if(rig.getType().equals(Constants.PRESSURE_RIG)) {
+					valveTitleLabel.setVisible(true);
+					valveGridPane.setVisible(true);
+					valveDueDateLabel.setText(format.format(rig.getValve().getDueDate()));
+					valveRegistrationNumberLabel.setText(rig.getValve().getRegistrationNumber());
 				} else {
-					rigParameterTable.setVisible(true);
+					valveTitleLabel.setVisible(false);
+					valveGridPane.setVisible(false);
 				}
-				//TODO rigType and isValve should be displayed? How?
 			} else {
 				rigNameLabel.setText("Instalatie");
-				dueDateLabel.setText(DBServices.getDatePattern().replaceAll("d", "z").replaceAll("M","l").replaceAll("y", "a"));
+				dueDateLabel.setText("");
+				productionNumberLabel.setText("");
+				productionYearLabel.setText("");
+				iscirRegistrationNumberLabel.setText("");
+				rigTypeLabel.setText("");
+				valveTitleLabel.setVisible(false);
+				valveGridPane.setVisible(false);
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);

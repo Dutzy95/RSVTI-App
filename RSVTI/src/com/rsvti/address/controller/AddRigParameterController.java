@@ -39,7 +39,7 @@ public class AddRigParameterController {
 	@FXML
 	public void initialize() {
 		try {
-			parameterType.setItems(FXCollections.observableArrayList("de ridicat", "sub presiune"));
+			parameterType.setItems(FXCollections.observableArrayList(Constants.LIFTING_RIG, Constants.PRESSURE_RIG));
 			parameterType.getSelectionModel().select(0);
 			parameterTable.setItems(FXCollections.observableArrayList(DBServices.getAllRigParameters()));
 			parameterTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));

@@ -17,11 +17,11 @@ public class Rig{
 	private String productionNumber;
 	private int productionYear;
 	private String iscirRegistrationNumber;
-	private boolean isValve;
+	private Valve valve;
 
 	private String type;
 	
-	public Rig(String rigName, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, boolean isValve) {
+	public Rig(String rigName, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, Valve valve) {
 		this.setRigName(rigName);
 		parameters = new ArrayList<ParameterDetails>();
 		this.revisionDate = revisionDate;
@@ -30,10 +30,22 @@ public class Rig{
 		this.setProductionNumber(productionNumber);
 		this.setProductionYear(productionYear);
 		this.setIscirRegistrationNumber(iscirRegistrationNumber);
-		this.setValve(isValve);
+		this.setValve(valve);
 	}
 	
-	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, boolean isValve) {
+	public Rig(String rigName, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber) {
+		this.setRigName(rigName);
+		parameters = new ArrayList<ParameterDetails>();
+		this.revisionDate = revisionDate;
+		this.setType(type);
+		this.setAuthorizationExtension(1);
+		this.setProductionNumber(productionNumber);
+		this.setProductionYear(productionYear);
+		this.setIscirRegistrationNumber(iscirRegistrationNumber);
+		this.setValve(null);
+	}
+	
+	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber, Valve valve) {
 		this.setRigName(rigName);
 		this.parameters = parameters;
 		this.setRevisionDate(revisionDate);
@@ -42,7 +54,19 @@ public class Rig{
 		this.setProductionNumber(productionNumber);
 		this.setProductionYear(productionYear);
 		this.setIscirRegistrationNumber(iscirRegistrationNumber);
-		this.setValve(isValve);
+		this.setValve(valve);
+	}
+	
+	public Rig(String rigName, List<ParameterDetails> parameters, Date revisionDate, String type, String productionNumber, int productionYear, String iscirRegistrationNumber) {
+		this.setRigName(rigName);
+		this.parameters = parameters;
+		this.setRevisionDate(revisionDate);
+		this.setType(type);
+		this.setAuthorizationExtension(1);
+		this.setProductionNumber(productionNumber);
+		this.setProductionYear(productionYear);
+		this.setIscirRegistrationNumber(iscirRegistrationNumber);
+		this.setValve(null);
 	}
 	
 	/**
@@ -171,11 +195,11 @@ public class Rig{
 		this.iscirRegistrationNumber = iscirRegistrationNumber;
 	}
 
-	public boolean isValve() {
-		return isValve;
+	public Valve getValve() {
+		return valve;
 	}
 
-	public void setValve(boolean isValve) {
-		this.isValve = isValve;
+	public void setValve(Valve valve) {
+		this.valve = valve;
 	}
 }

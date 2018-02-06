@@ -10,13 +10,13 @@ import com.rsvti.common.Utils;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
+import com.rsvti.database.entities.Valve;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -25,7 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 
 public class AddRigsToFirmController {
 
@@ -61,9 +61,15 @@ public class AddRigsToFirmController {
 	@FXML
 	private TextField iscirRegistrationNumberField;
 	@FXML
-	private CheckBox isValveCheckBox;
+	private TextField valveRegistrationNumberField;
 	@FXML
-	private VBox transferButtons;
+	private DatePicker valveRevisionDate;
+	@FXML
+	private Label valveDueDateLabel;
+	@FXML
+	private Label valveTitleLabel;
+	@FXML
+	private GridPane valveGridPane;
 	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
@@ -80,10 +86,9 @@ public class AddRigsToFirmController {
 	@FXML
 	public void initialize() {
 		try {
-			rigType.setItems(FXCollections.observableArrayList("de ridicat", "sub presiune"));
+			rigType.setItems(FXCollections.observableArrayList(Constants.LIFTING_RIG, Constants.PRESSURE_RIG));
 			rigType.getSelectionModel().select(0);
-			isValveCheckBox.setVisible(false);
-			importedParameterTable.setItems(FXCollections.observableArrayList(DBServices.getRigParametersByType("de ridicat")));
+			importedParameterTable.setItems(FXCollections.observableArrayList(DBServices.getRigParametersByType(Constants.LIFTING_RIG)));
 			importedParameterTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			importedParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			importedParameterColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
@@ -104,29 +109,15 @@ public class AddRigsToFirmController {
 					String selectedItem = rigType.getSelectionModel().getSelectedItem();
 					filterSelectedParameters(selectedItem);
 					importedParameterTable.refresh();
-					if(selectedItem.equals("sub presiune")) {
-						isValveCheckBox.setVisible(true);
+					if(selectedItem.equals(Constants.PRESSURE_RIG)) {
+						valveTitleLabel.setVisible(true);
+						valveGridPane.setVisible(true);
 					} else {
-						isValveCheckBox.setVisible(false);
+						valveTitleLabel.setVisible(false);
+						valveGridPane.setVisible(false);
 					}
 				} catch (Exception e) {
 					DBServices.saveErrorLogEntry(e);
-				}
-			});
-			
-			isValveCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-				if(newValue) {
-					chosenParametersTable.setVisible(false);
-					importedParameterTable.setVisible(false);
-					transferButtons.setVisible(false);
-					authorizationExtension.setDisable(true);
-					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), 1)));
-				} else {
-					chosenParametersTable.setVisible(true);
-					importedParameterTable.setVisible(true);
-					transferButtons.setVisible(true);
-					authorizationExtension.setDisable(false);
-					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 				}
 			});
 			
@@ -154,11 +145,7 @@ public class AddRigsToFirmController {
 					} else {
 						selectedExtensionValue = 0;
 					}
-					if(isValveCheckBox.selectedProperty().get()) {
-						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), 1)));
-					} else {
-						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
-					}
+					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 				} catch (Exception err) {
 					DBServices.saveErrorLogEntry(err);
 				}
@@ -170,10 +157,21 @@ public class AddRigsToFirmController {
 			
 			dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), selectedExtensionValue)));
 			
+			valveTitleLabel.setVisible(false);
+			valveGridPane.setVisible(false);
+			Utils.setDisabledDaysForDatePicker(valveRevisionDate);
+			Utils.setDisplayFormatForDatePicker(valveRevisionDate);
+			valveRevisionDate.setValue(LocalDate.now());
+			valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), 1)));
+			valveRevisionDate.setOnAction(e -> {
+				valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
+			});
+			
 			rigNameField.setAlignment(Pos.CENTER);
 			productionNumberField.setAlignment(Pos.CENTER);
 			iscirRegistrationNumberField.setAlignment(Pos.CENTER);
 			productionYearField.setAlignment(Pos.CENTER);
+			valveRegistrationNumberField.setAlignment(Pos.CENTER);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -224,38 +222,75 @@ public class AddRigsToFirmController {
 	@FXML
 	private void handleSave() {
 		try {
+			Rig newRig;
 			if(isDueDateUpdate) {
-				Rig newRig = new Rig(rigNameField.getText(), 
-						 chosenParametersTable.getItems(), 
-						 java.sql.Date.valueOf(revisionDate.getValue()),  
-						 rigType.getValue(),
-						 productionNumberField.getText(),
-						 Integer.parseInt(productionYearField.getText()),
-						 iscirRegistrationNumberField.getText(),
-						 isValveCheckBox.selectedProperty().get());
+				if(rigType.getValue().equals(Constants.LIFTING_RIG)) {
+					newRig = new Rig(rigNameField.getText(), 
+							 chosenParametersTable.getItems(), 
+							 java.sql.Date.valueOf(revisionDate.getValue()),  
+							 rigType.getValue(),
+							 productionNumberField.getText(),
+							 Integer.parseInt(productionYearField.getText()),
+							 iscirRegistrationNumberField.getText());
+				} else {
+					newRig = new Rig(rigNameField.getText(), 
+							 chosenParametersTable.getItems(), 
+							 java.sql.Date.valueOf(revisionDate.getValue()),  
+							 rigType.getValue(),
+							 productionNumberField.getText(),
+							 Integer.parseInt(productionYearField.getText()),
+							 iscirRegistrationNumberField.getText(),
+							 new Valve(
+									 new SimpleDateFormat(DBServices.getDatePattern()).parse(valveDueDateLabel.getText()),
+									 valveRegistrationNumberField.getText()));
+				}
 				newRig.setAuthorizationExtension(selectedExtensionValue);
 				javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
 			} else {
 				if(isUpdate) {
-					Rig newRig = new Rig(rigNameField.getText(), 
-										 chosenParametersTable.getItems(), 
-										 java.sql.Date.valueOf(revisionDate.getValue()), 
-										 rigType.getValue(),
-										 productionNumberField.getText(),
-										 Integer.parseInt(productionYearField.getText()),
-										 iscirRegistrationNumberField.getText(),
-										 isValveCheckBox.selectedProperty().get());
+					if(rigType.getValue().equals(Constants.LIFTING_RIG)) {
+						newRig = new Rig(rigNameField.getText(), 
+											 chosenParametersTable.getItems(), 
+											 java.sql.Date.valueOf(revisionDate.getValue()), 
+											 rigType.getValue(),
+											 productionNumberField.getText(),
+											 Integer.parseInt(productionYearField.getText()),
+											 iscirRegistrationNumberField.getText());
+					} else {
+						newRig = new Rig(rigNameField.getText(), 
+								 chosenParametersTable.getItems(), 
+								 java.sql.Date.valueOf(revisionDate.getValue()), 
+								 rigType.getValue(),
+								 productionNumberField.getText(),
+								 Integer.parseInt(productionYearField.getText()),
+								 iscirRegistrationNumberField.getText(),
+								 new Valve(
+										 new SimpleDateFormat(DBServices.getDatePattern()).parse(valveDueDateLabel.getText()),
+										 valveRegistrationNumberField.getText()));
+					}
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
 				} else {
-					Rig newRig = new Rig(rigNameField.getText(), 
-										 chosenParametersTable.getItems(), 
-										 java.sql.Date.valueOf(revisionDate.getValue()),  
-										 rigType.getValue(),
-										 productionNumberField.getText(),
-										 Integer.parseInt(productionYearField.getText()),
-										 iscirRegistrationNumberField.getText(),
-										 isValveCheckBox.selectedProperty().get());
+					if(rigType.getValue().equals(Constants.LIFTING_RIG)) {
+						newRig = new Rig(rigNameField.getText(), 
+											 chosenParametersTable.getItems(), 
+											 java.sql.Date.valueOf(revisionDate.getValue()),  
+											 rigType.getValue(),
+											 productionNumberField.getText(),
+											 Integer.parseInt(productionYearField.getText()),
+											 iscirRegistrationNumberField.getText());
+					} else {
+						newRig = new Rig(rigNameField.getText(), 
+								 chosenParametersTable.getItems(), 
+								 java.sql.Date.valueOf(revisionDate.getValue()),  
+								 rigType.getValue(),
+								 productionNumberField.getText(),
+								 Integer.parseInt(productionYearField.getText()),
+								 iscirRegistrationNumberField.getText(),
+								 new Valve(
+										 new SimpleDateFormat(DBServices.getDatePattern()).parse(valveDueDateLabel.getText()),
+										 valveRegistrationNumberField.getText()));
+					}
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
 				}
@@ -275,10 +310,13 @@ public class AddRigsToFirmController {
 		dueDateLabel.setText(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate().toString());
 		rigType.setValue(rig.getType());
 		chosenParametersTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
-		filterSelectedParameters("de ridicat");
+		filterSelectedParameters(Constants.LIFTING_RIG);
 		revisionDate.setValue(new java.sql.Date(rig.getRevisionDate().getTime()).toLocalDate());
 		authorizationExtension.getSelectionModel().select(rig.getAuthorizationExtension());
 		dueDateLabel.setText(simpleDateFormat.format(rig.getDueDate()));
+		productionYearField.setText(rig.getProductionYear() + "");
+		productionNumberField.setText(rig.getProductionNumber());
+		iscirRegistrationNumberField.setText(rig.getIscirRegistrationNumber());
 	}
 	
 	public void setIsUpdate(boolean isUpdate) {

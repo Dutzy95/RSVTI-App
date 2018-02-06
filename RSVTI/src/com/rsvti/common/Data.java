@@ -3,7 +3,6 @@ package com.rsvti.common;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 
 import com.rsvti.database.entities.Administrator;
@@ -14,6 +13,7 @@ import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
+import com.rsvti.database.entities.Valve;
 import com.rsvti.database.services.DBServices;
 
 public class Data {
@@ -39,25 +39,24 @@ public class Data {
 			Employee employee6 = new Employee("FirstName6", "LastName6", "MH", "479465", "13456879546", getDate(1950, 12, 4), "Severin", "Adresa6", "Severin",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 2, 10), addFromTodayDate(0, 2, 15)), "manevrant", false);
 			
-			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), "de ridicat", "1237dsa987", 2005, "32988fa0s", false);
+			Rig liftingRig1 = new Rig("macara", addFromTodayDate(0, 2, 0), Constants.LIFTING_RIG, "1237dsa987", 2005, "32988fa0");
 			liftingRig1.setAuthorizationExtension(0);
 			liftingRig1.addParameter(new ParameterDetails("inaltime_maxima","23","m"));
 			liftingRig1.addParameter(new ParameterDetails("greutate_maxima","44", "kg"));
 			
-			Rig supapa = new Rig("Supapa1", addFromTodayDate(0, 0, 0), "sub presiune", "asd78921u", 2001, "ad81u304", true);
-			
 			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457",
 					"Vasile Vasilescu",	new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), 
-					Arrays.asList(liftingRig1, supapa), Arrays.asList(employee1,employee2)), false);
+					Arrays.asList(liftingRig1), Arrays.asList(employee1,employee2)), false);
 			
 			
-			Rig liftingRig2 = new Rig("stivuitor", addFromTodayDate(0, 11, 12), "de ridicat", "ds87123hui", 2006, "das87f6723", false);
+			Rig liftingRig2 = new Rig("stivuitor", addFromTodayDate(0, 11, 12), Constants.LIFTING_RIG, "ds87123hui", 2006, "das87f6723");
 			liftingRig2.setAuthorizationExtension(0);
 			liftingRig2.addParameter(new ParameterDetails("ceva","45","cevauri"));
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
-			Rig pressureRig = new Rig("cazan", addFromTodayDate(1, 2, 3), "sub presiune", "84390d7s68a97a", 2007, "432d9ssfas", false);
+			Rig pressureRig = new Rig("cazan", addFromTodayDate(1, 2, 3), Constants.PRESSURE_RIG, "84390d7s68a97a", 2007, "432d9ssfas",
+					new Valve(addFromTodayDate(0, 2, 0), "83hqk234"));
 			pressureRig.setAuthorizationExtension(0);
 			pressureRig.addParameter(new ParameterDetails("volum_maxim","98","m3"));
 			pressureRig.addParameter(new ParameterDetails("presiune_maxima","74","bar"));
@@ -67,12 +66,12 @@ public class Data {
 					"Dan Popescu", new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), 
 					Arrays.asList(liftingRig2,pressureRig), Arrays.asList(employee3, employee4, employee5, employee6)), false);
 			
-			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_maxima", "m"));
-			DBServices.saveEntry(new RigParameter("de ridicat", "greutate_maxima", "kg"));
-			DBServices.saveEntry(new RigParameter("de ridicat", "inaltime_minima", "m"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "volum_maxim", "m3"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "volum_minim", "m3"));
-			DBServices.saveEntry(new RigParameter("sub presiune", "presiune_maxima", "bar"));
+			DBServices.saveEntry(new RigParameter(Constants.LIFTING_RIG, "inaltime_maxima", "m"));
+			DBServices.saveEntry(new RigParameter(Constants.LIFTING_RIG, "greutate_maxima", "kg"));
+			DBServices.saveEntry(new RigParameter(Constants.LIFTING_RIG, "inaltime_minima", "m"));
+			DBServices.saveEntry(new RigParameter(Constants.PRESSURE_RIG, "volum_maxim", "m3"));
+			DBServices.saveEntry(new RigParameter(Constants.PRESSURE_RIG, "volum_minim", "m3"));
+			DBServices.saveEntry(new RigParameter(Constants.PRESSURE_RIG, "presiune_maxima", "bar"));
 			
 			DBServices.saveEntry(new TestQuestion("MLorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tincidunt lacus ac enim vestibulum, in porta nulla bibendum. Mauris malesuada sodales cursus.", Arrays.asList("raspuns11", "raspuns12", "raspuns13"),"manevrant"));
 			DBServices.saveEntry(new TestQuestion("MDonec condimentum, orci non fermentum rutrum, quam nisl maximus ante, id finibus nibh risus eget felis. Curabitur fermentum metus dignissim lectus blandit ullamcorper.", Arrays.asList("raspuns21", "raspuns22", "raspuns23"),"manevrant"));

@@ -7,6 +7,7 @@ import java.util.List;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.rsvti.common.Constants;
 import com.rsvti.database.entities.Administrator;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
@@ -15,6 +16,7 @@ import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.entities.TestQuestion;
+import com.rsvti.database.entities.Valve;
 
 public class EntityBuilder {
 
@@ -39,6 +41,7 @@ public class EntityBuilder {
 			
 			if(rigEmployeeNode.getNodeName().equals("instalatie")) {
 				List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
+				Rig rig;
 				
 				String rigName = rigEmployeeNode.getChildNodes().item(0).getTextContent();
 				Date revisionDate = new Date(Long.parseLong(rigEmployeeNode.getChildNodes().item(1).getTextContent()));
@@ -46,15 +49,27 @@ public class EntityBuilder {
 				String productionNumber = rigEmployeeNode.getChildNodes().item(3).getTextContent();
 				int productionYear = Integer.parseInt(rigEmployeeNode.getChildNodes().item(4).getTextContent());
 				String iscirRegistrationNumber = rigEmployeeNode.getChildNodes().item(5).getTextContent();
-				boolean isValve = Boolean.parseBoolean(rigEmployeeNode.getAttributes().getNamedItem("supapa").getTextContent());
-				
 				String type = rigEmployeeNode.getAttributes().getNamedItem("type").getTextContent();
 				
-				for(int l = 6; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
-					parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+				if(type.equals(Constants.PRESSURE_RIG)) {
+					Node valve = rigEmployeeNode.getChildNodes().item(6);
+					Date valveDueDate = new Date(Long.parseLong(valve.getChildNodes().item(0).getTextContent()));
+					String valveRegistrationNumber = valve.getChildNodes().item(1).getTextContent();
+					
+					for(int l = 7; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
+						parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+					}
+					
+					rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
+							new Valve(valveDueDate, valveRegistrationNumber));
+				} else {
+					for(int l = 6; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
+						parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+					}
+					
+					rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber);
 				}
 				
-				Rig rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber, isValve);
 				rig.setAuthorizationExtension(authorizationExtension);
 				rigs.add(rig);
 			} else {
@@ -115,6 +130,7 @@ public class EntityBuilder {
 	
 	public static Rig buildRigFromXml(Node node) {
 		List<ParameterDetails> parameters = new ArrayList<ParameterDetails>();
+		Rig rig;
 		
 		String rigName = node.getChildNodes().item(0).getTextContent();
 		Date revisionDate = new Date(Long.parseLong(node.getChildNodes().item(1).getTextContent()));
@@ -122,13 +138,26 @@ public class EntityBuilder {
 		String productionNumber = node.getChildNodes().item(3).getTextContent();
 		int productionYear = Integer.parseInt(node.getChildNodes().item(4).getTextContent());
 		String iscirRegistrationNumber = node.getChildNodes().item(5).getTextContent();
-		boolean isValve = Boolean.parseBoolean(node.getAttributes().getNamedItem("supapa").getTextContent());
+		String type = node.getAttributes().getNamedItem("type").getTextContent();
 		
-		String type = "";
-		for(int i = 6; i < node.getChildNodes().getLength(); i++) {
-			parameters.add(new ParameterDetails(node.getChildNodes().item(i).getNodeName(), node.getChildNodes().item(i).getTextContent(),node.getChildNodes().item(i).getAttributes().getNamedItem("mUnit").getTextContent()));
+		if(type.equals(Constants.PRESSURE_RIG)) {
+			Node valve = node.getChildNodes().item(6);
+			Date valveDueDate = new Date(Long.parseLong(valve.getChildNodes().item(0).getTextContent()));
+			String valveRegistrationNumber = valve.getChildNodes().item(1).getTextContent();
+			
+			for(int l = 7; l < node.getChildNodes().getLength(); l++) {
+				parameters.add(new ParameterDetails(node.getChildNodes().item(l).getNodeName(), node.getChildNodes().item(l).getTextContent(), node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+			}
+			
+			rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
+					new Valve(valveDueDate, valveRegistrationNumber));
+		} else {
+			for(int l = 6; l < node.getChildNodes().getLength(); l++) {
+				parameters.add(new ParameterDetails(node.getChildNodes().item(l).getNodeName(), node.getChildNodes().item(l).getTextContent(), node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+			}
+			
+			rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber);
 		}
-		Rig rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber, isValve);
 		rig.setAuthorizationExtension(authorizationExtension);
 		return rig;
 	}
@@ -211,5 +240,19 @@ public class EntityBuilder {
 				node.getAttributes().getNamedItem("nume_firma").getTextContent(), 
 				new Date(Long.parseLong(node.getAttributes().getNamedItem("data_si_ora_generarii").getTextContent()))
 				);
+	}
+	
+	public static Valve buildValveFromXml(Node node) {
+		return new Valve(
+				new Date(Long.parseLong(node.getChildNodes().item(0).getTextContent())),
+				node.getChildNodes().item(1).getTextContent());
+	}
+	
+	public static List<Valve> buildValveListFromXml(NodeList nodeList) {
+		List<Valve> valves = new ArrayList<>();
+		for(int i = 0; i < nodeList.getLength(); i++) {
+			valves.add(buildValveFromXml(nodeList.item(i)));
+		}
+		return valves;
 	}
 }

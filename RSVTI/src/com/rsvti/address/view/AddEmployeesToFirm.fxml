@@ -35,6 +35,10 @@
             <Label text="Număr buletin" GridPane.rowIndex="3" />
             <Label text="CNP" GridPane.rowIndex="4" />
             <Label text="Titlu" GridPane.rowIndex="5" />
+            <Label text="Data nașterii" GridPane.rowIndex="6" />
+            <Label text="Localitatea nașterii" GridPane.rowIndex="7" />
+            <Label text="Adresa domiciliu:" GridPane.rowIndex="8" />
+            <Label text="Județ domiciliu:" GridPane.rowIndex="9" />
             <Label text="Număr autorizație" GridPane.rowIndex="10" />
             <Label text="Data obținerii autorizației" GridPane.rowIndex="11" />
             <Label text="Data scadenței autorizației" GridPane.rowIndex="12" />
@@ -44,18 +48,14 @@
             <TextField fx:id="idNumberField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="personalIdentificationNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <DatePicker fx:id="birthDate" prefHeight="31.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="birthCityField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="homeAddressField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="homeRegionField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <TextField fx:id="authorizationNumberField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
             <DatePicker fx:id="authorizationObtainigDate" prefHeight="31.0" prefWidth="247.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <DatePicker fx:id="authorizationDueDate" prefHeight="31.0" prefWidth="244.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <Label text="Data nașterii" GridPane.rowIndex="6" />
-            <Label text="Localitatea nașterii" GridPane.rowIndex="7" />
-            <Label text="Județ domiciliu:" GridPane.rowIndex="9" />
-            <DatePicker fx:id="birthDate" prefHeight="31.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="birthLocationField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="homeRegionField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <CheckBox fx:id="rsvtiCheckbox" mnemonicParsing="false" text="RSVTI" GridPane.rowIndex="13" />
-            <Label text="Adresa domiciliu:" GridPane.rowIndex="8" />
-            <TextField fx:id="homeAddressField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <Button layoutX="262.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />

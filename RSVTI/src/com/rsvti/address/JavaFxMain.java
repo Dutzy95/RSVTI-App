@@ -314,14 +314,11 @@ public class JavaFxMain extends Application {
 	        Scene scene = new Scene(addUpdateEmployeesToFirm);
 	        addUpdateEmployeesToFirmStage.setScene(scene);
             
-	        AddEmployeesToFirmController controller = loader.getController();
-	        controller.setJavaFxMain(this);
-	        controller.setFirmName(stageName);
-	        controller.setIsDueDateUpdate(isDueDateUpdate);
-	        controller.setValidators(addUpdateEmployeesToFirmStage);
-            
-            addUpdateEmployeesToFirmController = loader.getController();
-            addUpdateEmployeesToFirmController.setJavaFxMain(this);
+        	addUpdateEmployeesToFirmController = loader.getController();
+	        addUpdateEmployeesToFirmController.setJavaFxMain(this);
+	        addUpdateEmployeesToFirmController.setFirmName(stageName);
+	        addUpdateEmployeesToFirmController.setIsDueDateUpdate(isDueDateUpdate);
+	        addUpdateEmployeesToFirmController.setValidators(addUpdateEmployeesToFirmStage);
             addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
             
             if(employee != null) {
