@@ -10,7 +10,7 @@ import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.Rig;
-import com.rsvti.database.entities.RigDueDateDetails;
+import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -35,13 +35,13 @@ public class DueDateOverviewController {
 	private DatePicker dateTo;
 	
 	@FXML
-	private TableView<RigDueDateDetails> rigTable;
+	private TableView<RigWithDetails> rigTable;
 	@FXML
-	private TableColumn<RigDueDateDetails,String> rigColumn;
+	private TableColumn<RigWithDetails,String> rigColumn;
 	@FXML
-	private TableColumn<RigDueDateDetails,String> firmNameColumn;
+	private TableColumn<RigWithDetails,String> firmNameColumn;
 	@FXML
-	private TableColumn<RigDueDateDetails,String> rigDueDateColumn;
+	private TableColumn<RigWithDetails,String> rigDueDateColumn;
 	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
@@ -75,10 +75,10 @@ public class DueDateOverviewController {
 			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 			rigDueDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(simpleDateFormat.format(cellData.getValue().getDueDate())));
 			rigTable.setRowFactory( tv -> {
-			    TableRow<RigDueDateDetails> row = new TableRow<>();
+			    TableRow<RigWithDetails> row = new TableRow<>();
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-			        	RigDueDateDetails rowData = row.getItem();
+			        	RigWithDetails rowData = row.getItem();
 			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName());
 			        }
 			    });
@@ -126,8 +126,8 @@ public class DueDateOverviewController {
 	}
 	
 	public void updateRigTable(String firmName, Rig rigToUpdate, Rig newRig) {
-		List<RigDueDateDetails> beforeUpdate = rigTable.getItems();
-		for(RigDueDateDetails index : beforeUpdate) {
+		List<RigWithDetails> beforeUpdate = rigTable.getItems();
+		for(RigWithDetails index : beforeUpdate) {
 			if(index.getRig().equals(rigToUpdate)) {
 				index.setRig(newRig);
 				index.setDueDate(newRig.getDueDate());

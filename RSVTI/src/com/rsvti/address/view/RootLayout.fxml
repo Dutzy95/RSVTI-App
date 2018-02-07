@@ -21,7 +21,12 @@
               <MenuItem mnemonicParsing="false" onAction="#handleFileClose" text="Închide aplicația" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Modifică" />
+          <Menu mnemonicParsing="false" text="Modifică">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Firmă" />
+                  <MenuItem mnemonicParsing="false" text="Instalație" />
+                  <MenuItem fx:id="handleEditEmployee" mnemonicParsing="false" text="Angajat" />
+               </items></Menu>
             <Menu mnemonicParsing="false" text="Afișează">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#handleViewFirms" text="Firme" />
@@ -38,6 +43,7 @@
                   <Menu mnemonicParsing="false" text="Proces verbal">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#handleGenerateTestResultsReport" text="Rezultate examinare" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleTechnicalRigEvaluationReport" text="Verificare tehnică utilaj" />
                     </items>
                   </Menu>
               </items>

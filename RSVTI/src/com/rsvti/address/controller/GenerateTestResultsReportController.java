@@ -31,8 +31,6 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.util.converter.DefaultStringConverter;
 
 public class GenerateTestResultsReportController {
-	@FXML
-	private JavaFxMain javaFxMain;
 	
 	@FXML
 	private TableView<Firm> firmTable;
@@ -214,9 +212,4 @@ public class GenerateTestResultsReportController {
 		}
 		return tmp;
 	}
-	
-	public void setJavaFxMain(JavaFxMain javaFxMain) {
-		this.javaFxMain = javaFxMain;
-	}
-
 }

@@ -40,7 +40,7 @@ import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
-import com.rsvti.database.entities.RigDueDateDetails;
+import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.entities.Valve;
@@ -241,7 +241,8 @@ public class DBServices {
 			}
 			
 			for(ParameterDetails rigParameterIndex : parameters) {
-				Element node = document.createElement(rigParameterIndex.getName());
+				Element node = document.createElement(rigParameterIndex.getName().toLowerCase().replaceAll(" ", "_"));
+				node.setAttribute("name", rigParameterIndex.getName());
 				node.appendChild(document.createTextNode(rigParameterIndex.getValue()));
 				node.setAttribute("mUnit", rigParameterIndex.getMeasuringUnit());
 				rig.appendChild(node);
@@ -494,8 +495,8 @@ public class DBServices {
 		return selectedEmployees;
 	}
 	
-	public static List<RigDueDateDetails> getRigsBetweenDateInterval(Date beginDate, Date endDate) {
-		List<RigDueDateDetails> selectedRigs = new ArrayList<RigDueDateDetails>();
+	public static List<RigWithDetails> getRigsBetweenDateInterval(Date beginDate, Date endDate) {
+		List<RigWithDetails> selectedRigs = new ArrayList<RigWithDetails>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			Firm firm = EntityBuilder.buildFirmFromXml(firmNodes.item(i));
@@ -503,7 +504,7 @@ public class DBServices {
 				Date dueDate = firm.getRigs().get(j).getDueDate();
 				if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
 						(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
-					selectedRigs.add(new RigDueDateDetails(firm.getRigs().get(j), firm.getFirmName(), dueDate));
+					selectedRigs.add(new RigWithDetails(firm.getRigs().get(j), firm, dueDate));
 				}
 			}
 		}

@@ -15,12 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class EmployeeOverviewController {
-
+	
 	@FXML
 	private TableView<Employee> employeeTable;
 	@FXML
@@ -60,7 +59,7 @@ public class EmployeeOverviewController {
 			this.employeeList = employeeList;
 			employeeTable.setItems(FXCollections.observableArrayList(employeeList));
 			employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-		
+			
 			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 			firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
 			lastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));

@@ -57,14 +57,20 @@ public class EntityBuilder {
 					String valveRegistrationNumber = valve.getChildNodes().item(1).getTextContent();
 					
 					for(int l = 7; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
-						parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+						parameters.add(new ParameterDetails(
+								rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("name").getTextContent(),
+								rigEmployeeNode.getChildNodes().item(l).getTextContent(),
+								rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 					}
 					
 					rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
 							new Valve(valveDueDate, valveRegistrationNumber));
 				} else {
 					for(int l = 6; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
-						parameters.add(new ParameterDetails(rigEmployeeNode.getChildNodes().item(l).getNodeName(), rigEmployeeNode.getChildNodes().item(l).getTextContent(), rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+						parameters.add(new ParameterDetails(
+								rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("name").getTextContent(),
+								rigEmployeeNode.getChildNodes().item(l).getTextContent(),
+								rigEmployeeNode.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 					}
 					
 					rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber);
@@ -146,14 +152,20 @@ public class EntityBuilder {
 			String valveRegistrationNumber = valve.getChildNodes().item(1).getTextContent();
 			
 			for(int l = 7; l < node.getChildNodes().getLength(); l++) {
-				parameters.add(new ParameterDetails(node.getChildNodes().item(l).getNodeName(), node.getChildNodes().item(l).getTextContent(), node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+				parameters.add(new ParameterDetails(
+						node.getChildNodes().item(l).getAttributes().getNamedItem("name").getTextContent(),
+						node.getChildNodes().item(l).getTextContent(),
+						node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 			}
 			
 			rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
 					new Valve(valveDueDate, valveRegistrationNumber));
 		} else {
 			for(int l = 6; l < node.getChildNodes().getLength(); l++) {
-				parameters.add(new ParameterDetails(node.getChildNodes().item(l).getNodeName(), node.getChildNodes().item(l).getTextContent(), node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
+				parameters.add(new ParameterDetails(
+						node.getChildNodes().item(l).getAttributes().getNamedItem("name").getTextContent(),
+						node.getChildNodes().item(l).getTextContent(),
+						node.getChildNodes().item(l).getAttributes().getNamedItem("mUnit").getTextContent()));
 			}
 			
 			rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber);

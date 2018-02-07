@@ -60,4 +60,7 @@ public class Constants {
 	
 	public static final String LIFTING_RIG = "de ridicat";
 	public static final String PRESSURE_RIG = "sub presiune";
+	
+	public static final String RIG_PARAMETER_PRESSURE = "P";
+	public static final String RIG_PARAMETER_VOLUME = "V";
 }

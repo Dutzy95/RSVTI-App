@@ -202,4 +202,22 @@ public class Rig{
 	public void setValve(Valve valve) {
 		this.valve = valve;
 	}
+	
+	public ParameterDetails getPressure() {
+		for(ParameterDetails index : parameters) {
+			if(index.getName().equals(Constants.RIG_PARAMETER_PRESSURE)) {
+				return index;
+			}
+		}
+		return null;
+	}
+	
+	public ParameterDetails getVolume() {
+		for(ParameterDetails index : parameters) {
+			if(index.getName().equals(Constants.RIG_PARAMETER_VOLUME)) {
+				return index;
+			}
+		}
+		return null;
+	}
 }

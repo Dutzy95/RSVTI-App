@@ -141,7 +141,11 @@ public class Utils {
 	
 	public static String getJarFilePath() {
 		//		For .jar file
-//		String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+//		try {
+//			String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+//		} catch(Exception e) {
+//			DBServices.saveErrorLogEntry(e);
+//		}
 //		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
 		
 		//		For Eclipse
@@ -159,6 +163,7 @@ public class Utils {
 			String jarFilePath = getJarFilePath();
 			File file = new File(jarFilePath + "database");
 			file.mkdir();
+			Runtime.getRuntime().exec("attrib +H " + file.getAbsolutePath());	//hide Folder
 			file = new File(jarFilePath + "docs");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\adeverințe");
@@ -167,10 +172,13 @@ public class Utils {
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\procese verbale\\rezultate examinare");
 			file.mkdir();
+			file = new File(jarFilePath + "docs\\procese verbale\\verificare tehnică utilaje");
+			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste");
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste\\logs");
 			file.mkdir();
+			Runtime.getRuntime().exec("attrib +H " + file.getAbsolutePath());	//hide Folder
 			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
 			file = new File(jarFilePath + "images");

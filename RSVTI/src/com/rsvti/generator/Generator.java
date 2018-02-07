@@ -38,11 +38,13 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.EmployeeTestResults;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
+import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
+import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
 
@@ -125,7 +127,7 @@ public class Generator {
 		return run;
 	}
 	
-	public static XWPFParagraph createParagraphForCertificate(XWPFDocument document, ParagraphAlignment alignment) {
+	public static XWPFParagraph createFormattedParagraph(XWPFDocument document, ParagraphAlignment alignment) {
 		XWPFParagraph paragraph = document.createParagraph();
 		paragraph.setAlignment(alignment);
 		paragraph.setSpacingAfter(0);
@@ -137,19 +139,19 @@ public class Generator {
 	public static void generateOneCertificate(XWPFDocument document, EmployeeWithDetails employee, int registrationNumber, Date registrationDate, 
 			Date issueDate, boolean choice1, boolean choice2, boolean choice3, boolean choice4, String rsvti, String executiveName) {
 		SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
-		XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
+		XWPFParagraph paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
 		XWPFRun run;
 		createRunSize14TimesNR(paragraph, "   " + employee.getFirmName(), false);
 		document.createParagraph();	//empty line
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.CENTER);
 		createRunSize14TimesNR(paragraph, "ADEVERINȚĂ", true);
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.CENTER);
 		createRunSize14TimesNR(paragraph, "Nr ", false);
 		createRunSize14TimesNR(paragraph, registrationNumber + "", false);
 		createRunSize14TimesNR(paragraph, " / ", false);
 		createRunSize14TimesNR(paragraph, format.format(registrationDate), false);
 		document.createParagraph();	//empty line
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.BOTH);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		run.addTab();	//indent for paragraph beginning
 		createRunSize14TimesNR(paragraph, "Prin prezenta se adeverește că Dl/D-na ", false);
@@ -200,20 +202,20 @@ public class Generator {
 			createRunSize14TimesNR(paragraph, ", să deservească mașinile de ridicat stipulate în procesul verbal.", false);
 		}
 		emptyLines(document, 2);
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		createRunSize14TimesNR(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-executiveName.length())/2) + executiveName + getStringOfSpaces((82/2-executiveName.length())/2), false);
 		run = createRunSize14TimesNR(paragraph, "", false);
 		createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-rsvti.length())/2) + rsvti + getStringOfSpaces((82/2-rsvti.length())/2), false);
 		emptyLines(document, 2);
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 		createRunSize14TimesNR(paragraph, "Eliberată la data de " + format.format(issueDate), false);
-		paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+		paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 		createRunSize14TimesNR(paragraph, "Valabil un an de la data emiterii.", false);
 	}
 	
@@ -271,7 +273,7 @@ public class Generator {
 	
 	private static void emptyLines(XWPFDocument document, int nrOfLines) {
 		for(int i = 0; i < nrOfLines; i++) {
-			document.createParagraph();
+			createFormattedParagraph(document, ParagraphAlignment.LEFT);
 		}
 	}
 	
@@ -316,8 +318,8 @@ public class Generator {
 		}
 	}
 	
-	private static void setCellParagraph(XWPFParagraph paragraph) {
-		paragraph.setAlignment(ParagraphAlignment.CENTER);
+	private static void formatParagraph(XWPFParagraph paragraph, ParagraphAlignment alignment) {
+		paragraph.setAlignment(alignment);
 		paragraph.setSpacingAfter(0);
 		paragraph.setSpacingBefore(0);
 		paragraph.setSpacingLineRule(LineSpacingRule.EXACT);
@@ -347,13 +349,13 @@ public class Generator {
 			SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
 			
 			XWPFRun run;
-			XWPFParagraph paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			XWPFParagraph paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 			createRunSize14TimesNR(paragraph, firm.getFirmName(), true);
 			emptyLines(document, 5);
-			paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+			paragraph = createFormattedParagraph(document, ParagraphAlignment.CENTER);
 			createRunSize14TimesNR(paragraph, "PROCES VERBAL NR. " + registrationNumber + " / " + format.format(registrationDate), true);
 			emptyLines(document, 1);
-			paragraph = createParagraphForCertificate(document, ParagraphAlignment.CENTER);
+			paragraph = createFormattedParagraph(document, ParagraphAlignment.CENTER);
 			createRunSize14TimesNR(paragraph, "CU REZULTATELE OBȚINUTE LA EXAMINAREA PERIODICĂ A PERSONALULUI CA " + employeeTitle.toUpperCase() + ", PENTRU URMĂTORII CANDIDAȚI", false);
 			
 			XWPFTable table = document.createTable();
@@ -365,32 +367,32 @@ public class Generator {
 			tableTitle.getCell(0).removeParagraph(0);
 			tableTitle.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(0).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Nr. Crt", true, 10);
 		    tableTitle.addNewTableCell().removeParagraph(0);
 		    tableTitle.getCell(1).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(1).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Numele și prenumele", true, 10);
 		    tableTitle.addNewTableCell().removeParagraph(0);
 		    tableTitle.getCell(2).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(2).addParagraph(); 
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "CNP", true, 10);
 		    tableTitle.addNewTableCell().removeParagraph(0);
 		    tableTitle.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(3).addParagraph(); 
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Nr adeverință", true, 10);
 		    tableTitle.addNewTableCell().removeParagraph(0);
 		    tableTitle.getCell(4).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(4).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Tip instalație", true, 10);
 		    tableTitle.addNewTableCell().removeParagraph(0);
 		    tableTitle.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = tableTitle.getCell(5).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Rezultatul Examinării", true, 10);
 		    tableTitle.addNewTableCell();
 		    
@@ -398,12 +400,12 @@ public class Generator {
 		    dataRow.getCell(5).removeParagraph(0);
 		    dataRow.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = dataRow.getCell(5).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Teoretic", true, 10);
 		    dataRow.getCell(6).removeParagraph(0);
 		    dataRow.getCell(6).setVerticalAlignment(XWPFVertAlign.CENTER);
 		    paragraph = dataRow.getCell(6).addParagraph();
-		    setCellParagraph(paragraph);
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 		    createRunTimesNR(paragraph, "Practic", true, 10);
 		    
 		    
@@ -412,32 +414,32 @@ public class Generator {
 				dataRow.getCell(0).removeParagraph(0);
 				dataRow.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(0).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, i + "", false, 10);
 			    dataRow.getCell(1).removeParagraph(0);
 			    dataRow.getCell(1).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(1).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, employees.get(i-1).getEmployeeName(), false, 10);
 			    dataRow.getCell(2).removeParagraph(0);
 			    dataRow.getCell(2).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(2).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, employees.get(i-1).getPersonalIdentificationNumber(), false, 10);
 			    dataRow.getCell(3).removeParagraph(0);
 			    dataRow.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(3).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, i + "", false, 10);
 			    dataRow.getCell(5).removeParagraph(0);
 			    dataRow.getCell(5).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(5).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, employees.get(i-1).getTheoryResult(), false, 10);
 			    dataRow.getCell(6).removeParagraph(0);
 			    dataRow.getCell(6).setVerticalAlignment(XWPFVertAlign.CENTER);
 			    paragraph = dataRow.getCell(6).addParagraph();
-			    setCellParagraph(paragraph);
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			    createRunTimesNR(paragraph, employees.get(i-1).getPractiseResult(), false, 10);
 			}
 			
@@ -446,12 +448,12 @@ public class Generator {
 				dataRow.getCell(0).removeParagraph(0);
 				dataRow.getCell(0).setVerticalAlignment(XWPFVertAlign.CENTER);
 				paragraph = dataRow.getCell(0).addParagraph();
-				setCellParagraph(paragraph);
+				formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				createRunTimesNR(paragraph, i + "", false, 10);
 				dataRow.getCell(3).removeParagraph(0);
 				dataRow.getCell(3).setVerticalAlignment(XWPFVertAlign.CENTER);
 				paragraph = dataRow.getCell(3).addParagraph();
-				setCellParagraph(paragraph);
+				formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				createRunTimesNR(paragraph, i + "", false, 10);
 			}
 			
@@ -459,7 +461,7 @@ public class Generator {
 			cell.removeParagraph(0);
 			cell.setVerticalAlignment(XWPFVertAlign.CENTER);
 			paragraph = cell.addParagraph();
-			setCellParagraph(paragraph);
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
 			int cnt = 0;
 			if(choice1.selectedProperty().get()) {
 				createRunTimesNR(paragraph, choice1.getText().toUpperCase(), false, 10);
@@ -468,10 +470,10 @@ public class Generator {
 			if(choice2.selectedProperty().get()) {
 				if(cnt == 1) {
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 					createRunTimesNR(paragraph, " + ", false, 10);
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				}
 				createRunTimesNR(paragraph, choice2.getText().toUpperCase(), false, 10);
 				cnt++;
@@ -479,15 +481,15 @@ public class Generator {
 			if(choice3.selectedProperty().get()) {
 				if(cnt >= 1) {
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 					createRunTimesNR(paragraph, " + ", false, 10);
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				}
 				if(choice3.getText().indexOf("(") > 0) {
 					createRunTimesNR(paragraph, choice3.getText().substring(0, choice3.getText().indexOf("(") - 1).toUpperCase(), false, 10);
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 					createRunTimesNR(paragraph, choice3.getText().substring(choice3.getText().indexOf("("), choice3.getText().indexOf("Q") + 1), false, 10);
 					run = createRunTimesNR(paragraph, choice3.getText().substring(choice3.getText().indexOf("Q") + 1, choice3.getText().indexOf("x") + 1), false, 10);
 					run.setSubscript(VerticalAlign.SUBSCRIPT);
@@ -500,14 +502,14 @@ public class Generator {
 			if(choice4.isVisible() && choice4.selectedProperty().get()) {
 				if(cnt >= 1) {
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 					createRunTimesNR(paragraph, " + ", false, 10);
 					paragraph = cell.addParagraph();
-					setCellParagraph(paragraph);
+					formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				}
 				createRunTimesNR(paragraph, choice4.getText().substring(0, choice4.getText().indexOf("(") - 1).toUpperCase(), false, 10);
 				paragraph = cell.addParagraph();
-				setCellParagraph(paragraph);
+				formatParagraph(paragraph, ParagraphAlignment.CENTER);
 				createRunTimesNR(paragraph, choice4.getText().substring(choice4.getText().indexOf("("), choice4.getText().indexOf("Q") + 1), false, 10);
 				run = createRunTimesNR(paragraph, choice4.getText().substring(choice4.getText().indexOf("Q") + 1, choice4.getText().indexOf("x") + 1), false, 10);
 				run.setSubscript(VerticalAlign.SUBSCRIPT);
@@ -515,12 +517,12 @@ public class Generator {
 			}
 			
 			emptyLines(document, 3);
-			paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 			run = createRunSize14TimesNR(paragraph, "", false);
 			createRunSize14TimesNR(paragraph, getStringOfSpaces(16) + "DIRECTOR" + getStringOfSpaces(17), true);
 			run = createRunSize14TimesNR(paragraph, "", false);
 			createRunSize14TimesNR(paragraph, getStringOfSpaces(18) + "RSVTI", true);
-			paragraph = createParagraphForCertificate(document, ParagraphAlignment.LEFT);
+			paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
 			run = createRunSize14TimesNR(paragraph, "", false);
 			createRunSize14TimesNR(paragraph, getStringOfSpaces((82/2-executiveName.length())/2) + executiveName + getStringOfSpaces((82/2-executiveName.length())/2), false);
 			run = createRunSize14TimesNR(paragraph, "", false);
@@ -556,6 +558,244 @@ public class Generator {
 				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\rezultate examinare\\" + currentDate);
 				backupFile.mkdir();
 				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\rezultate examinare\\" + currentDate + "\\" + firm.getFirmName() + ".docx");
+				FileOutputStream backupOutput = new FileOutputStream(backupFile);
+				document.write(backupOutput);
+			}
+			
+			document.close();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+		return file;
+	}
+	
+	public static File generateTechnicalRigEvaluationReport(RigWithDetails rigWithDetails, String reportNumber, Date reportCreationDate, String rigCode,
+			String liftingRigType, boolean firstTime) {
+		File file = null;
+		try {
+			String jarFilePath = Utils.getJarFilePath();
+			
+			XWPFDocument document = new XWPFDocument();
+			CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
+		    CTPageMar pageMar = sectPr.addNewPgMar();
+		    //values taken from original file XML w:pgMar (a bit modified to fit all content)
+		    pageMar.setLeft(BigInteger.valueOf(1138L));
+		    pageMar.setTop(BigInteger.valueOf(576L));
+		    pageMar.setRight(BigInteger.valueOf(317L));
+		    pageMar.setBottom(BigInteger.valueOf(1080L));
+			
+			String currentDate = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT).format(Calendar.getInstance().getTime());
+			file = new File(jarFilePath + "docs\\procese verbale\\verificare tehnică utilaje\\" + currentDate);
+			file.mkdir();
+			file = new File(jarFilePath + "docs\\procese verbale\\verificare tehnică utilaje\\" + currentDate + "\\" + rigWithDetails.getRig().getRigName()
+					+ " - " + rigWithDetails.getFirmName() + ".docx");
+			FileOutputStream output = new FileOutputStream(file);
+			
+			SimpleDateFormat format = new SimpleDateFormat(Constants.GENERATED_FILE_DATE_FORMAT);
+			
+			XWPFTable table = document.createTable();
+			XWPFTableRow row = table.getRow(0);
+			XWPFTableCell cell = row.getCell(0);
+			cell.removeParagraph(0);
+			cell.setVerticalAlignment(XWPFVertAlign.CENTER);
+			XWPFParagraph paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "ÎMPUTERNICIRE  Inspecția teritorială ISCIR Nr...............", false, 10);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "------------------------ ", true, 11);
+			paragraph = cell.addParagraph();	//empty line
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "Aut. Nr: ", true, 10);
+			paragraph = cell.addParagraph();	//empty line
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			
+			cell = row.addNewTableCell();
+			cell.removeParagraph(0);
+			cell.setVerticalAlignment(XWPFVertAlign.CENTER);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "Proces-verbal", true, 14);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "de verificare tehnică", true, 14);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "Nr. " + reportNumber, true, 14);
+			
+			cell = row.addNewTableCell();
+			cell.removeParagraph(0);
+			cell.setVerticalAlignment(XWPFVertAlign.CENTER);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, "DEȚINĂTOR / UTILIZATOR: ", true, 12);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			createRunTimesNR(paragraph, rigWithDetails.getFirmName(), true, 12);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.LEFT);
+			createRunTimesNR(paragraph, "Adresa: " + rigWithDetails.getFirmAddress(), false, 11);
+			paragraph = cell.addParagraph();
+			formatParagraph(paragraph, ParagraphAlignment.LEFT);
+			createRunTimesNR(paragraph, "Tel: " + rigWithDetails.getFirmPhoneNumber(), false, 11);
+			
+			row.setHeight(1299);
+			widenTableCells(table, 0, 2016);
+			widenTableCells(table, 1, 3568);
+			widenTableCells(table, 2, 4871);
+			CTTblPr tblPr = table.getCTTbl().getTblPr();
+		    CTJc jc = (tblPr.isSetJc() ? tblPr.getJc() : tblPr.addNewJc());
+		    jc.setVal(STJc.CENTER);
+		    
+		    emptyLines(document, 3);
+		    
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "Încheiat astăzi " + format.format(reportCreationDate) + " cu ocazia ", false, 12);
+		    if(firstTime) {
+		    	createRunTimesNR(paragraph, "autorizării funcționării ", true, 12);
+		    } else {
+		    	createRunTimesNR(paragraph, "inspecției tehnice în utilizare ", true, 12);
+		    }
+		    createRunTimesNR(paragraph, "efectuată în baza prevederilor H.G. 1340/2001, modificată și completată cu H.G. 182/2005, H.G. 920/2009 "
+		    		+ "și Prescripțiilor Tehnice aplicabile R1-2010 Colecția ISCIR, la ", false, 12);
+		    if(rigWithDetails.getRig().getType().equals(Constants.PRESSURE_RIG)) {
+		    	createRunTimesNR(paragraph, "RECIPIENT AER COMPRIMAT", false, 12);
+		    } else {
+		    	createRunTimesNR(paragraph, liftingRigType.toUpperCase(), false, 12);
+		    }
+		    createRunTimesNR(paragraph, ", produsa de " + rigWithDetails.getRig().getRigName() + ", cu numărul de fabricație " 
+		    		+ rigWithDetails.getRig().getProductionNumber() + " / " + rigWithDetails.getRig().getProductionYear() + " si cartea instalației "
+		    		+ rigCode + ", având parametrii ultimei verificări ", false, 12);
+		    List<ParameterDetails> parameters = rigWithDetails.getRig().getParameters();
+		    for(int i = 0 ; i < parameters.size(); i++) {
+		    	if(i == parameters.size() - 1) {
+		    		createRunTimesNR(paragraph, parameters.get(i).getName() + " = " + parameters.get(i).getValue() + " " + parameters.get(i).getMeasuringUnit() + ".", false, 12);
+		    	} else {
+		    		createRunTimesNR(paragraph, parameters.get(i).getName() + " = " + parameters.get(i).getValue() + " " + parameters.get(i).getMeasuringUnit() + "; ", false, 12);
+		    	}
+		    }
+		    emptyLines(document, 1);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "Deținătorul/solicitantul: ", false, 12);
+		    createRunTimesNR(paragraph, rigWithDetails.getFirmName(), true, 12);
+		    createRunTimesNR(paragraph, " din localitatea " + rigWithDetails.getFirmAddress() + " CUI: " + rigWithDetails.getFirmFiscalCode() + ", număr"
+		    		+ " de înregistrare " + rigWithDetails.getFirmRegistrationNumber() + ".", false, 12);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "Verificarea s-a efectuat la ", false, 12);
+		    createRunTimesNR(paragraph, rigWithDetails.getFirmName(), true, 12);
+		    createRunTimesNR(paragraph, " din localitatea " + rigWithDetails.getFirmAddress() + ".", false, 12);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "Subsemnatul Ing. Bogdan Radu Victor, RSVTI cu autorizația nr. OR-1406, al " + rigWithDetails.getFirmName() + " am"
+		    		+ " constatat următoarele: ", false, 12);
+			emptyLines(document, 1);
+			
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
+		    XWPFRun run = createRunTimesNR(paragraph, "S-a efectuat cu rezultate corespunzătoare verificarea elementelor componente ale instalației.", false, 12);
+		    run.addBreak();
+		    run = createRunTimesNR(paragraph, "S-au efectuat cu rezultate corespunzătoare încercări în gol ale instalației și verificarea funcționării"
+		    		+ " componentelor de securitate.", false, 12);
+		    run.addBreak();
+		    if(rigWithDetails.getRig().getType().equals(Constants.PRESSURE_RIG)) {
+		    	run = createRunTimesNR(paragraph, "S-au efectuat încercări cu presiunea nominală, cu rezultate corespunzătoare și încercarea"
+		    			+ " de etanșeitate.", false, 12);
+		    } else {
+		    	run = createRunTimesNR(paragraph, "S-a efectuat cu rezultate corespunzătoare încercarea statică cu o suprasarcină cu 10% mai mare"
+		    			+ " decât sarcina nominală.", false, 12);
+		    	run.addBreak();
+		    	run = createRunTimesNR(paragraph, "S-a efectuat cu rezultate corespunzătoare încercarea dinamică cu o suprasarcină cu 10% mai mare"
+		    			+ " decât sarcina nominală.", false, 12);
+		    	run.addBreak();
+		    	run = createRunTimesNR(paragraph, "S-au efectuat, cu sarcina nominală, cu rezultate corespunzătoare, încercarea de etanșeitate și"
+		    			+ " încercarea la scăparea bruscă a presiunii.", false, 12);
+		    	
+		    }
+		    run.addBreak();
+		    run = createRunTimesNR(paragraph, "Nu se constată suduri necorespunzătoare sau elemente cu deformații ce ar putea periclita siguranța în"
+		    		+ " funcționare.", false, 12);
+		    run.addBreak();
+		    run = createRunTimesNR(paragraph, "Construcția metalică și îmbinările acesteia (sudate, nituite) nu prezintă defecte vizibile.", false, 12);
+		    if(rigWithDetails.getRig().getType().equals(Constants.PRESSURE_RIG)) {
+		    	run.addBreak();
+		    	createRunTimesNR(paragraph, "Supapa de siguranță are seria " + rigWithDetails.getRig().getValve().getRegistrationNumber() + " și scadența"
+		    			+ " la verificare în data de " + format.format(rigWithDetails.getRig().getValve().getDueDate()) + " .", false, 12);
+		    }
+		    
+		    emptyLines(document, 1);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.BOTH);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "Am dat următoarele dispoziții: ", true, 12);
+		    createRunTimesNR(paragraph, "Instalația poate funcționa, cu condiția respectării Prescripțiilor Tehnice - Colecția ISCIR în vigoare și a"
+		    		+ " instrucțiunilor de exploatare, utilizare și întreținere.", false, 12);
+		    emptyLines(document, 1);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
+		    addTabs(paragraph.createRun(), 1);
+		    createRunTimesNR(paragraph, "După această verificare s-a admis funcționarea cu parametri: ", false, 12);
+		    for(int i = 0 ; i < parameters.size(); i++) {
+		    	if(i == parameters.size() - 1) {
+		    		createRunTimesNR(paragraph, parameters.get(i).getName() + " = " + parameters.get(i).getValue() + " " + parameters.get(i).getMeasuringUnit() + ".", false, 12);
+		    	} else {
+		    		createRunTimesNR(paragraph, parameters.get(i).getName() + " = " + parameters.get(i).getValue() + " " + parameters.get(i).getMeasuringUnit() + "; ", false, 12);
+		    	}
+		    }
+		    emptyLines(document, 1);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.LEFT);
+		    createRunTimesNR(paragraph, "Scadența următoarei verificări se fixează la data de: ", false, 12);
+		    createRunTimesNR(paragraph, format.format(rigWithDetails.getRig().getDueDate()), true, 12);
+		    emptyLines(document, 1);
+		    paragraph = createFormattedParagraph(document, ParagraphAlignment.CENTER);
+		    createRunTimesNR(paragraph, "Am luat la cunoștință", false, 12);
+		    
+		    table = document.createTable();
+		    tblPr = table.getCTTbl().getTblPr();
+		    jc = (tblPr.isSetJc() ? tblPr.getJc() : tblPr.addNewJc());
+		    jc.setVal(STJc.CENTER);
+		    row = table.getRow(0);
+		    cell = row.getCell(0);
+		    cell.removeParagraph(0);
+		    paragraph = cell.addParagraph();
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
+		    createRunTimesNR(paragraph, "OPERATOR RSVTI", false, 12);
+		    cell = row.addNewTableCell();
+		    cell.removeParagraph(0);
+		    paragraph = cell.addParagraph();
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
+		    createRunTimesNR(paragraph, "Deținător/Solicitant", false, 12);
+		    cell = row.addNewTableCell();
+		    cell.removeParagraph(0);
+		    paragraph = cell.addParagraph();
+		    formatParagraph(paragraph, ParagraphAlignment.CENTER);
+		    createRunTimesNR(paragraph, "Delegatul agentului economic montator, reparator, întreținător, etc.", false, 12);
+		    
+		    row = table.createRow();
+		    for(int i = 0; i < 3; i++) {
+			    cell = row.getCell(i);
+			    paragraph = cell.addParagraph();
+			    formatParagraph(paragraph, ParagraphAlignment.CENTER);
+			    createRunTimesNR(paragraph, "_____________________", false, 12);
+		    }
+		    widenTableCells(table, 0, 3843);
+		    widenTableCells(table, 1, 3249);
+		    widenTableCells(table, 2, 3719);
+		    table.getCTTbl().getTblPr().unsetTblBorders();
+		    
+			document.write(output);
+			output.close();
+			
+			if(!DBServices.getBackupPath().isEmpty()) {
+				File backupFile = new File(DBServices.getBackupPath() + "\\procese verbale");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\verificare tehnică utilaje");
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\verificare tehnică utilaje\\" + currentDate);
+				backupFile.mkdir();
+				backupFile = new File(DBServices.getBackupPath() + "\\procese verbale\\verificare tehnică utilaje\\" + currentDate + "\\"
+						+ rigWithDetails.getRig().getRigName() + " - " + rigWithDetails.getFirmName() + ".docx");
 				FileOutputStream backupOutput = new FileOutputStream(backupFile);
 				document.write(backupOutput);
 			}

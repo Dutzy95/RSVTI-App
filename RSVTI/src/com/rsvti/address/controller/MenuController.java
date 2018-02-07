@@ -51,6 +51,15 @@ public class MenuController {
 	}
 	
 	@FXML
+	public void handleEditEmployee() {
+		try {
+			
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
 	private void handleViewRigs() {
 		try {
 			javaFxMain.showRigOverview(null , DBServices.getAllRigs());
@@ -117,6 +126,15 @@ public class MenuController {
 	public void handleGenerateTestResultsReport() {
 		try {
 			javaFxMain.generateTestResultsReport();
+		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	public void handleTechnicalRigEvaluationReport() {
+		try {
+			javaFxMain.generateTechnicalRigEvaluationReport();
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

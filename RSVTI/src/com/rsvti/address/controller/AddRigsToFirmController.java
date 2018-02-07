@@ -113,8 +113,8 @@ public class AddRigsToFirmController {
 						valveTitleLabel.setVisible(true);
 						valveGridPane.setVisible(true);
 						chosenParametersTable.setItems(FXCollections.observableArrayList(
-								new ParameterDetails("presiune", "", "bar"),
-								new ParameterDetails("volum", "", "m3")));
+								new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE, "", "bar"),
+								new ParameterDetails(Constants.RIG_PARAMETER_VOLUME, "", "litri")));
 					} else {
 						valveTitleLabel.setVisible(false);
 						valveGridPane.setVisible(false);
@@ -214,7 +214,7 @@ public class AddRigsToFirmController {
 			List<ParameterDetails> selectedItems = chosenParametersTable.getSelectionModel().getSelectedItems();
 			if(selectedItems != null) {
 				for(ParameterDetails index : selectedItems) {
-					if(!index.getName().equals("presiune") && !index.getName().equals("volum")) {
+					if(!index.getName().equals(Constants.RIG_PARAMETER_PRESSURE) && !index.getName().equals(Constants.RIG_PARAMETER_VOLUME)) {
 						importedParameterTable.getItems().add(new RigParameter(rigType.getValue(), index.getName(),index.getMeasuringUnit()));
 						chosenParametersTable.getItems().remove(index);
 					}

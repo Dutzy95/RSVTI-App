@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Utils;
@@ -17,7 +15,6 @@ import com.rsvti.database.services.DBServices;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -84,19 +81,8 @@ public class SettingsController {
 				homeDateIntervalUnitComboBox.getSelectionModel().select(0);
 			}
 			
-			homeDateIntervalField.textProperty().addListener((observable, oldvalue, newvalue) -> {
-				try{
-					if(Integer.parseInt(homeDateIntervalField.getText()) <= 0) {
-						Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-								"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
-					}
-				} catch (NumberFormatException nfe) {
-					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-							"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
-				} catch (Exception e) {
-					DBServices.saveErrorLogEntry(e);
-				}
-			});
+			Utils.setTextFieldValidator(homeDateIntervalField, "[0-9]*", "[0-9]{1,2}", false, 2,
+					"Numărul de zile, luni sau ani pentru care se vor afișa date in graficul de pe pagina pricipală.", JavaFxMain.primaryStage);
 			
 			Calendar calendar = Calendar.getInstance();
 			List<String> patterns = Arrays.asList(
@@ -135,19 +121,8 @@ public class SettingsController {
 			homeDateIntervalField.setAlignment(Pos.CENTER);
 			
 			maximumLogSize.setText(DBServices.getMaximumLogSize() + "");
-			maximumLogSize.textProperty().addListener((observable, oldValue, newValue) -> {
-				try {
-					if(Integer.parseInt(newValue) < 0) {
-						Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-								"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
-					}
-				} catch(NumberFormatException nfe) {
-					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-							"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
-				} catch(Exception e) {
-					DBServices.saveErrorLogEntry(e);
-				}
-			});
+			Utils.setTextFieldValidator(maximumLogSize, "[0-9]*", "[0-9]{1,3}", false, 3,
+					"Numărul de teste care se vor ține minte indiferent, dacă acestea există sau nu pe disc.", JavaFxMain.primaryStage);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -212,64 +187,34 @@ public class SettingsController {
 	@FXML
 	private void handleSave() {
 		try {
-			boolean ok = true;
 			//save back-up path
 			if(backupPath != null) {
 				DBServices.saveBackupPath(backupPath);	
 			}
 			//set home date interval for due dates' graph
-			try {
-				int homeDateIntervalValue = Integer.parseInt(homeDateIntervalField.getText());
-				String homeDateIntervalUnit = homeDateIntervalUnitComboBox.getValue(); 
-				if(homeDateIntervalValue > 0) {
-					switch(homeDateIntervalUnit) {
-					case "zile": {
-						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.DATE);
-						break;
-					}
-					case "luni": {
-						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.MONTH);
-						break;
-					}
-					case "ani": {
-						DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.YEAR);
-						break;
-					}
-					}
-					ok = true;
-				} else {
-					ok = false;
-					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-							"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
-				}
-			} catch(NumberFormatException nfe) {
-				Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-						"Numarul de unitati ale intervalului de afisare a datelor scadente trebuie sa fie un numar pozitiv si diferit de 0.");
-				ok = false;
+			int homeDateIntervalValue = Integer.parseInt(homeDateIntervalField.getText());
+			String homeDateIntervalUnit = homeDateIntervalUnitComboBox.getValue(); 
+			switch(homeDateIntervalUnit) {
+			case "zile": {
+				DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.DATE);
+				break;
+			}
+			case "luni": {
+				DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.MONTH);
+				break;
+			}
+			case "ani": {
+				DBServices.saveHomeDateDisplayInterval(homeDateIntervalValue, Calendar.YEAR);
+				break;
+			}
 			}
 			//set maximum log size
-			try {
-				int maxLogSize = Integer.parseInt(maximumLogSize.getText());
-				if(maxLogSize > 0) {
-					ok = true;
-					DBServices.saveMaximumLogSize(maxLogSize);
-					Utils.synchronizeLog();
-				} else {
-					ok = false;
-					Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-							"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
-				}
-			} catch(NumberFormatException nfe) {
-				Utils.alert(AlertType.WARNING, "Atenție", "Valoare incorectă", 
-						"Dimensiunea log-ului fisierelor generate trebuie sa fie un numar pozitiv.");
-				ok = false;
-			}
+			int maxLogSize = Integer.parseInt(maximumLogSize.getText());
+			DBServices.saveMaximumLogSize(maxLogSize);
+			Utils.synchronizeLog();
 			
-			
-			if(ok) {
-				homeController.refresh();
-				stage.close();
-			}
+			homeController.refresh();
+			stage.close();
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

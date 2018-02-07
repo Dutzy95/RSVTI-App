@@ -8,7 +8,6 @@ import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -47,11 +46,11 @@ public class RigOverviewController {
 	@FXML
 	private TableView<ParameterDetails> rigParameterTable;
 	@FXML
-	private TableColumn<ParameterDetails ,String> parameterNameColumn;
+	private TableColumn<ParameterDetails, String> parameterNameColumn;
 	@FXML
-	private TableColumn<ParameterDetails ,Double> parameterValueColumn;
+	private TableColumn<ParameterDetails, String> parameterValueColumn;
 	@FXML
-	private TableColumn<ParameterDetails ,String> parameterMeasuringUnit;
+	private TableColumn<ParameterDetails, String> parameterMeasuringUnit;
 	
 	@FXML
 	private List<Rig> rigList;
@@ -69,7 +68,7 @@ public class RigOverviewController {
 				rigParameterTable.setItems(FXCollections.observableArrayList(rig.getParameters()));
 				rigParameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 				parameterNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-				parameterValueColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(Double.parseDouble(cellData.getValue().getValue())).asObject());
+				parameterValueColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue()));
 				parameterMeasuringUnit.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMeasuringUnit()));
 				if(rig.getType().equals(Constants.PRESSURE_RIG)) {
 					valveTitleLabel.setVisible(true);

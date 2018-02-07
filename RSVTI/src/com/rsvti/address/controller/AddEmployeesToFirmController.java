@@ -173,7 +173,7 @@ public class AddEmployeesToFirmController {
 								false,
 								null);
 						} catch(Exception e) {
-							e.printStackTrace();
+							DBServices.saveErrorLogEntry(e);
 						}
 					}
 				}
