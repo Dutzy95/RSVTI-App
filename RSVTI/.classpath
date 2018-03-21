@@ -9,5 +9,19 @@
 	<classpathentry kind="lib" path="D:/Tata/Libraries/Word/poi-ooxml-schemas-3.16-beta2.jar"/>
 	<classpathentry kind="lib" path="D:/Tata/Libraries/Word/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="D:/Tata/Libraries/Word/ooxml-schemas-1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-api-client-1.23.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-oauth-client-java6-1.13.1-beta.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-oauth-client-jetty-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-oauth-client-servlet-1.23.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-http-client-1.23.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-oauth-client-1.23.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-http-client-jackson2-1.20.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/com.fasterxml.jackson.core.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/jetty-6.1.5.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/jetty-util-6.1.25.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/com.google.guava_1.6.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-api-services-drive-v3-rev107-1.23.0.jar"/>
+	<classpathentry kind="lib" path="D:/Tata/Libraries/Google/google-api-services-dfareporting-v2.1-rev1-1.20.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

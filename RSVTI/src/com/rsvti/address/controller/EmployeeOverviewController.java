@@ -27,6 +27,8 @@ public class EmployeeOverviewController {
 	@FXML
 	private TableColumn<Employee,String> lastNameColumn;
 	@FXML
+	private TableColumn<Employee,String> firmNameColumn;
+	@FXML
 	private TableColumn<Employee,String> idCodeColumn;
 	@FXML
 	private TableColumn<Employee,String> idNumberColumn;
@@ -63,6 +65,7 @@ public class EmployeeOverviewController {
 			SimpleDateFormat format = new SimpleDateFormat(DBServices.getDatePattern());
 			firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
 			lastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
+			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(DBServices.getFirmForEmployee(cellData.getValue())));
 			idCodeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdCode()));
 			idNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdNumber()));
 			personalIdentificationNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPersonalIdentificationNumber()));

@@ -14,11 +14,11 @@ import javafx.scene.paint.Color;
 
 public class Constants {
 
-	public static final String XML_FIRMS_FILE_NAME = "database/RSVTI_database.xml";
-	public static final String XML_RIG_PARAMETERS_FILE_NAME = "database/RigParameters.xml";
-	public static final String XML_TEST_DATA_FILE_NAME = "database/TestData.xml";
-	public static final String XML_CUSTOM_SETTINGS_FILE_NAME = "database/CustomSettings.xml";
-	public static final String XML_LOGGED_TESTS_FILE_NAME = "database/LoggedTests.xml";
+	public static final String XML_FIRMS_FILE_NAME = "RSVTI_database.xml";
+	public static final String XML_RIG_PARAMETERS_FILE_NAME = "RigParameters.xml";
+	public static final String XML_TEST_DATA_FILE_NAME = "TestData.xml";
+	public static final String XML_CUSTOM_SETTINGS_FILE_NAME = "CustomSettings.xml";
+	public static final String XML_LOGGED_TESTS_FILE_NAME = "LoggedTests.xml";
 	public static final String XML_ERROR_LOG_FILE = "Errlog.xml";
 	
 	public static final String APP_NAME = "RSVTI App";
@@ -63,4 +63,22 @@ public class Constants {
 	
 	public static final String RIG_PARAMETER_PRESSURE = "P";
 	public static final String RIG_PARAMETER_VOLUME = "V";
+	
+	public static enum DB_FILE_NAMES {
+		FIRM_FILE("RSVTI_database.xml"),
+		RIG_PARAM_FILE("RigParameters.xml"),
+		TEST_DATA_FILE("TestData.xml"),
+		CUSTOM_SETTINGS_FILE("CustomSettings.xml"),
+		LOGGED_TESTS_FILE("LoggedTests.xml");
+		
+		private String fileName; 
+		
+		DB_FILE_NAMES(String fileName) {
+			this.fileName = fileName;
+		}
+		
+		public String getName() {
+			return fileName;
+		}
+	}
 }

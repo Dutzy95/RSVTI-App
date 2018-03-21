@@ -21,6 +21,8 @@ public class RigOverviewController {
 	@FXML
 	private TableView<Rig> rigTable;
 	@FXML
+	private TableColumn<Rig, String> firmNameColumn;
+	@FXML
 	private TableColumn<Rig,String> rigNameColumn;
 	
 	@FXML
@@ -94,12 +96,17 @@ public class RigOverviewController {
 		}
 	}
 	
-	public void setRigList(List<Rig> rigList) {
+	public void setRigList(List<Rig> rigList, boolean showFirmName) {
 		try {
 			this.rigList = rigList;
 			rigTable.setItems(FXCollections.observableArrayList(rigList));
 			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
+			if(showFirmName) {
+				firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(DBServices.getFirmForRig(cellData.getValue())));
+			} else {
+				firmNameColumn.setVisible(false);
+			}
 			
 			showRigDetails(null);
 			

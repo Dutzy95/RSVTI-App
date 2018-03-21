@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.rsvti.backup.GoogleDriveBackup;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Administrator;
@@ -40,12 +41,14 @@ import com.rsvti.database.entities.Firm;
 import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.entities.ParameterDetails;
 import com.rsvti.database.entities.Rig;
-import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.entities.RigParameter;
+import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.entities.Valve;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
+
 
 public class DBServices {
 	
@@ -58,7 +61,12 @@ public class DBServices {
 	private static void openFile(String filepath) {
 		try {
 			jarFilePath = Utils.getJarFilePath();
-			File file = new File(jarFilePath + filepath);
+			File file;
+			if(filepath.equals(Constants.XML_ERROR_LOG_FILE)) {
+				file = new File(jarFilePath + filepath);
+			} else {
+				file = new File(jarFilePath + "database/" + filepath);
+			}
 			
 			if(file.createNewFile()) {
 				PrintStream ps = new PrintStream(file);
@@ -67,7 +75,7 @@ public class DBServices {
 				} else if(filepath.contains("TestData.xml")) {
 					ps.println("<?xml version=\"1.0\"?><test></test>");
 				} else if(filepath.contains("CustomSettings.xml")) {
-					ps.println("<?xml version=\"1.0\"?><custom><variable_dates></variable_dates></custom>");
+					ps.println("<?xml version=\"1.0\"?><custom><variable_dates></variable_dates><backup></backup></custom>");
 				} else if(filepath.contains("LoggedTests.xml")) {
 					ps.println("<?xml version=\"1.0\"?><log></log>");
 				} else if(filepath.contains("Errlog.xml")) {
@@ -95,7 +103,16 @@ public class DBServices {
 	private static void transformXmlFile(String fileName) {
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(jarFilePath + fileName));
+			Result output;
+			if(fileName.equals(Constants.XML_ERROR_LOG_FILE)) {
+				output = new StreamResult(new File(jarFilePath + fileName));
+			} else {
+				Thread thread = new Thread(() -> {
+					GoogleDriveBackup.uploadFile(fileName);
+				});
+				thread.start();
+				output = new StreamResult(new File(jarFilePath + "database/" + fileName));
+			}
 			Source input = new DOMSource(document);
 			
 			transformer.transform(input, output);
@@ -371,6 +388,22 @@ public class DBServices {
 		return EntityBuilder.buildRigListFromXml(rigNodes);
 	}
 	
+	public static String getFirmForRig(Rig rig) {
+		Node firmName = (Node) executeXmlQuery("//nume_firma[parent::firma[instalatie[nume_instalatie = '" + rig.getRigName() + "']]]", XPathConstants.NODE);
+		return firmName.getTextContent();
+	}
+	
+	public static List<Employee> getAllEmployees() {
+		NodeList employeeNodes = (NodeList) executeXmlQuery("//angajat", XPathConstants.NODESET);
+		return EntityBuilder.buildEmployeeListFromXml(employeeNodes);
+	}
+	
+	public static String getFirmForEmployee(Employee employee) {
+		Node firmName = (Node) executeXmlQuery("//nume_firma[parent::firma[angajat[nume = '" + employee.getLastName() + "', "
+				+ "prenume ='" + employee.getFirstName() + "']]]", XPathConstants.NODE);
+		return firmName.getTextContent();
+	}
+	
 	public static List<RigParameter> getAllRigParameters() {
 		List<RigParameter> rigParameters = new ArrayList<RigParameter>();
 		NodeList rigParameterNodes = (NodeList) executeXmlQuery(Constants.XML_RIG_PARAMETERS_FILE_NAME, "//parameter", XPathConstants.NODESET);
@@ -427,7 +460,7 @@ public class DBServices {
 			XPathExpression expr = xpath.compile(query);
 			returnValue = expr.evaluate(document,xpathConstant);
 		} catch(XPathExpressionException xee) {
-			xee.printStackTrace();
+			DBServices.saveErrorLogEntry(xee);
 		}
 		return returnValue;
 	}
@@ -840,7 +873,7 @@ public class DBServices {
 		
 		e.printStackTrace();
 		Utils.alert(AlertType.ERROR, "Eroare", "A apărut o eroare!", 
-				"Eroarea s-a inregistrat la data de: " + currentDate + ", ora: " + new SimpleDateFormat(Constants.DEFAULT_TIMESTAMP_FORMAT).format(calendar.getTime()));
+				"Eroarea s-a inregistrat la data de: " + currentDate + ", ora: " + new SimpleDateFormat(Constants.DEFAULT_TIMESTAMP_FORMAT).format(calendar.getTime()), false);
 	}
 	
 	public static List<Employee> getRsvtiFromFirm(String firmName) {

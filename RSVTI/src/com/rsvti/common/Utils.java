@@ -97,18 +97,18 @@ public class Utils {
         datePicker.setShowWeekNumbers(true);
 	}
 	
-	public static Optional<ButtonType> alert(AlertType alertType, String title, String header, String content) {
+	public static Optional<ButtonType> alert(AlertType alertType, String title, String header, String content, boolean yesNo) {
 		Alert alert = new Alert(alertType);
 		try {
 	        alert.setTitle(title);
 	        alert.setHeaderText(header);
 	        alert.setContentText(content);
 	        
-	        if(alertType == AlertType.INFORMATION) {
+	        if(yesNo) {
 	        	ButtonType yes = new ButtonType("Da", ButtonData.YES);
 	        	ButtonType no = new ButtonType("Nu", ButtonData.NO);
 	        	alert.getButtonTypes().setAll(yes,no);
-	        } else if(alertType == AlertType.ERROR) {
+	        } else {
 	        	ButtonType ok = new ButtonType("OK", ButtonData.OK_DONE);
 	        	alert.getButtonTypes().setAll(ok);
 	        }

@@ -1,9 +1,18 @@
 package com.rsvti.address.controller;
 
-import com.rsvti.address.JavaFxMain;
-import com.rsvti.database.services.DBServices;
+import java.awt.Desktop;
+import java.util.Optional;
 
+import com.rsvti.address.JavaFxMain;
+import com.rsvti.backup.GoogleDriveBackup;
+import com.rsvti.common.Utils;
+import com.rsvti.database.services.DBServices;
+import com.sun.javafx.application.LauncherImpl;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 public class MenuController {
 	
@@ -62,7 +71,7 @@ public class MenuController {
 	@FXML
 	private void handleViewRigs() {
 		try {
-			javaFxMain.showRigOverview(null , DBServices.getAllRigs());
+			javaFxMain.showRigOverview(null, DBServices.getAllRigs(), true);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -73,6 +82,15 @@ public class MenuController {
 		try {
 			javaFxMain.showFirmOverview();
 		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	private void handleViewEmployees() {
+		try {
+			javaFxMain.showEmployeeOverview(null, DBServices.getAllEmployees());
+		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}
@@ -136,6 +154,27 @@ public class MenuController {
 		try {
 			javaFxMain.generateTechnicalRigEvaluationReport();
 		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	public void handleRecoverData() {
+		try {
+			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Recuperare date", "Recuperare date", "Doriti sa recuperati datele?", true);
+			if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
+				if(GoogleDriveBackup.connected()) {
+					new Thread(() -> {
+						GoogleDriveBackup.updateLocalDBFiles();
+						Platform.runLater(() ->
+							Utils.alert(AlertType.INFORMATION, "Recuperare date", "Succes!", "Datele au fost recuperate cu succes! Aplicația trebuie repornită pentru ca modificările să aibă loc.", false)
+							);
+					}).start();
+				} else {
+					Utils.alert(AlertType.ERROR, "Recuperare date", "Eroare!", "Nu exista legatura la reteaua de internet!", false);
+				}
+			}
+		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}

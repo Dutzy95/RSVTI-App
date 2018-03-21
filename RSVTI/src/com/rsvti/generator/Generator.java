@@ -546,6 +546,19 @@ public class Generator {
 		    for(int i = 2; i < tableMaxLength + 2; i++) {
 		    	table.getRow(i).setHeight(400);
 		    }
+		    
+		    //original values
+//		    widenTableCells(table, 0, 705);
+//		    widenTableCells(table, 1, 2955);
+//		    widenTableCells(table, 2, 2115);
+//		    widenTableCells(table, 3, 900);
+//		    widenTableCells(table, 4, 2160);
+//		    widenTableCells(table, 5, 750);
+//		    widenTableCells(table, 6, 835);
+//		    table.getRow(0).setHeight(563);
+//		    for(int i = 2; i < tableMaxLength + 2; i++) {
+//		    	table.getRow(i).setHeight(286);
+//		    }
 			
 			document.write(output);
 			output.close();

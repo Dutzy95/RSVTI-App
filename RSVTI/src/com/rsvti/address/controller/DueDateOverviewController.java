@@ -108,7 +108,7 @@ public class DueDateOverviewController {
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 				} else {
 					dateFrom.setValue(LocalDate.now());
-					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"");
+					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"", false);
 				}
 			});
 			dateTo.setOnAction(event -> {
@@ -117,7 +117,7 @@ public class DueDateOverviewController {
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 				} else {
 					dateTo.setValue(LocalDate.now());
-					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"");
+					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"", false);
 				}
 			});
 		} catch (Exception e) {

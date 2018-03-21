@@ -18,6 +18,7 @@ import com.rsvti.address.controller.HomeController;
 import com.rsvti.address.controller.MenuController;
 import com.rsvti.address.controller.RigOverviewController;
 import com.rsvti.address.controller.SettingsController;
+import com.rsvti.backup.GoogleDriveBackup;
 import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
@@ -26,6 +27,7 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -162,7 +164,7 @@ public class JavaFxMain extends Application {
         }
     }
 	
-	public void showRigOverview(String firmName, List<Rig> rigList) {
+	public void showRigOverview(String firmName, List<Rig> rigList, boolean showFirmName) {
 	    try {
 	    	
 	        FXMLLoader loader = new FXMLLoader();
@@ -171,7 +173,7 @@ public class JavaFxMain extends Application {
 
 	        // Set the person into the controller.
 	        RigOverviewController controller = loader.getController();
-	        controller.setRigList(rigList);
+	        controller.setRigList(rigList, showFirmName);
 	        
 	        Tab tab;
 	        if(firmName == null) {
@@ -199,7 +201,7 @@ public class JavaFxMain extends Application {
 
 	        Stage stage = new Stage();
 	        if(firmName == null) {
-	        	stage.setTitle("Personal deservent");
+	        	stage.setTitle("Angajați");
 	        } else {
 	        	stage.setTitle("Personal deservent - " + firmName);
 	        }
@@ -573,6 +575,7 @@ public class JavaFxMain extends Application {
 			Locale.setDefault(locale);
 	//		Utils.setErrorLog();
 	//		Utils.setStartup();
+			GoogleDriveBackup.initialize();
 			Utils.createFolderHierarchy();
 			Data.populate();
 			launch(args);

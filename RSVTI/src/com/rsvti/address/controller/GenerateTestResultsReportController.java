@@ -175,7 +175,7 @@ public class GenerateTestResultsReportController {
 						choice4,
 						rsvtiComboBox.getSelectionModel().getSelectedItem(),
 						firm.getExecutiveName());
-				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Rezultate Examinare", "Generararea s-a terminat cu succes", bodyMessage);
+				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Rezultate Examinare", "Generararea s-a terminat cu succes", bodyMessage, true);
 				if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 					Desktop.getDesktop().open(file);
 				}

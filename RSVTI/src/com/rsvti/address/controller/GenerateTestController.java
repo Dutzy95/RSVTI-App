@@ -83,7 +83,7 @@ public class GenerateTestController {
 				bodyMessage = "Fișierele se pot găsi in docs\\teste. Sau în " + DBServices.getBackupPath() + "\\teste\nDoriți să vizualizați fișierele generate?";
 			}
 			
-			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Test", "Generararea s-a terminat cu succes", bodyMessage);
+			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Test", "Generararea s-a terminat cu succes", bodyMessage, true);
 			if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 				for(File file : files) {
 					Desktop.getDesktop().open(file);

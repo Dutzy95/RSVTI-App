@@ -31,6 +31,7 @@
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#handleViewFirms" text="Firme" />
                   <MenuItem mnemonicParsing="false" onAction="#handleViewRigs" text="Utilaje" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewEmployees" text="Angajați" />
                   <MenuItem mnemonicParsing="false" onAction="#handleViewDueDateOverview" text="Date scadente" />
                   <MenuItem mnemonicParsing="false" onAction="#handleViewTestLogs" text="Istoric teste" />
               </items>
@@ -50,6 +51,7 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Ajutor">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleRecoverData" text="Recuperează date" />
               <MenuItem mnemonicParsing="false" text="Despre" />
             </items>
           </Menu>

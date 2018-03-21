@@ -66,7 +66,7 @@ public class GenerateTableController {
 				bodyMessage = "Fișierele se pot găsi in docs\\tabele utilaje. Sau în " + DBServices.getBackupPath() + "\\tabele utilaje\nDoriți să vizualizați fișierele generate?";
 			}
 			
-			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Tabel", "Generararea s-a terminat cu succes", bodyMessage);
+			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Tabel", "Generararea s-a terminat cu succes", bodyMessage, true);
 			if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 				for(File file : files) {
 					try {

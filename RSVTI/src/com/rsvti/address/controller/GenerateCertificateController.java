@@ -146,7 +146,7 @@ public class GenerateCertificateController {
 						rsvtiComboBox.getSelectionModel().getSelectedItem(),
 						employee.getExecutiveName());
 				
-				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Adeverință", "Generararea s-a terminat cu succes", bodyMessage);
+				Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Adeverință", "Generararea s-a terminat cu succes", bodyMessage, true);
 				if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 					Desktop.getDesktop().open(file);
 				}

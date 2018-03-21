@@ -108,7 +108,7 @@ public class GenerateTechnicalRigEvaluationReportController {
 					liftingRigTypeComboBox.getSelectionModel().getSelectedItem(),
 					firstTimeCheckBox.selectedProperty().get());
 			
-			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Proces Verbal", "Generararea s-a terminat cu succes", bodyMessage);
+			Optional<ButtonType> choice = Utils.alert(AlertType.INFORMATION, "Generare Proces Verbal", "Generararea s-a terminat cu succes", bodyMessage, true);
 			if(choice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 				Desktop.getDesktop().open(file);
 			}

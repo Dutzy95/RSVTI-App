@@ -22,9 +22,9 @@ public class Data {
 		try {
 			
 			String jarFilePath = Utils.getJarFilePath();
-			new File(jarFilePath + Constants.XML_FIRMS_FILE_NAME).delete();
-			new File(jarFilePath + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
-			new File(jarFilePath + Constants.XML_TEST_DATA_FILE_NAME).delete();
+			new File(jarFilePath + "database/" + Constants.XML_FIRMS_FILE_NAME).delete();
+			new File(jarFilePath + "database/" + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
+			new File(jarFilePath + "database/" + Constants.XML_TEST_DATA_FILE_NAME).delete();
 			
 			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
 					new EmployeeAuthorization("123948273", addFromTodayDate(0, 0, 20), addFromTodayDate(0, 0, 25)), "manevrant", true);

@@ -14,6 +14,7 @@
                <children>
                   <TableView fx:id="rigTable" layoutX="42.0" layoutY="22.0" prefHeight="698.0" prefWidth="327.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
+                        <TableColumn fx:id="firmNameColumn" prefWidth="75.0" text="Firma" />
                       <TableColumn fx:id="rigNameColumn" prefWidth="75.0" text="Utilaj" />
                     </columns>
                      <columnResizePolicy>

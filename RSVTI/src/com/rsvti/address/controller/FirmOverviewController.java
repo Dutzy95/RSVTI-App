@@ -147,7 +147,7 @@ public class FirmOverviewController {
 		try {
 			int selectedIndex = firmTable.getSelectionModel().getSelectedIndex();
 			if(selectedIndex >= 0) {
-				javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs());
+				javaFxMain.showRigOverview(firmTable.getItems().get(selectedIndex).getFirmName(), firmTable.getItems().get(selectedIndex).getRigs(), false);
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
