@@ -17,7 +17,7 @@ public class StartImageController {
 	@FXML
 	private void initialize() {
 		try {
-			imageView.setImage(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_with_text.png").toURI().toString()));
+			imageView.setImage(new Image(getClass().getResourceAsStream("/RSVTI_with_text.png")));
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

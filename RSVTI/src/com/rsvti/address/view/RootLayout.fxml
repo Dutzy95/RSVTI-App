@@ -23,9 +23,9 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Modifică">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Firmă" />
-                  <MenuItem mnemonicParsing="false" text="Instalație" />
-                  <MenuItem fx:id="handleEditEmployee" mnemonicParsing="false" text="Angajat" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditFirm" text="Firmă" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditRig" text="Instalație" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditEmployee" text="Angajat" />
                </items></Menu>
             <Menu mnemonicParsing="false" text="Afișează">
               <items>

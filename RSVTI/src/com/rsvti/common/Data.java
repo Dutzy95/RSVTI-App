@@ -26,17 +26,17 @@ public class Data {
 			new File(jarFilePath + "database/" + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
 			new File(jarFilePath + "database/" + Constants.XML_TEST_DATA_FILE_NAME).delete();
 			
-			Employee employee1 = new Employee("FirstName1", "LastName1", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
+			Employee employee1 = new Employee("FirstNamea", "LastNamea", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
 					new EmployeeAuthorization("123948273", addFromTodayDate(0, 0, 20), addFromTodayDate(0, 0, 25)), "manevrant", true);
-			Employee employee2 = new Employee("FirstName2", "LastName2", "BH", "098742", "240928735387", getDate(1969, 2, 24), "Timisoara", "Adresa2", "Timis",
+			Employee employee2 = new Employee("FirstNameb", "LastNameb", "BH", "098742", "240928735387", getDate(1969, 2, 24), "Timisoara", "Adresa2", "Timis",
 					new EmployeeAuthorization("56732894", addFromTodayDate(0, 1, 0), addFromTodayDate(0, 11, 5)), "macaragist", false);
-			Employee employee3 = new Employee("FirstName3", "LastName3", "GZ", "472893", "2190287463728", getDate(1980, 5, 16), "Oradea", "Adresa3", "Bihor",
+			Employee employee3 = new Employee("FirstNamec", "LastNamec", "GZ", "472893", "2190287463728", getDate(1980, 5, 16), "Oradea", "Adresa3", "Bihor",
 					new EmployeeAuthorization("2357234345", addFromTodayDate(0, 0, 15), addFromTodayDate(0, 0, 17)), "manevrant", true);
-			Employee employee4 = new Employee("FirstName4", "LastName4", "AR", "125489", "1234567890123", getDate(1950, 12, 4), "Arad", "Adresa4", "Arad",
+			Employee employee4 = new Employee("FirstNamed", "LastNamed", "AR", "125489", "1234567890123", getDate(1950, 12, 4), "Arad", "Adresa4", "Arad",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 1, 15), addFromTodayDate(0, 1, 20)), "legător sarcină", false);
-			Employee employee5 = new Employee("FirstName5", "LastName5", "AR", "57984", "197846583245", getDate(1955, 9, 3), "Arad", "Adresa5", "Arad",
+			Employee employee5 = new Employee("FirstNamee", "LastNamee", "AR", "57984", "197846583245", getDate(1955, 9, 3), "Arad", "Adresa5", "Arad",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 4, 15), addFromTodayDate(0, 4, 20)), "legător sarcină", true);
-			Employee employee6 = new Employee("FirstName6", "LastName6", "MH", "479465", "13456879546", getDate(1950, 12, 4), "Severin", "Adresa6", "Severin",
+			Employee employee6 = new Employee("FirstNamef", "LastNamef", "MH", "479465", "13456879546", getDate(1950, 12, 4), "Severin", "Adresa6", "Severin",
 					new EmployeeAuthorization("254965846", addFromTodayDate(0, 2, 10), addFromTodayDate(0, 2, 15)), "manevrant", false);
 			
 			Rig liftingRig1 = new Rig("PLEXI", addFromTodayDate(0, 2, 0), Constants.LIFTING_RIG, "1237dsa987", 2005, "32988fa0");
@@ -51,7 +51,7 @@ public class Data {
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"10","bar"));
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"15","litri"));
 			
-			DBServices.saveEntry(new Firm("SC Gigi SRL", "ABC123", "uroi1273", "Str.Oituz, Nr.7", "012398423", "238120948", 
+			DBServices.saveEntry(new Firm("SC Gigi SRL", "J12/23/1995", "1234567890", "Str.Oituz, Nr.7", "012398423", "238120948", 
 					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457",
 					"Vasile Vasilescu",	new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), 
 					Arrays.asList(liftingRig1, pressureRig1), Arrays.asList(employee1,employee2)), false);
@@ -68,7 +68,7 @@ public class Data {
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"15","bar"));
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"20","litri"));
 			
-			DBServices.saveEntry(new Firm("SC DURU SRL", "CDE348", "234hjk213", "Str.Florii, Nr.3", "1297048613", "532784921", 
+			DBServices.saveEntry(new Firm("SC DURU SRL", "J23/75/2000", "RO1234567", "Str.Florii, Nr.3", "1297048613", "532784921", 
 					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
 					"Dan Popescu", new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), 
 					Arrays.asList(liftingRig2,pressureRig2), Arrays.asList(employee3, employee4, employee5, employee6)), false);

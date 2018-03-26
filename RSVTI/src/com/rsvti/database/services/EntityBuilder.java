@@ -110,8 +110,7 @@ public class EntityBuilder {
 						));
 			}
 		}
-		
-		return new Firm(
+		Firm firm = new Firm(
 				firmParameterValues.get(0),
 				firmParameterValues.get(1),
 				firmParameterValues.get(2),
@@ -132,6 +131,8 @@ public class EntityBuilder {
 				rigs,
 				employees
 				);
+		firm.setId(node.getAttributes().getNamedItem("id").getTextContent());
+		return firm;
 	}
 	
 	public static Rig buildRigFromXml(Node node) {

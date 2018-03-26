@@ -27,7 +27,6 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -54,7 +53,6 @@ public class JavaFxMain extends Application {
 	private Tab addRigParameterTab;
 	private DueDateOverviewController dueDateOverviewController;
 	private PauseTransition delay = new PauseTransition(Duration.seconds(3));
-	private PauseTransition delay1 = new PauseTransition(Duration.seconds(3));
 	private HomeController homeController;
 	
 	@Override
@@ -63,15 +61,12 @@ public class JavaFxMain extends Application {
 			JavaFxMain.primaryStage = primaryStage;
 			JavaFxMain.primaryStage.setTitle("RSVTI App");
 	        
-			JavaFxMain.primaryStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+			JavaFxMain.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/RSVTI_without_text.png")));
 	        
 //	        Platform.setImplicitExit(false);
 //			Utils.setTray(primaryStage);
 			
-//			initApp();
-			
-	        initRootLayout();
-	        showHome();
+			initApp();
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -90,10 +85,15 @@ public class JavaFxMain extends Application {
 	        Stage stage = new Stage();
 	        stage.setScene(scene);
 	        stage.initStyle(StageStyle.UNDECORATED);
+	        stage.getIcons().add(new Image(getClass().getResourceAsStream("/RSVTI_without_text.png")));
 	        
 	        stage.show();
 	        
-	        delay.setOnFinished( event -> stage.close() );
+	        delay.setOnFinished( event -> {
+	        	stage.close();
+	        	initRootLayout();
+		        showHome();
+	        });
 	        delay.play();
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -116,8 +116,7 @@ public class JavaFxMain extends Application {
             MenuController menuController = loader.getController();
             menuController.setJavaFxMain(this);
             
-            delay1.setOnFinished( event -> primaryStage.show() );
-	        delay1.play();
+            primaryStage.show();
         } catch (Exception e) {
             DBServices.saveErrorLogEntry(e);
         }
@@ -222,14 +221,18 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void addFirm() {
+	public void addUpdateFirm(boolean update) {
 		try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddFirm.fxml"));
 	        AnchorPane addFirm = (AnchorPane) loader.load();
 
-	        addRigParameterTab = new Tab("Adaugă firmă");
+	        if(update) {
+	        	addRigParameterTab = new Tab("Modifică firmă");
+	        } else {
+	        	addRigParameterTab = new Tab("Adaugă firmă");
+	        }
             addRigParameterTab.setContent(addFirm);
             addRigParameterTab.setClosable(true);
             
@@ -238,6 +241,8 @@ public class JavaFxMain extends Application {
             
             addFirmController = loader.getController();
             addFirmController.setJavaFxMain(this);
+        	addFirmController.setUpdate(update);
+        	addFirmController.initializeIfUpdate();
             
 	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
@@ -573,7 +578,6 @@ public class JavaFxMain extends Application {
 	public static void main(String[] args) {
 			Locale locale = new Locale("ro", "RO");
 			Locale.setDefault(locale);
-	//		Utils.setErrorLog();
 	//		Utils.setStartup();
 			GoogleDriveBackup.initialize();
 			Utils.createFolderHierarchy();

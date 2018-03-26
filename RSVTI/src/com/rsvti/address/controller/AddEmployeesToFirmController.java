@@ -99,7 +99,7 @@ public class AddEmployeesToFirmController {
 				"Localitatea poate conține doar litere majuscule și minuscule.", stage);
 		Utils.setTextFieldValidator(homeRegionField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
 				"Județul poate conține doar litere majuscule și minuscule.", stage);
-		Utils.setTextFieldValidator(homeAddressField, "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
+		Utils.setTextFieldValidator(homeAddressField, "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
 				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", stage);
 	}
 	

@@ -53,9 +53,7 @@ import javafx.scene.control.Alert.AlertType;
 public class DBServices {
 	
 	private static Document document;
-	private static boolean indexesAreInitialized = false;
-	private static long numberOfFirms;
-	private static long indexOfUpdatedFirm;
+	private static long numberOfFirms = getLastFirmIndex();
 	private static String jarFilePath;
 	
 	private static void openFile(String filepath) {
@@ -121,27 +119,14 @@ public class DBServices {
 		}
 	}
 	
-	/**
-	 * Method that sets the number of firms and rigs, depending on whether there is some data in the xml or not.
-	 * If there isn't both indexes are 0. If there is some data in the xml it takes the last index of both firms and rigs to count
-	 * the total number of firms and rigs that have been added at some point to the database. 
-	 */
-	private static void setIndexes() {
-		if(!indexesAreInitialized) {
-			numberOfFirms = getLastFirmIndex();
-			indexesAreInitialized = true;
-		}
-	}
-	
 	public static void saveEntry(Firm firm, boolean update) {
-		setIndexes();
 		openFile(Constants.XML_FIRMS_FILE_NAME);
 		
 		Element root = document.getDocumentElement();
 		
 		Element firma = document.createElement("firma");
 		if(update) {
-			firma.setAttribute("id", "" + indexOfUpdatedFirm);
+			firma.setAttribute("id", "" + firm.getId());
 		} else {
 			firma.setAttribute("id", "" + numberOfFirms++);
 		}
@@ -273,11 +258,11 @@ public class DBServices {
 			Element employee = document.createElement("angajat");
 			employee.setAttribute("title", employeeIndex.getTitle());
 			
-			Element employeeFirstName = document.createElement("nume");
+			Element employeeFirstName = document.createElement("prenume");
 			employeeFirstName.appendChild(document.createTextNode(employeeIndex.getFirstName()));
 			employee.appendChild(employeeFirstName);
 			
-			Element employeeLastName = document.createElement("prenume");
+			Element employeeLastName = document.createElement("nume");
 			employeeLastName.appendChild(document.createTextNode(employeeIndex.getLastName()));
 			employee.appendChild(employeeLastName);
 			
@@ -340,7 +325,6 @@ public class DBServices {
 	
 	public static void updateEntry(Firm source, Firm replacement) {
 		openFile(Constants.XML_FIRMS_FILE_NAME);
-		setIndexes();
 		List<Firm> firms = EntityBuilder.buildFirmListFormXml((NodeList) DBServices.executeXmlQuery("//firma", XPathConstants.NODESET));
 		for(Firm index : firms) {
 			if(index.equals(source)) {
@@ -351,7 +335,6 @@ public class DBServices {
 	}
 	
 	public static void updateRigForFirm(String firmName, Rig rigToUpdate, Rig newRig) {
-		setIndexes();
 		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
 		for(int i = 0; i < firm.getRigs().size(); i++) {
@@ -363,7 +346,6 @@ public class DBServices {
 	}
 	
 	public static void updateEmployeeForFirm(String firmName, Employee employeeToUpdate, Employee newEmployee) {
-		setIndexes();
 		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
 		for(int i = 0; i < firm.getEmployees().size(); i++) {
@@ -399,7 +381,7 @@ public class DBServices {
 	}
 	
 	public static String getFirmForEmployee(Employee employee) {
-		Node firmName = (Node) executeXmlQuery("//nume_firma[parent::firma[angajat[nume = '" + employee.getLastName() + "', "
+		Node firmName = (Node) executeXmlQuery("//nume_firma[parent::firma[angajat[nume = '" + employee.getLastName() + "' and "
 				+ "prenume ='" + employee.getFirstName() + "']]]", XPathConstants.NODE);
 		return firmName.getTextContent();
 	}
@@ -429,7 +411,6 @@ public class DBServices {
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			if(EntityBuilder.buildFirmFromXml(firmNodes.item(i)).equals(firm)) {
-				indexOfUpdatedFirm = Long.parseLong(firmNodes.item(i).getAttributes().getNamedItem("id").getTextContent());
 				root.removeChild(firmNodes.item(i));
 			}
 		}

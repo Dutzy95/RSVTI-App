@@ -181,10 +181,8 @@ public class Utils {
 			Runtime.getRuntime().exec("attrib +H " + file.getAbsolutePath());	//hide Folder
 			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
-			file = new File(jarFilePath + "images");
-			file.mkdir();
-			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_with_text.png")), "png", new File(jarFilePath + "images/RSVTI_with_text.png"));
-			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png")), "png", new File(jarFilePath + "images/RSVTI_without_text.png"));
+//			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_with_text.png")), "png", new File(jarFilePath + "images/RSVTI_with_text.png"));
+//			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png")), "png", new File(jarFilePath + "images/RSVTI_without_text.png"));
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

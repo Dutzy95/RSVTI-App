@@ -1,10 +1,14 @@
 package com.rsvti.address.controller;
 
 import java.awt.Desktop;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.backup.GoogleDriveBackup;
+import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.services.DBServices;
 import com.sun.javafx.application.LauncherImpl;
@@ -21,7 +25,7 @@ public class MenuController {
 	@FXML
 	private void handleAddFirm() {
 		try {
-			javaFxMain.addFirm();
+			javaFxMain.addUpdateFirm(false);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -57,6 +61,24 @@ public class MenuController {
 	@FXML
 	public void handleFileClose() {
 		System.exit(0);
+	}
+	
+	@FXML
+	public void handleEditFirm() {
+		try {
+			javaFxMain.addUpdateFirm(true);
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	public void handleEditRig() {
+		try {
+			
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 	
 	@FXML
@@ -166,9 +188,36 @@ public class MenuController {
 				if(GoogleDriveBackup.connected()) {
 					new Thread(() -> {
 						GoogleDriveBackup.updateLocalDBFiles();
-						Platform.runLater(() ->
-							Utils.alert(AlertType.INFORMATION, "Recuperare date", "Succes!", "Datele au fost recuperate cu succes! Aplicația trebuie repornită pentru ca modificările să aibă loc.", false)
-							);
+						Platform.runLater(() -> {
+							Optional<ButtonType> restartChoice = Utils.alert(AlertType.INFORMATION, "Recuperare date", "Succes!", "Datele au fost recuperate cu succes! Aplicația trebuie"
+										+ " repornită pentru ca modificările să aibă loc. Doriti sa reporniți aplicația acum?", true);
+							if(restartChoice.get().getButtonData() == ButtonType.YES.getButtonData()) {
+								try {
+//									final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+//									final File currentJar = new File(Utils.getJarFilePath() + Constants.APP_NAME + ".jar");
+//									final ArrayList<String> command = new ArrayList<String>();
+//									command.add(javaBin);
+//									command.add("-jar");
+//									command.add(currentJar.getPath());
+//
+//									final ProcessBuilder builder = new ProcessBuilder(command);
+//									builder.start();
+//									System.exit(0);
+									Runtime.getRuntime().addShutdownHook(new Thread() {
+										@Override
+										public void run() {
+											try {
+												Runtime.getRuntime().exec("java -jar " + Constants.APP_NAME + ".jar");
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										}
+									});
+								} catch(Exception e) {
+									DBServices.saveErrorLogEntry(e);
+								}
+							}
+						});
 					}).start();
 				} else {
 					Utils.alert(AlertType.ERROR, "Recuperare date", "Eroare!", "Nu exista legatura la reteaua de internet!", false);

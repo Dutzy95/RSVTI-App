@@ -17,6 +17,7 @@ public class Firm {
 	private Administrator administrator;
 	private List<Rig> rigs;
 	private List<Employee> employees;
+	private String id;
 	
 	public Firm(String firmName, String registrationNumber, String fiscalCode, String address, String phoneNumber, String faxNumber, String email,
 			String bankName, String ibanCode, String executiveName, Administrator administrator, List<Rig> rigs, List<Employee> employees) {
@@ -37,18 +38,7 @@ public class Firm {
 	
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof Firm &&
-				this.getFirmName().equals(((Firm) o).getFirmName()) &&
-				this.getRegistrationNumber().equals(((Firm) o).getRegistrationNumber()) &&
-				this.getFiscalCode().equals(((Firm) o).getFiscalCode()) &&
-				this.getAddress().equals(((Firm) o).getAddress()) &&
-				this.getPhoneNumber().equals(((Firm) o).getPhoneNumber()) &&
-				this.getFaxNumber().equals(((Firm) o).getFaxNumber()) &&
-				this.getEmail().equals(((Firm) o).getEmail()) &&
-				this.getBankName().equals(((Firm) o).getBankName()) &&
-				this.getIbanCode().equals(((Firm) o).getIbanCode()) &&
-				this.getExecutiveName().equals(((Firm) o).getExecutiveName()) &&
-				this.getAdministrator().equals(((Firm) o).getAdministrator());
+		return o instanceof Firm && ((Firm) o).getId().equals(id);
 	}
 	
 	public String getRegistrationNumber() {
@@ -161,5 +151,13 @@ public class Firm {
 
 	public void setExecutiveName(String executiveName) {
 		this.executiveName = executiveName;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }
