@@ -2,6 +2,7 @@ package com.rsvti.address.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.rsvti.address.JavaFxMain;
@@ -16,7 +17,6 @@ import com.rsvti.database.services.DBServices;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
@@ -144,49 +144,34 @@ public class AddFirmController {
 				setFieldsAndTables(newValue);
 			});
 		}
-		addressField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(addressField, "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
 				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", JavaFxMain.primaryStage);
-		adminFirstNameField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(adminFirstNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
 				"Prenumele administratorului poate conține doar litere majuscule și minuscule.", JavaFxMain.primaryStage);
-		adminIdCodeField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(adminIdCodeField, "[A-Za-z]*", "[A-Z]{2}", true, 2,
 				"Seria de buletin a administratorului poate conține doar două litere majuscule.", JavaFxMain.primaryStage);
-		adminIdNumberField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(adminIdNumberField, "[0-9]*", "[0-9]{6}", false, 6,
 				"Numărul de buletin al administratorului poate conține doar 6 cifre.", JavaFxMain.primaryStage);
-		adminLastNameField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(adminLastNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
 				"Numele administratorului poate conține doar litere majuscule și minuscule.", JavaFxMain.primaryStage);
-		adminPhoneNumberField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(adminPhoneNumberField, "[+0-9]*", "\\+?([0-9]{11}|[0-9]{10})", false, 12, 
 				"Numărul de telefon al administratotorului poate conține doar 10 cifre sau + urmat de 11 cifre.", JavaFxMain.primaryStage);
-		bankNameField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(bankNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
 				"Numele băncii poate conține doar litere majuscule sau minuscule.", JavaFxMain.primaryStage);
-		emailField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(emailField, "[A-Za-z0-9_%+-@]*", "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}", false, Constants.INFINITE,
 				"Emailul poate contine doar litere majuscule sau minuscule, cifre si caracterele _ % + - .\nExemplu: ion_ionescu.01@exemplu.com", JavaFxMain.primaryStage);
-		faxNumberField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(faxNumberField, "[+0-9]*", "\\+?([0-9]{11}|[0-9]{10})", false, 12,
 				"Numărul de fax poate conține doar 10 cifre sau + urmat de 11 cifre.", JavaFxMain.primaryStage);
-		firmNameField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(firmNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE, 
 				"Numele firmei poate conține doar litere majuscule și minuscule.", JavaFxMain.primaryStage);
-		fiscalCodeField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(fiscalCodeField, "[ROro0-9]*", "(RO)?[0-9]{6,9}[0-9]", true, 11,
 				"Codul fiscal poate conține RO urmat de minim 7 și maxim 10 cifre.", JavaFxMain.primaryStage);
-		ibanCodeField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(ibanCodeField, "[A-Za-z0-9 ]*", "RO[0-9][0-9] ?[A-Z]{4}( ?[A-Z0-9]{4}){4}", true, 29,
 				"Codul IBAN este format din RO urmat de doua cifre, indicativul bancii format din patru litere, urmat de 16 cifre sau litere.", JavaFxMain.primaryStage);
-		phoneNumberField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(phoneNumberField, "[+0-9]*", "\\+?([0-9]{11}|[0-9]{10})", false, 12,
 				"Numărul de telefon poate conține doar 10 cifre sau + urmat de 11 cifre.", JavaFxMain.primaryStage);
-		registrationNumberField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(registrationNumberField, "[JCFjcf/0-9]*", "[JCF][0-9][0-9]/[0-9]{1,4}/[0-9]{4}",
 				true, 14, "Numărul de înregistrare este de tipul: <J sau C sau F cifra cifra>/<un numar cu maxim 4 cifre>/<un numar cu fix patru cifre>.", JavaFxMain.primaryStage);
-		executiveNameField.setAlignment(Pos.CENTER);
 		Utils.setTextFieldValidator(executiveNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
 				"Numele directorului poate conține doar litere majuscule sau minuscule.", JavaFxMain.primaryStage);
 	}
@@ -258,6 +243,34 @@ public class AddFirmController {
 		}
 	}
 	
+	@FXML
+	public void handleDeleteRig() {
+		try {
+			Rig rig = rigTable.getSelectionModel().getSelectedItem();
+			if(rig != null) {
+				rigList.remove(rig);
+				Collections.sort(rigList, (r1, r2) -> r1.getRigName().compareToIgnoreCase(r2.getRigName()));
+				rigTable.setItems(FXCollections.observableArrayList(rigList));
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	@FXML
+	public void handleDeleteEmployee() {
+		try {
+			Employee employee = employeeTable.getSelectionModel().getSelectedItem();
+			if(employee != null) {
+				employeeList.remove(employee);
+				Collections.sort(employeeList, (e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
+				employeeTable.setItems(FXCollections.observableArrayList(employeeList));
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
 	public void updateRigTable(Rig rig, boolean isUpdate, Rig updatedRig) {
 		if(isUpdate) {
 			for(int i = 0; i < rigList.size(); i++) {
@@ -268,6 +281,7 @@ public class AddFirmController {
 		} else {
 			rigList.add(rig);
 		}
+		Collections.sort(rigList, (r1, r2) -> r1.getRigName().compareToIgnoreCase(r2.getRigName()));
 		rigTable.setItems(FXCollections.observableArrayList(rigList));
 	}
 	
@@ -281,6 +295,7 @@ public class AddFirmController {
 		} else {
 			employeeList.add(employee);
 		}
+		Collections.sort(employeeList, (e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
 		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
 	}
 	

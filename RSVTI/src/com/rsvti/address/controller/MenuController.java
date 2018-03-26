@@ -1,9 +1,5 @@
 package com.rsvti.address.controller;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 import com.rsvti.address.JavaFxMain;
@@ -11,7 +7,6 @@ import com.rsvti.backup.GoogleDriveBackup;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.services.DBServices;
-import com.sun.javafx.application.LauncherImpl;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

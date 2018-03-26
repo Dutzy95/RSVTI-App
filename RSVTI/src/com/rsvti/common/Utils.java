@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import com.rsvti.database.entities.Employee;
@@ -31,7 +30,6 @@ import com.rsvti.database.entities.LoggedTest;
 import com.rsvti.database.services.DBServices;
 
 import javafx.application.Platform;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -63,7 +61,6 @@ public class Utils {
                                         setDisable(true);
                                         setStyle("-fx-background-color: " + Constants.DISABLED_COLOR + ";");
                                 }   
-                                setAlignment(Pos.CENTER);
                             }
                         };
                     }

@@ -64,7 +64,7 @@ public class EntityBuilder {
 					}
 					
 					rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
-							new Valve(valveDueDate, valveRegistrationNumber));
+							new Valve(valveDueDate, valveRegistrationNumber, Boolean.parseBoolean(valve.getAttributes().getNamedItem("nuEsteExtinsa").getTextContent())));
 				} else {
 					for(int l = 6; l < rigEmployeeNode.getChildNodes().getLength(); l++) {
 						parameters.add(new ParameterDetails(
@@ -160,7 +160,7 @@ public class EntityBuilder {
 			}
 			
 			rig = new Rig(rigName, parameters, revisionDate, type, productionNumber, productionYear, iscirRegistrationNumber,
-					new Valve(valveDueDate, valveRegistrationNumber));
+					new Valve(valveDueDate, valveRegistrationNumber, Boolean.parseBoolean(valve.getAttributes().getNamedItem("nuEsteExtinsa").getTextContent())));
 		} else {
 			for(int l = 6; l < node.getChildNodes().getLength(); l++) {
 				parameters.add(new ParameterDetails(
@@ -258,7 +258,8 @@ public class EntityBuilder {
 	public static Valve buildValveFromXml(Node node) {
 		return new Valve(
 				new Date(Long.parseLong(node.getChildNodes().item(0).getTextContent())),
-				node.getChildNodes().item(1).getTextContent());
+				node.getChildNodes().item(1).getTextContent(),
+				Boolean.parseBoolean(node.getAttributes().getNamedItem("nuEsteExtinsa").getTextContent()));
 	}
 	
 	public static List<Valve> buildValveListFromXml(NodeList nodeList) {

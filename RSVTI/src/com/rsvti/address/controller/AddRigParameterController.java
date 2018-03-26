@@ -7,7 +7,6 @@ import com.rsvti.database.services.DBServices;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -54,8 +53,6 @@ public class AddRigParameterController {
 				}
 			});
 			parameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
-			parameterMeasurementUnitField.setAlignment(Pos.CENTER);
-			parameterNameField.setAlignment(Pos.CENTER);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

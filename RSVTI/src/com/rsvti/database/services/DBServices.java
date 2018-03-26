@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,6 @@ import com.rsvti.database.entities.RigWithDetails;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.entities.Valve;
 
-import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 
 
@@ -231,8 +231,10 @@ public class DBServices {
 			if(rigIndex.getType().equals(Constants.PRESSURE_RIG)) {
 				Element valve = document.createElement("supapa");
 				
+				valve.setAttribute("nuEsteExtinsa", rigIndex.getValve().isNotExtended() + "");
+				
 				Element valveDueDate = document.createElement("data_scadentei");
-				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate().getTime() + ""));
+				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate(rigIndex.getValve().isNotExtended()).getTime() + ""));
 				valve.appendChild(valveDueDate);
 				
 				Element valveRegistrationNumber = document.createElement("numar_inregistrare");
@@ -362,12 +364,15 @@ public class DBServices {
 		for(int i = 0; i < firmNodes.getLength(); i++) {
 			firms.add(EntityBuilder.buildFirmFromXml(firmNodes.item(i)));
 		}
+		Collections.sort(firms, (f1, f2) -> f1.getFirmName().compareToIgnoreCase(f2.getFirmName()));
 		return firms;
 	}
 	
 	public static List<Rig> getAllRigs() {
 		NodeList rigNodes = (NodeList) executeXmlQuery("//instalatie", XPathConstants.NODESET);
-		return EntityBuilder.buildRigListFromXml(rigNodes);
+		List<Rig> rigs = EntityBuilder.buildRigListFromXml(rigNodes);
+		Collections.sort(rigs, (r1, r2) -> r1.getRigName().compareToIgnoreCase(r2.getRigName()));
+		return rigs;
 	}
 	
 	public static String getFirmForRig(Rig rig) {
@@ -377,7 +382,9 @@ public class DBServices {
 	
 	public static List<Employee> getAllEmployees() {
 		NodeList employeeNodes = (NodeList) executeXmlQuery("//angajat", XPathConstants.NODESET);
-		return EntityBuilder.buildEmployeeListFromXml(employeeNodes);
+		List<Employee> employees = EntityBuilder.buildEmployeeListFromXml(employeeNodes);
+		Collections.sort(employees, (e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
+		return employees;
 	}
 	
 	public static String getFirmForEmployee(Employee employee) {
@@ -530,7 +537,7 @@ public class DBServices {
 		List<Valve> valves = EntityBuilder.buildValveListFromXml(valveNodes);
 		List<Valve> tmp = new ArrayList<>();
 		for(Valve index : valves) {
-			Date dueDate = index.getDueDate();
+			Date dueDate = index.getDueDate(index.isNotExtended());
 			if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
 					(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
 				tmp.add(index);

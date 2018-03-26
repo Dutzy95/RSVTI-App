@@ -19,7 +19,6 @@ import com.rsvti.address.controller.MenuController;
 import com.rsvti.address.controller.RigOverviewController;
 import com.rsvti.address.controller.SettingsController;
 import com.rsvti.backup.GoogleDriveBackup;
-import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
@@ -79,6 +78,8 @@ public class JavaFxMain extends Application {
 	        
 	        AnchorPane pane = (AnchorPane) loader.load();
 	        Scene scene = new Scene(pane);
+	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
 	        
 	        loader.getController();
 	        
@@ -111,6 +112,8 @@ public class JavaFxMain extends Application {
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
+            String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
             primaryStage.setScene(scene);
             
             MenuController menuController = loader.getController();
@@ -208,6 +211,8 @@ public class JavaFxMain extends Application {
 	        stage.initOwner(primaryStage);
 	        stage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(employeeOverview);
+	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
 	        stage.setScene(scene);
 	        
 	        // Set the person into the controller.
@@ -296,6 +301,8 @@ public class JavaFxMain extends Application {
 	        addUpdateRigsToFirmStage.initOwner(primaryStage);
 	        addUpdateRigsToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(addUpdateRigsToFirm);
+	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
 	        addUpdateRigsToFirmStage.setScene(scene);
             
             addUpdateRigsToFirmStage.showAndWait();
@@ -318,6 +325,8 @@ public class JavaFxMain extends Application {
 	        addUpdateEmployeesToFirmStage.initOwner(primaryStage);
 	        addUpdateEmployeesToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(addUpdateEmployeesToFirm);
+	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
 	        addUpdateEmployeesToFirmStage.setScene(scene);
             
         	addUpdateEmployeesToFirmController = loader.getController();
@@ -417,6 +426,8 @@ public class JavaFxMain extends Application {
 	        stage.initOwner(primaryStage);
 	        stage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
 	        Scene scene = new Scene(settings);
+	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+	        scene.getStylesheets().add(css);
 	        stage.setScene(scene);
             
 	        stage.setOnCloseRequest(e -> {
@@ -581,7 +592,7 @@ public class JavaFxMain extends Application {
 	//		Utils.setStartup();
 			GoogleDriveBackup.initialize();
 			Utils.createFolderHierarchy();
-			Data.populate();
+//			Data.populate();
 			launch(args);
 	}
 }

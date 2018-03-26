@@ -11,7 +11,6 @@ import com.rsvti.database.entities.EmployeeAuthorization;
 import com.rsvti.database.services.DBServices;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -65,16 +64,6 @@ public class AddEmployeesToFirmController {
 			Utils.setDisplayFormatForDatePicker(authorizationDueDate);
 			Utils.setDisabledDaysForDatePicker(birthDate);
 			Utils.setDisplayFormatForDatePicker(birthDate);
-			authorizationNumberField.setAlignment(Pos.CENTER);
-			firstNameField.setAlignment(Pos.CENTER);
-			idCodeField.setAlignment(Pos.CENTER);
-			idNumberField.setAlignment(Pos.CENTER);
-			lastNameField.setAlignment(Pos.CENTER);
-			personalIdentificationNumberField.setAlignment(Pos.CENTER);
-			titleField.setAlignment(Pos.CENTER);
-			birthCityField.setAlignment(Pos.CENTER);
-			homeRegionField.setAlignment(Pos.CENTER);
-			homeAddressField.setAlignment(Pos.CENTER);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

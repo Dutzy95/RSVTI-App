@@ -18,7 +18,6 @@ import com.rsvti.generator.Generator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -122,7 +121,6 @@ public class GenerateTestResultsReportController {
 			});
 			Utils.setTextFieldValidator(registrationNumberField, "[0-9]*", "[0-9]+", false, Constants.INFINITE, 
 					"Numărul de înregistrare poate conține doar cifre.", JavaFxMain.primaryStage);
-			registrationNumberField.setAlignment(Pos.CENTER);
 			firmTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
 				if(firmTable.getSelectionModel().getSelectedItem() != null) {
 					rsvtiComboBox.setItems(FXCollections.observableArrayList(Utils.getEmployeeNames(

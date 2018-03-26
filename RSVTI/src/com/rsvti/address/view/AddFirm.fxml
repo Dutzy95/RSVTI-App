@@ -9,11 +9,11 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.address.controller.AddFirmController">
    <children>
-      <SplitPane fx:id="splitPane" dividerPositions="0.18196994991652754" prefHeight="800.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane fx:id="splitPane" dividerPositions="0.2036727879799666" prefHeight="800.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="firmTable" prefHeight="800.0" prefWidth="214.0">
+                  <TableView fx:id="firmTable" prefHeight="800.0" prefWidth="240.0">
                     <columns>
                       <TableColumn fx:id="firmNameColumn" prefWidth="75.0" text="Firmă" />
                     </columns>
@@ -25,7 +25,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <VBox fx:id="vbox" alignment="CENTER" prefHeight="798.0" prefWidth="976.0">
+                  <VBox fx:id="vbox" alignment="CENTER" prefHeight="798.0" prefWidth="950.0">
                      <children>
                         <HBox fx:id="hbox1" alignment="CENTER" spacing="20.0">
                            <children>
@@ -141,7 +141,7 @@
                               </GridPane>
                               <VBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <Label text="Angajați">
+                                    <Label text="Utilaje">
                                        <font>
                                           <Font size="29.0" />
                                        </font>
@@ -154,18 +154,23 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                     </TableView>
-                                    <Button mnemonicParsing="false" onAction="#handleAddRig" text="Adaugă utilaj" />
+                                    <HBox alignment="CENTER" spacing="30.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#handleAddRig" text="Adaugă utilaj" />
+                                          <Button mnemonicParsing="false" onAction="#handleDeleteRig" text="Șterge utilaj" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
                         <HBox fx:id="hbox2" alignment="CENTER" spacing="20.0">
                            <children>
-                              <VBox alignment="CENTER_LEFT">
+                              <VBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
                                     <Label text="Administrator">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font size="26.0" />
                                        </font>
                                     </Label>
                                     <GridPane prefHeight="183.0" prefWidth="582.0">
@@ -217,7 +222,7 @@
                               </VBox>
                               <VBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <Label text="Utilaje">
+                                    <Label text="Angajați">
                                        <font>
                                           <Font size="29.0" />
                                        </font>
@@ -231,12 +236,20 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  		</columnResizePolicy>
                               	</TableView>
-                                    <Button mnemonicParsing="false" onAction="#handleAddEmployee" text="Adaugă angajat" />
+                                    <HBox alignment="CENTER" spacing="30.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#handleAddEmployee" text="Adaugă angajat" />
+                                          <Button mnemonicParsing="false" onAction="#handleDeleteEmployee" text="Șterge angajat" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" onAction="#handleSave" text="Salvare" />
+                        <Button mnemonicParsing="false" onAction="#handleSave" text="Salvare">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Button>
                      </children>
                   </VBox>
                </children>

@@ -1,6 +1,7 @@
 package com.rsvti.common;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +47,7 @@ public class Data {
 			liftingRig1.addParameter(new ParameterDetails("Mod actionare","Manual", ""));
 			
 			Rig pressureRig1 = new Rig("CORTAR", addFromTodayDate(0, 5, 15), Constants.PRESSURE_RIG, "dash23k32", 2000, "das984j12l2k3",
-					new Valve(addFromTodayDate(0, 3, 0), "8593jdaiw"));
+					new Valve(addFromTodayDate(0, 3, 0), "8593jdaiw", true));
 			pressureRig1.setAuthorizationExtension(0);
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"10","bar"));
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"15","litri"));
@@ -63,7 +64,7 @@ public class Data {
 			liftingRig2.addParameter(new ParameterDetails("altceva","96","altcevauri"));
 			
 			Rig pressureRig2 = new Rig("STERN", addFromTodayDate(1, 2, 3), Constants.PRESSURE_RIG, "84390d7s68a97a", 2007, "432d9ssfas",
-					new Valve(addFromTodayDate(0, 2, 0), "83hqk234"));
+					new Valve(addFromTodayDate(0, 2, 0), "83hqk234", false));
 			pressureRig2.setAuthorizationExtension(0);
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"15","bar"));
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"20","litri"));
@@ -109,6 +110,15 @@ public class Data {
 			DBServices.saveEntry(new TestQuestion("SLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ante mauris, tempor ac nulla nec, tincidunt vulputate lorem. Pellentesque sollicitudin sollicitudin ante. Proin tempus metus quis eros mollis, pellentesque pellentesque sem aliquam.", Arrays.asList("raspuns31", "raspuns32", "raspuns33"),"stivuitorist"));
 			DBServices.saveEntry(new TestQuestion("SDonec nec interdum erat. In malesuada metus at aliquet euismod. Donec nec gravida ligula. Duis id ullamcorper nibh, eget maximus mauris. Mauris ornare metus sit amet aliquet efficitur. Quisque vestibulum hendrerit libero sed pellentesque. Morbi nec nunc non enim placerat pretium at id nisl.", Arrays.asList("raspuns31", "raspuns32", "raspuns33"),"stivuitorist"));
 			
+			//CustomSettings
+			DBServices.saveBackupPath("D:\\Tata");
+			SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+			DBServices.saveEntry(dateFormat.parse("03-01-2018"));
+			DBServices.saveEntry(dateFormat.parse("15-01-2018"));
+			DBServices.saveEntry(dateFormat.parse("16-01-2018"));
+			DBServices.saveHomeDateDisplayInterval(12, Calendar.MONTH);
+			DBServices.saveDatePattern("dd-MM-yyyy");
+			DBServices.saveMaximumLogSize(1);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

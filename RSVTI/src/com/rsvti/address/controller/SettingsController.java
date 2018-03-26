@@ -14,7 +14,6 @@ import com.rsvti.database.services.DBServices;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -116,9 +115,6 @@ public class SettingsController {
 					DBServices.saveErrorLogEntry(e);
 				}
 			});
-			
-			maximumLogSize.setAlignment(Pos.CENTER);
-			homeDateIntervalField.setAlignment(Pos.CENTER);
 			
 			maximumLogSize.setText(DBServices.getMaximumLogSize() + "");
 			Utils.setTextFieldValidator(maximumLogSize, "[0-9]*", "[0-9]{1,3}", false, 3,
