@@ -308,16 +308,26 @@ public class AddRigsToFirmController {
 				if(firmId != null) {
 					javaFxMain.getDueDateOverviewController().updateRigTable(firmId, rigToUpdate, newRig);
 				}
+				javaFxMain.getAddRigsToFirmStage().close();
 			} else {
 				if(updateForFirm) {
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(rigToUpdate, true, newRig);
+					javaFxMain.getAddRigsToFirmStage().close();
+				} else if(update) {
+					DBServices.updateRigForFirm(rigTable.getSelectionModel().getSelectedItem().getFirmId(), rigToUpdate, newRig);
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+							Constants.LOW_DATE,
+							Constants.HIGH_DATE,
+							(r1, r2) -> r1.getRig().getRigName().compareToIgnoreCase(r2.getRig().getRigName()))));
+					rigTable.refresh();
 				} else {
 					newRig.setAuthorizationExtension(selectedExtensionValue);
 					javaFxMain.getAddFirmController().updateRigTable(newRig, false, null);
+					javaFxMain.getAddRigsToFirmStage().close();
 				}
 			}
-			javaFxMain.getAddRigsToFirmStage().close();
+			
 			isDueDateUpdate = false;
 			updateForFirm = false;
 		} catch (Exception e) {
