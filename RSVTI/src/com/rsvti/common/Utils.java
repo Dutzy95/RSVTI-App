@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,20 +139,17 @@ public class Utils {
 	}
 	
 	public static String getJarFilePath() {
-		//		For .jar file
-//		try {
-//			String jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
-//		} catch(Exception e) {
-//			DBServices.saveErrorLogEntry(e);
-//		}
-//		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
-		
-		//		For Eclipse
 		String jarFilePath = "";
+		// For .jar file
 		try {
-			jarFilePath = new File(Utils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
-		} catch(Exception e) {
-			DBServices.saveErrorLogEntry(e);
+			jarFilePath = new File(ClassLoader.getSystemClassLoader().getResource(Constants.JAR_FILE_NAME).getPath()).getAbsolutePath();
+			jarFilePath = URLDecoder.decode(jarFilePath, "UTF-8");
+		} catch(Exception ex) {
+			// For Eclipse
+			try {
+				jarFilePath = new File(Utils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getAbsolutePath();
+			} catch(Exception e) {}
+			return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
 		}
 		return jarFilePath.substring(0, jarFilePath.lastIndexOf("\\")) + "\\";
 	}
@@ -178,8 +177,6 @@ public class Utils {
 			Runtime.getRuntime().exec("attrib +H " + file.getAbsolutePath());	//hide Folder
 			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
-//			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_with_text.png")), "png", new File(jarFilePath + "images/RSVTI_with_text.png"));
-//			ImageIO.write(ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png")), "png", new File(jarFilePath + "images/RSVTI_without_text.png"));
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -187,7 +184,7 @@ public class Utils {
 	
 	public static void setTray(Stage primaryStage) {
 		try {
-			
+			Platform.setImplicitExit(false);
 			primaryStage.setOnCloseRequest(event -> {
 				Platform.runLater(() -> {
 						primaryStage.hide();
@@ -393,6 +390,30 @@ public class Utils {
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		
+		return calendar.getTime();
+	}
+
+	public static Date getCalculatedDueDate(Date revisionDate, int authorizationExtension) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(revisionDate);
+		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
+		if(authorizationExtension > 0) {
+			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+			List<Date> variableDates = DBServices.getVariableVacationDates();
+			while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
+					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+					|| variableDates.contains(calendar.getTime())) {
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
+						|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
+						|| variableDates.contains(calendar.getTime())) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+				}
+				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+					calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
+				}
+			}
+		}
 		return calendar.getTime();
 	}
 }

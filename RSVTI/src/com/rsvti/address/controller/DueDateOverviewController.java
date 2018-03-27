@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -29,6 +30,8 @@ public class DueDateOverviewController {
 	private DatePicker dateFrom;
 	@FXML
 	private DatePicker dateTo;
+	@FXML
+	private CheckBox allCheckbox;
 	
 	@FXML
 	private TableView<RigWithDetails> rigTable;
@@ -75,7 +78,7 @@ public class DueDateOverviewController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			        	RigWithDetails rowData = row.getItem();
-			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName());
+			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName(), rowData.getFirmId());
 			        }
 			    });
 			    return row ;
@@ -92,7 +95,7 @@ public class DueDateOverviewController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			        	EmployeeWithDetails rowData = row.getItem();
-			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName());
+			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName(), rowData.getFirmId());
 			        }
 			    });
 			    return row ;
@@ -116,12 +119,25 @@ public class DueDateOverviewController {
 					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"", false);
 				}
 			});
+			allCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+				if(newValue) {
+					dateFrom.setDisable(true);
+					dateTo.setDisable(true);
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
+				} else {
+					dateFrom.setDisable(false);
+					dateTo.setDisable(false);
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+				}
+			});
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
-	public void updateRigTable(String firmName, Rig rigToUpdate, Rig newRig) {
+	public void updateRigTable(String firmId, Rig rigToUpdate, Rig newRig) {
 		List<RigWithDetails> beforeUpdate = rigTable.getItems();
 		for(RigWithDetails index : beforeUpdate) {
 			if(index.getRig().equals(rigToUpdate)) {
@@ -130,10 +146,10 @@ public class DueDateOverviewController {
 			}
 		}
 		rigTable.refresh();
-		DBServices.updateRigForFirm(firmName, rigToUpdate, newRig);
+		DBServices.updateRigForFirm(firmId, rigToUpdate, newRig);
 	}
 	
-	public void updateEmployeeTable(String firmName, Employee employeeToUpdate, Employee newEmployee) {
+	public void updateEmployeeTable(String firmId, Employee employeeToUpdate, Employee newEmployee) {
 		List<EmployeeWithDetails> beforeUpdate = employeeTable.getItems();
 		for(EmployeeWithDetails index : beforeUpdate) {
 			if(index.getEmployee().equals(employeeToUpdate)) {
@@ -142,7 +158,7 @@ public class DueDateOverviewController {
 			}
 		}
 		employeeTable.refresh();
-		DBServices.updateEmployeeForFirm(firmName, employeeToUpdate, newEmployee);
+		DBServices.updateEmployeeForFirm(firmId, employeeToUpdate, newEmployee);
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

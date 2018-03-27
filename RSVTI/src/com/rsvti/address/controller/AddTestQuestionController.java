@@ -10,6 +10,7 @@ import com.rsvti.database.services.DBServices;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -40,6 +41,9 @@ public class AddTestQuestionController {
 	@FXML
 	private ComboBox<String> questionTypeComboBox;
 	
+	@FXML
+	private Button deleteButton;
+	
 	private boolean isUpdate = false;
 	private TestQuestion questionToUpdate;
 
@@ -47,12 +51,20 @@ public class AddTestQuestionController {
 	private void initialize() {
 		try {
 			testTable.setItems(FXCollections.observableArrayList(DBServices.getAllTestQuestions()));
+			testTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+				if(newValue != null) {
+					deleteButton.setDisable(false);
+				} else {
+					deleteButton.setDisable(true);
+				}
+			});
 			questionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getQuestion()));
 			questionTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getType()));
 			questionTypeComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("stivutorist", "macaragist", "legător de sarcină", "manevrant", "fochist")));
 			questionTypeComboBox.getSelectionModel().select(0);
 			testTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showTestDetails(newValue));
 			testTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			deleteButton.setDisable(true);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

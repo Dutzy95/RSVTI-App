@@ -2,6 +2,8 @@ package com.rsvti.database.entities;
 
 import java.util.Date;
 
+import com.rsvti.common.Constants;
+
 public class LoggedTest {
 
 	private String employeeFirstName;
@@ -66,5 +68,13 @@ public class LoggedTest {
 				((LoggedTest) o).getEmployeeTitle().equals(employeeTitle) &&
 				((LoggedTest) o).getFirmName().equals(firmName) &&
 				((LoggedTest) o).getGenerationDateAndTime().equals(generationDateAndTime);
+	}
+	
+	public String toString() {
+		return "employeeFirstName: " + employeeFirstName +
+				"\nemployeeLastName: " + employeeLastName +
+				"\nemployeeTitle: " + employeeTitle +
+				"\nfirmName: " + firmName +
+				"\ngenerationDateAndTime: " + Constants.DEFAULT_DATE_FORMATTER.format(generationDateAndTime);
 	}
 }

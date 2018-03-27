@@ -41,4 +41,10 @@ public class RigParameter {
 		return o instanceof RigParameter &&
 				((RigParameter) o).getName().equals(name);
 	}
+	
+	public String toString() {
+		return "type: " + type +
+				"\nname: " + name +
+				"\nmeasuringUnit: " + measuringUnit;
+	}
 }

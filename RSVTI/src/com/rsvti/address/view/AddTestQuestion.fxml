@@ -41,8 +41,8 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button layoutX="435.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleSaveTestQuestion" text="Salvează" />
-      <Button layoutX="703.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleDeleteTestQuestion" text="Șterge" />
+      <Button defaultButton="true" layoutX="435.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleSaveTestQuestion" text="Salvează" />
+      <Button fx:id="deleteButton" layoutX="703.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleDeleteTestQuestion" text="Șterge" />
       <Button layoutX="539.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleEmptyAreas" text="Golește câmpurile" />
    </children>
 </AnchorPane>

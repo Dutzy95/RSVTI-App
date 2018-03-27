@@ -77,7 +77,7 @@ public class AddRigsToFirmController {
 	
 	private boolean isUpdate = false;
 	private boolean isDueDateUpdate = false;
-	private String firmName;
+	private String firmId;
 	private Rig rigToUpdate;
 	
 	private int selectedExtensionValue = 0;
@@ -137,7 +137,7 @@ public class AddRigsToFirmController {
 						selectedExtensionValue = 0;
 					}
 					if(revisionDate.getValue() != null) {
-						dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
+						dueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 					}
 				} catch (Exception e) {
 					DBServices.saveErrorLogEntry(e);
@@ -151,7 +151,7 @@ public class AddRigsToFirmController {
 					} else {
 						selectedExtensionValue = 0;
 					}
-					dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
+					dueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(revisionDate.getValue()), selectedExtensionValue)));
 				} catch (Exception err) {
 					DBServices.saveErrorLogEntry(err);
 				}
@@ -161,26 +161,26 @@ public class AddRigsToFirmController {
 	        Utils.setDisabledDaysForDatePicker(revisionDate);
 	        revisionDate.setValue(LocalDate.now());
 			
-			dueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), selectedExtensionValue)));
+			dueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(LocalDate.now()), selectedExtensionValue)));
 			
 			valveTitleLabel.setVisible(false);
 			valveHbox.setVisible(false);
 			Utils.setDisabledDaysForDatePicker(valveRevisionDate);
 			Utils.setDisplayFormatForDatePicker(valveRevisionDate);
 			valveRevisionDate.setValue(LocalDate.now());
-			valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(LocalDate.now()), 1)));
+			valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(LocalDate.now()), 1)));
 			valveRevisionDate.setOnAction(e -> {
 				if(valveNoExtensionCheckbox.selectedProperty().get()) {
-					valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 0)));
+					valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 0)));
 				} else {
-					valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
+					valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
 				}
 			});
 			valveNoExtensionCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 				if(newValue) {
-					valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 0)));
+					valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 0)));
 				} else {
-					valveDueDateLabel.setText(simpleDateFormat.format(Rig.getDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
+					valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
 				}
 			});
 		} catch (Exception e) {
@@ -259,7 +259,9 @@ public class AddRigsToFirmController {
 									 valveNoExtensionCheckbox.selectedProperty().get()));
 				}
 				newRig.setAuthorizationExtension(selectedExtensionValue);
-				javaFxMain.getDueDateOverviewController().updateRigTable(firmName, rigToUpdate, newRig);
+				if(firmId != null) {
+					javaFxMain.getDueDateOverviewController().updateRigTable(firmId, rigToUpdate, newRig);
+				}
 			} else {
 				if(isUpdate) {
 					if(rigType.getValue().equals(Constants.LIFTING_RIG)) {
@@ -335,7 +337,8 @@ public class AddRigsToFirmController {
 		iscirRegistrationNumberField.setText(rig.getIscirRegistrationNumber());
 		if(rig.getType().equals(Constants.PRESSURE_RIG)) {
 			valveRegistrationNumberField.setText(rig.getValve().getRegistrationNumber());
-			valveRevisionDate.setValue(new java.sql.Date(rig.getValve().getDueDate(rig.getValve().isNotExtended()).getTime()).toLocalDate());
+			valveRevisionDate.setValue(new java.sql.Date(rig.getValve().getRevisionDate().getTime()).toLocalDate());
+			valveDueDateLabel.setText(simpleDateFormat.format(rig.getValve().getDueDate()));
 			valveNoExtensionCheckbox.setSelected(rig.getValve().isNotExtended());
 		}
 	}
@@ -348,8 +351,8 @@ public class AddRigsToFirmController {
 		this.isDueDateUpdate = isDueDateUpdate;
 	}
 
-	public void setFirmName(String firmName) {
-		this.firmName = firmName;
+	public void setFirmId(String firmId) {
+		this.firmId = firmId;
 	}
 	public void setJavaFxMain(JavaFxMain javaFxMain) {
 		this.javaFxMain = javaFxMain;

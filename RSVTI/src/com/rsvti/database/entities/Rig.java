@@ -114,30 +114,6 @@ public class Rig{
 		this.authorizationExtension = authorizationExtension;
 	}
 	
-	public static Date getDueDate(Date revisionDate, int authorizationExtension) {
-		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.setTime(revisionDate);
-		calendar.add(GregorianCalendar.YEAR, authorizationExtension);
-		if(authorizationExtension > 0) {
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
-			List<Date> variableDates = DBServices.getVariableVacationDates();
-			while(Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1)) 
-					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY 
-					|| calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
-					|| variableDates.contains(calendar.getTime())) {
-				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY
-						|| Constants.publicHolidays.contains(calendar.get(GregorianCalendar.DATE) + "-" + (calendar.get(GregorianCalendar.MONTH) + 1))
-						|| variableDates.contains(calendar.getTime())) {
-					calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
-				}
-				if(calendar.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
-					calendar.add(GregorianCalendar.DAY_OF_MONTH, -2);
-				}
-			}
-		}
-		return calendar.getTime();
-	}
-	
 	public Date getDueDate() {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(revisionDate);
@@ -219,5 +195,15 @@ public class Rig{
 			}
 		}
 		return null;
+	}
+	
+	public String toString() {
+		return "rigName: " + rigName +
+				"\nrevisionDate: " + Constants.DEFAULT_DATE_FORMATTER.format(revisionDate) +
+				"\nauthorizationExtension: " + authorizationExtension +
+				"\nproductionNumber: " + productionNumber +
+				"\nproductionYear: " + productionYear +
+				"\niscirRegistrationNumber: " + iscirRegistrationNumber +
+				"\nvalve: " + valve.toString();
 	}
 }

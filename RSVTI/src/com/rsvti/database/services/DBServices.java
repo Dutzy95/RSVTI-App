@@ -234,7 +234,7 @@ public class DBServices {
 				valve.setAttribute("nuEsteExtinsa", rigIndex.getValve().isNotExtended() + "");
 				
 				Element valveDueDate = document.createElement("data_scadentei");
-				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate(rigIndex.getValve().isNotExtended()).getTime() + ""));
+				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate().getTime() + ""));
 				valve.appendChild(valveDueDate);
 				
 				Element valveRegistrationNumber = document.createElement("numar_inregistrare");
@@ -336,8 +336,8 @@ public class DBServices {
 		}
 	}
 	
-	public static void updateRigForFirm(String firmName, Rig rigToUpdate, Rig newRig) {
-		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
+	public static void updateRigForFirm(String firmId, Rig rigToUpdate, Rig newRig) {
+		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[@id = \"" + firmId + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
 		for(int i = 0; i < firm.getRigs().size(); i++) {
 			if(firm.getRigs().get(i).equals(rigToUpdate)) {
@@ -347,8 +347,8 @@ public class DBServices {
 		saveEntry(firm, true);
 	}
 	
-	public static void updateEmployeeForFirm(String firmName, Employee employeeToUpdate, Employee newEmployee) {
-		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[nume_firma = \"" + firmName + "\"]", XPathConstants.NODE));
+	public static void updateEmployeeForFirm(String firmId, Employee employeeToUpdate, Employee newEmployee) {
+		Firm firm = EntityBuilder.buildFirmFromXml((Node) executeXmlQuery("//firma[@id = \"" + firmId + "\"]", XPathConstants.NODE));
 		deleteEntry(firm);
 		for(int i = 0; i < firm.getEmployees().size(); i++) {
 				if(firm.getEmployees().get(i).equals(employeeToUpdate)) {
@@ -508,11 +508,11 @@ public class DBServices {
 				Date dueDate = firm.getEmployees().get(j).getAuthorization().getDueDate();
 				if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
 						(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
-					selectedEmployees.add(new EmployeeWithDetails(firm.getEmployees().get(j), firm.getFirmName(), 
-							firm.getAddress(), firm.getExecutiveName(), dueDate));
+					selectedEmployees.add(new EmployeeWithDetails(firm.getEmployees().get(j), firm, dueDate));
 				}
 			}
 		}
+		Collections.sort(selectedEmployees, (e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()));
 		return selectedEmployees;
 	}
 	
@@ -529,6 +529,7 @@ public class DBServices {
 				}
 			}
 		}
+		Collections.sort(selectedRigs, (r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()));
 		return selectedRigs;
 	}
 	
@@ -537,7 +538,7 @@ public class DBServices {
 		List<Valve> valves = EntityBuilder.buildValveListFromXml(valveNodes);
 		List<Valve> tmp = new ArrayList<>();
 		for(Valve index : valves) {
-			Date dueDate = index.getDueDate(index.isNotExtended());
+			Date dueDate = index.getDueDate();
 			if(Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(beginDate)) || Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(endDate)) || 
 					(Utils.resetTimeForDate(dueDate).after(Utils.resetTimeForDate(beginDate)) && Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(endDate)))) {
 				tmp.add(index);

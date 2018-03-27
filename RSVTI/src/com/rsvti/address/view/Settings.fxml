@@ -46,7 +46,7 @@
             <TextField fx:id="maximumLogSize" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
-      <Button layoutX="250.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleSave" text="Salvare" />
-      <Button layoutX="370.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleCancel" text="Anulare" />
+      <Button defaultButton="true" layoutX="250.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleSave" text="Salvare" />
+      <Button cancelButton="true" layoutX="370.0" layoutY="455.0" mnemonicParsing="false" onAction="#handleCancel" text="Anulare" />
    </children>
 </AnchorPane>

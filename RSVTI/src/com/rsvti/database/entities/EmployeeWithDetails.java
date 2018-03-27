@@ -8,14 +8,16 @@ public class EmployeeWithDetails {
 	private String firmName;
 	private String firmAddress;
 	private String executiveName;
+	private String firmId;
 	private Date dueDate;
 	
-	public EmployeeWithDetails(Employee employee, String firmName, String firmAddress, String executiveName, Date dueDate) {
+	public EmployeeWithDetails(Employee employee, Firm firm, Date dueDate) {
 		this.setEmployee(employee);
-		this.setFirmName(firmName);
+		this.setFirmName(firm.getFirmName());
 		this.setDueDate(dueDate);
-		this.setFirmAddress(firmAddress);
-		this.setExecutiveName(executiveName);
+		this.setFirmAddress(firm.getAddress());
+		this.setExecutiveName(firm.getExecutiveName());
+		this.setFirmId(firm.getId());
 	}
 
 	public Employee getEmployee() {
@@ -56,5 +58,13 @@ public class EmployeeWithDetails {
 
 	public void setExecutiveName(String executiveName) {
 		this.executiveName = executiveName;
+	}
+
+	public String getFirmId() {
+		return firmId;
+	}
+
+	public void setFirmId(String firmId) {
+		this.firmId = firmId;
 	}
 }

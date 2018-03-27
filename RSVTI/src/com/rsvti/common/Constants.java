@@ -1,5 +1,6 @@
 package com.rsvti.common;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,10 +22,11 @@ public class Constants {
 	public static final String XML_LOGGED_TESTS_FILE_NAME = "LoggedTests.xml";
 	public static final String XML_ERROR_LOG_FILE = "Errlog.xml";
 	
-	public static final String APP_NAME = "RSVTI App";
+	public static final String APP_NAME = "RSVTIApp";
 	public static final String JAR_FILE_NAME = "RSVTIApp.jar";
 	
 	public static final String DEFAULT_DATE_FORMAT = "dd-MM-yyyy";
+	public static final SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
 	public static final String GENERATED_FILE_DATE_FORMAT = "dd.MM.yyyy";
 	public static final String DEFAULT_TIMESTAMP_FORMAT = "HH:mm:ss";
 	public static final String ERRLOG_TIMESTAMP_FORMAT = "HH.mm.ss.SSS";

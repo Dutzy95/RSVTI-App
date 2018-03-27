@@ -13,8 +13,8 @@
           <Menu mnemonicParsing="false" text="Fișier">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleAddFirm" text="Adaugă firmă" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleAddRigParameters" text="Adaugă parametru pentru utilaj" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleAddTestQuestion" text="Adaugă întrebare test" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddRigParameters" text="Parametrii pentru utilaj" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddTestQuestion" text="Întrebări test" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#handleShowSettings" text="Setări" />
                   <SeparatorMenuItem mnemonicParsing="false" />

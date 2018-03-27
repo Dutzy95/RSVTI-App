@@ -188,16 +188,6 @@ public class MenuController {
 										+ " repornită pentru ca modificările să aibă loc. Doriti sa reporniți aplicația acum?", true);
 							if(restartChoice.get().getButtonData() == ButtonType.YES.getButtonData()) {
 								try {
-//									final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-//									final File currentJar = new File(Utils.getJarFilePath() + Constants.APP_NAME + ".jar");
-//									final ArrayList<String> command = new ArrayList<String>();
-//									command.add(javaBin);
-//									command.add("-jar");
-//									command.add(currentJar.getPath());
-//
-//									final ProcessBuilder builder = new ProcessBuilder(command);
-//									builder.start();
-//									System.exit(0);
 									Runtime.getRuntime().addShutdownHook(new Thread() {
 										@Override
 										public void run() {
@@ -208,6 +198,7 @@ public class MenuController {
 											}
 										}
 									});
+									System.exit(0);
 								} catch(Exception e) {
 									DBServices.saveErrorLogEntry(e);
 								}

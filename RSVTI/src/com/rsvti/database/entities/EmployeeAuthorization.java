@@ -2,6 +2,8 @@ package com.rsvti.database.entities;
 
 import java.util.Date;
 
+import com.rsvti.common.Constants;
+
 public class EmployeeAuthorization {
 	
 	private String authorizationNumber;
@@ -36,5 +38,11 @@ public class EmployeeAuthorization {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+	
+	public String toString() {
+		return "authorizationNumber: " + authorizationNumber +
+				"\nobtainingDate: " + Constants.DEFAULT_DATE_FORMATTER.format(obtainingDate) +
+				"\ndueDate: " + Constants.DEFAULT_DATE_FORMATTER.format(dueDate);
 	}
 }

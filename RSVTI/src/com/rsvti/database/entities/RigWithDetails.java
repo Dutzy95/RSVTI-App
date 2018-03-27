@@ -10,6 +10,7 @@ public class RigWithDetails {
 	private String firmPhoneNumber;
 	private String firmFiscalCode;
 	private String firmRegistrationNumber;
+	private String firmId;
 	private Date dueDate;
 	
 	public RigWithDetails(Rig rig, Firm firm, Date dueDate) {
@@ -19,6 +20,7 @@ public class RigWithDetails {
 		this.setFirmPhoneNumber(firm.getPhoneNumber());
 		this.setFirmFiscalCode(firm.getFiscalCode());
 		this.setFirmRegistrationNumber(firm.getRegistrationNumber());
+		this.setFirmId(firm.getId());
 		this.setDueDate(dueDate);
 	}
 
@@ -76,6 +78,14 @@ public class RigWithDetails {
 
 	public void setFirmRegistrationNumber(String firmRegistrationNumber) {
 		this.firmRegistrationNumber = firmRegistrationNumber;
+	}
+
+	public String getFirmId() {
+		return firmId;
+	}
+
+	public void setFirmId(String firmId) {
+		this.firmId = firmId;
 	}
 
 }

@@ -17,6 +17,7 @@ import com.rsvti.database.services.DBServices;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
@@ -79,6 +80,10 @@ public class AddFirmController {
 	private TableView<Rig> rigTable;
 	@FXML
 	private TableColumn<Rig,String> rigColumn;
+	@FXML
+	private Button deleteRigButton;
+	@FXML
+	private Button deleteEmployeeButton;
 	
 	@FXML
 	private TableView<Employee> employeeTable;
@@ -105,12 +110,20 @@ public class AddFirmController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			            Rig rowData = row.getItem();
-			            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj");
+			            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj", null);
 			        }
 			    });
 			    return row ;
 			});
+			deleteRigButton.setDisable(true);
 			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+				if(newValue != null) {
+					deleteRigButton.setDisable(false);
+				} else {
+					deleteRigButton.setDisable(true);
+				}
+			});
 			rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 			
 			employeeTable.setItems(FXCollections.observableArrayList(employeeList));
@@ -122,10 +135,18 @@ public class AddFirmController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			            Employee rowData = row.getItem();
-			            javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, "Editează personal");
+			            javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, "Editează personal", null);
 			        }
 			    });
 			    return row ;
+			});
+			deleteEmployeeButton.setDisable(true);
+			employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+				if(newValue != null) {
+					deleteEmployeeButton.setDisable(false);
+				} else {
+					deleteEmployeeButton.setDisable(true);
+				}
 			});
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -228,7 +249,7 @@ public class AddFirmController {
 	@FXML
 	private void handleAddRig() {
 		try {
-			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj");
+			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj", null);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -237,7 +258,7 @@ public class AddFirmController {
 	@FXML
 	private void handleAddEmployee() {
 		try {
-			javaFxMain.showAddUpdateEmployeesToFirm(null, false, false,"Adaugă personal");
+			javaFxMain.showAddUpdateEmployeesToFirm(null, false, false,"Adaugă personal", null);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -283,6 +304,7 @@ public class AddFirmController {
 		}
 		Collections.sort(rigList, (r1, r2) -> r1.getRigName().compareToIgnoreCase(r2.getRigName()));
 		rigTable.setItems(FXCollections.observableArrayList(rigList));
+		rigTable.refresh();
 	}
 	
 	public void updateEmployeeList(Employee employee, boolean isUpdate, Employee updatedEmployee) {
@@ -297,6 +319,7 @@ public class AddFirmController {
 		}
 		Collections.sort(employeeList, (e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
 		employeeTable.setItems(FXCollections.observableArrayList(employeeList));
+		employeeTable.refresh();
 	}
 	
 	public void setFieldsAndTables(Firm firm) {

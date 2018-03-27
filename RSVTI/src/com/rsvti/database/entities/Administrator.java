@@ -72,4 +72,12 @@ public class Administrator {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	public String toString() {
+		return "firstName: " + firstName + 
+			"\nlastName: " + lastName +
+			"\nidCode: " + idCode + 
+			"\nidNumber: " + idNumber + 
+			"\nphoneNumber: " + phoneNumber;
+	}
 }

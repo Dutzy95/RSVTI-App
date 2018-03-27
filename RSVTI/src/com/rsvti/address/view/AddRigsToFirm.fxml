@@ -32,7 +32,7 @@
             <Button mnemonicParsing="false" onAction="#handleArrowLeft" text="&lt;-" />
          </children>
       </VBox>
-      <Button layoutX="357.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+      <Button defaultButton="true" layoutX="357.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
       <VBox alignment="CENTER_LEFT" layoutX="27.0" prefHeight="371.0" prefWidth="747.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="192.0" prefWidth="800.0" spacing="20.0">

@@ -35,4 +35,10 @@ public class ParameterDetails {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String toString() {
+		return "name: " + name +
+				"\nvalue: " + value +
+				"\nmeasuringUnit: " + measuringUnit;
+	}
 }

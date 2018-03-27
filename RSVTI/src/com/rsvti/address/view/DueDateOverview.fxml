@@ -13,32 +13,6 @@
             <Font size="32.0" />
          </font>
       </Label>
-      <GridPane layoutX="65.0" layoutY="101.0" prefHeight="47.0" prefWidth="700.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="186.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="16.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="238.0" minWidth="10.0" prefWidth="116.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="242.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="De la data">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <DatePicker fx:id="dateFrom" GridPane.columnIndex="1" />
-            <DatePicker fx:id="dateTo" GridPane.columnIndex="4" />
-            <Label text="Până la data" GridPane.columnIndex="3">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-         </children>
-      </GridPane>
       <TableView fx:id="rigTable" layoutX="65.0" layoutY="196.0" prefHeight="544.0" prefWidth="447.0">
         <columns>
             <TableColumn fx:id="rigColumn" prefWidth="75.0" text="Utilaj" />
@@ -63,5 +37,34 @@
             <TableColumn fx:id="employeeDueDateColumn" prefWidth="75.0" text="Data scadenței" />
          </columns>
       </TableView>
+      <HBox alignment="CENTER" layoutX="65.0" layoutY="125.0" spacing="40.0">
+         <children>
+            <HBox alignment="CENTER" spacing="15.0">
+               <children>
+                  <Label text="De la data">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="dateFrom" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="15.0">
+               <children>
+                  <Label text="Până la data">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="dateTo" />
+               </children>
+            </HBox>
+            <CheckBox fx:id="allCheckbox" mnemonicParsing="false" text="Toate">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

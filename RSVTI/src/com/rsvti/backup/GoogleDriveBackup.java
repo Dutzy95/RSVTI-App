@@ -69,7 +69,8 @@ public class GoogleDriveBackup {
     private final static String FILE_UPLOAD_FIELDS = "id";
     private final static String FILE_SEARCH_FIELDS = "id, name, createdTime";
     private static Drive service;
-    private static final int numberOfOnlineCopies = 3; 
+    private static final int numberOfOnlineCopies = 5;
+    private static int delay = 500;
 
     /**
      * Creates an authorized Credential object.
@@ -161,12 +162,17 @@ public class GoogleDriveBackup {
 		} catch (GoogleJsonResponseException g) {
 			if(g.getContent().contains("User Rate Limit Exceeded")) {
 				try {
-					Thread.sleep(1000);
+					//only when uploading all at once with Data.populate
+					Thread.sleep(delay);
+					delay+=500;
+					//
 					uploadFile(fileName);
 				} catch(Exception e) {}
 			}
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
+		} finally {
+			deleteExtraCopies();
 		}
 	}
 	
@@ -191,20 +197,41 @@ public class GoogleDriveBackup {
 		}
 	}
 	
-	private static void deleteExtraCopies(List<List<File>> lists) {
+	private static List<File> getAllFiles() {
+		List<File> files = new ArrayList<>();
+		try {
+			FileList result = service.files().list().setPageSize(100).setFields("nextPageToken, files(" + FILE_SEARCH_FIELDS + ")").execute();
+			files = result.getFiles();
+		} catch (GoogleJsonResponseException g) {
+			if(!g.getContent().contains("User Rate Limit Exceeded")) {
+				DBServices.saveErrorLogEntry(g);
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+		return files;
+	}
+	
+	private static void deleteExtraCopies() {
 		try {
 			while(!connected());
+			List<List<File>> lists = getFilesByTypes(getAllFiles());
 			for(List<File> index : lists) {
 				for(int i = numberOfOnlineCopies; i < index.size(); i++) {
+					System.out.println("Deleting extra copies: " + index.get(i).getName());
 					service.files().delete(index.get(i).getId()).execute();
 				}
+			}
+		} catch (GoogleJsonResponseException g) {
+			if(!g.getContent().contains("User Rate Limit Exceeded") && !g.getContent().contains("File not found")) {
+				DBServices.saveErrorLogEntry(g);
 			}
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
-	private static List<File> getLatestVersions(List<File> files) {
+	private static List<List<File>> getFilesByTypes(List<File> files) {
 		Collections.sort(files, (e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()));
 		List<List<File>> lists = new ArrayList<>();
 		List<File> sameNameFiles = new ArrayList<>();
@@ -227,8 +254,13 @@ public class GoogleDriveBackup {
 				}
 			}
 		}
-		deleteExtraCopies(lists);
+		return lists;
+	}
+	
+	private static List<File> getLatestVersions(List<File> files) {
+		deleteExtraCopies();
 		List<File> latestVersions = new ArrayList<>();
+		List<List<File>> lists = getFilesByTypes(getAllFiles());
 		for(List<File> index : lists) {
 			Collections.sort(index, (e1, e2) -> new Date(e1.getCreatedTime().getValue()).compareTo(new Date(e2.getCreatedTime().getValue())));
 			latestVersions.add(index.get(index.size() - 1));
@@ -253,7 +285,7 @@ public class GoogleDriveBackup {
     		initialize();
     		while(!connected());
 	        FileList result = service.files().list()
-	             .setPageSize(100)
+	             .setPageSize(1000)
 	             .setFields("nextPageToken, files(" + FILE_SEARCH_FIELDS + ")")
 	             .execute();
 	        List<File> files = result.getFiles();

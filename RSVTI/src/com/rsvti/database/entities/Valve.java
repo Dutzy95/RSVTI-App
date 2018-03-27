@@ -4,35 +4,31 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 
 public class Valve {
 	
-	private Date dueDate;
+	private Date revisionDate;
 	private String registrationNumber;
 	private boolean notExtended;
 
-	public Valve(Date dueDate, String registrationNumber, boolean notExtended) {
-		this.setDueDate(dueDate);
+	public Valve(Date revisionDate, String registrationNumber, boolean notExtended) {
+		this.setRevisionDate(revisionDate);
 		this.setRegistrationNumber(registrationNumber);
 		this.setNotExtended(notExtended);
 	}
 
-	public Date getDueDate(boolean notExtended) {
-		Date currentDate = Calendar.getInstance().getTime();
-		if(Utils.resetTimeForDate(dueDate).before(Utils.resetTimeForDate(currentDate)) || 
-				Utils.resetTimeForDate(dueDate).equals(Utils.resetTimeForDate(currentDate))) {
-			Calendar cal = new GregorianCalendar();
-			cal.setTime(dueDate);
-			cal.add(Calendar.YEAR, notExtended ? 0 : 1);
-			return cal.getTime();
-		} else {
-			return dueDate;
-		}
+	public Date getDueDate() {
+		return Utils.getCalculatedDueDate(revisionDate, notExtended ? 0 : 1);
 	}
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setRevisionDate(Date dueDate) {
+		this.revisionDate = dueDate;
+	}
+	
+	public Date getRevisionDate() {
+		return revisionDate;
 	}
 
 	public String getRegistrationNumber() {
@@ -51,4 +47,9 @@ public class Valve {
 		this.notExtended = notExtended;
 	}
 	
+	public String toString() {
+		return "dueDate: " + Constants.DEFAULT_DATE_FORMATTER.format(revisionDate) +
+				"\nregistrationNumber: " + registrationNumber +
+				"\nnotExtended: " + notExtended;
+	}
 }

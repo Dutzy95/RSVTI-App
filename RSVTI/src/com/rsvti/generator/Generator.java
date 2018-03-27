@@ -736,7 +736,7 @@ public class Generator {
 		    if(rigWithDetails.getRig().getType().equals(Constants.PRESSURE_RIG)) {
 		    	run.addBreak();
 		    	createRunTimesNR(paragraph, "Supapa de siguranță are seria " + rigWithDetails.getRig().getValve().getRegistrationNumber() + " și scadența"
-		    			+ " la verificare în data de " + format.format(rigWithDetails.getRig().getValve().getDueDate(rigWithDetails.getRig().getValve().isNotExtended())) + " .", false, 12);
+		    			+ " la verificare în data de " + format.format(rigWithDetails.getRig().getValve().getDueDate()) + " .", false, 12);
 		    }
 		    
 		    emptyLines(document, 1);

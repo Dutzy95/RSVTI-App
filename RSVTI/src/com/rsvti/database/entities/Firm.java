@@ -160,4 +160,19 @@ public class Firm {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	public String toString() {
+		return "firmName: " + firmName +
+				"\nregistrationNumber: " + registrationNumber +
+				"\nfiscalCode: " + fiscalCode +
+				"\naddress: " + address +
+				"\nphoneNumber: " + phoneNumber +
+				"\nfaxNumber: " + faxNumber +
+				"\nemail: " + email +
+				"\nbankName: " + bankName +
+				"\nibanCode: " + ibanCode +
+				"\nexecutiveName: " + executiveName +
+				"\nadministrator: " + administrator.toString() +
+				"\nid: " + id;
+	}
 }

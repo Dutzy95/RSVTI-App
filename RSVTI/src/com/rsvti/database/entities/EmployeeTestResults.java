@@ -60,4 +60,11 @@ public class EmployeeTestResults {
 	public boolean isEmpty() {
 		return employeeName.isEmpty() && personalIdentificationNumber.isEmpty() && practiseResult.isEmpty() && theoryResult.isEmpty();
 	}
+	
+	public String toString() {
+		return "employeeName: " + employeeName +
+				"\ntheoryResult: " + theoryResult +
+				"\npractiseResult: " + practiseResult +
+				"\npersonalIdentificationNumber: " + personalIdentificationNumber;
+	}
 }

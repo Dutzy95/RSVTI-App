@@ -196,6 +196,7 @@ public class HomeController {
 					
 					Calendar firstDayOfYear = Calendar.getInstance();
 					Calendar lastDayOfYear = Calendar.getInstance();
+//					lastDayOfYear.add(Calendar.YEAR, 1);
 					lastDayOfYear.set(Calendar.DATE, 31);
 					lastDayOfYear.set(Calendar.MONTH, Calendar.DECEMBER);
 					

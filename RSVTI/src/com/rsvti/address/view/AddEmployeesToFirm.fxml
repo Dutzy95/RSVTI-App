@@ -58,6 +58,6 @@
             <CheckBox fx:id="rsvtiCheckbox" mnemonicParsing="false" text="RSVTI" GridPane.rowIndex="13" />
          </children>
       </GridPane>
-      <Button layoutX="262.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+      <Button defaultButton="true" layoutX="262.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
    </children>
 </AnchorPane>

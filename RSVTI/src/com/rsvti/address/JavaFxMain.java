@@ -19,6 +19,7 @@ import com.rsvti.address.controller.MenuController;
 import com.rsvti.address.controller.RigOverviewController;
 import com.rsvti.address.controller.SettingsController;
 import com.rsvti.backup.GoogleDriveBackup;
+import com.rsvti.common.Data;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.Rig;
@@ -62,7 +63,6 @@ public class JavaFxMain extends Application {
 	        
 			JavaFxMain.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/RSVTI_without_text.png")));
 	        
-//	        Platform.setImplicitExit(false);
 //			Utils.setTray(primaryStage);
 			
 			initApp();
@@ -275,7 +275,7 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddUpdateRigsToFirm(Rig rig, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
+	public void showAddUpdateRigsToFirm(Rig rig, boolean isUpdate, boolean isDueDateUpdate, String stageName, String firmId) {
 		try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
@@ -284,7 +284,7 @@ public class JavaFxMain extends Application {
 	        
 	        AddRigsToFirmController controller = loader.getController();
 	        controller.setJavaFxMain(this);
-	        controller.setFirmName(stageName);
+	        controller.setFirmId(firmId);
 	        controller.setIsDueDateUpdate(isDueDateUpdate);
 
 	        if(rig != null) {
@@ -312,7 +312,7 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddUpdateEmployeesToFirm(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName) {
+	public void showAddUpdateEmployeesToFirm(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName, String firmId) {
 		try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
@@ -331,7 +331,7 @@ public class JavaFxMain extends Application {
             
         	addUpdateEmployeesToFirmController = loader.getController();
 	        addUpdateEmployeesToFirmController.setJavaFxMain(this);
-	        addUpdateEmployeesToFirmController.setFirmName(stageName);
+	        addUpdateEmployeesToFirmController.setFirmId(firmId);
 	        addUpdateEmployeesToFirmController.setIsDueDateUpdate(isDueDateUpdate);
 	        addUpdateEmployeesToFirmController.setValidators(addUpdateEmployeesToFirmStage);
             addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
@@ -587,12 +587,12 @@ public class JavaFxMain extends Application {
 	}
 
 	public static void main(String[] args) {
-			Locale locale = new Locale("ro", "RO");
-			Locale.setDefault(locale);
-	//		Utils.setStartup();
-			GoogleDriveBackup.initialize();
-			Utils.createFolderHierarchy();
-//			Data.populate();
-			launch(args);
+		Locale locale = new Locale("ro", "RO");
+		Locale.setDefault(locale);
+//		Utils.setStartup();
+		GoogleDriveBackup.initialize();
+		Utils.createFolderHierarchy();
+//		Data.populate();
+		launch(args);
 	}
 }

@@ -13,7 +13,7 @@
         <items>
           <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="firmTable" prefHeight="800.0" prefWidth="240.0">
+                  <TableView fx:id="firmTable" prefHeight="798.0" prefWidth="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="firmNameColumn" prefWidth="75.0" text="Firmă" />
                     </columns>
@@ -157,7 +157,7 @@
                                     <HBox alignment="CENTER" spacing="30.0">
                                        <children>
                                           <Button mnemonicParsing="false" onAction="#handleAddRig" text="Adaugă utilaj" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteRig" text="Șterge utilaj" />
+                                          <Button fx:id="deleteRigButton" mnemonicParsing="false" onAction="#handleDeleteRig" text="Șterge utilaj" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -239,14 +239,14 @@
                                     <HBox alignment="CENTER" spacing="30.0">
                                        <children>
                                           <Button mnemonicParsing="false" onAction="#handleAddEmployee" text="Adaugă angajat" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteEmployee" text="Șterge angajat" />
+                                          <Button fx:id="deleteEmployeeButton" mnemonicParsing="false" onAction="#handleDeleteEmployee" text="Șterge angajat" />
                                        </children>
                                     </HBox>
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" onAction="#handleSave" text="Salvare">
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Salvare">
                            <font>
                               <Font size="20.0" />
                            </font></Button>

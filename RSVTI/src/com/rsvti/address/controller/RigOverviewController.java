@@ -75,7 +75,7 @@ public class RigOverviewController {
 				if(rig.getType().equals(Constants.PRESSURE_RIG)) {
 					valveTitleLabel.setVisible(true);
 					valveGridPane.setVisible(true);
-					valveDueDateLabel.setText(format.format(rig.getValve().getDueDate(rig.getValve().isNotExtended())));
+					valveDueDateLabel.setText(format.format(rig.getValve().getDueDate()));
 					valveRegistrationNumberLabel.setText(rig.getValve().getRegistrationNumber());
 				} else {
 					valveTitleLabel.setVisible(false);

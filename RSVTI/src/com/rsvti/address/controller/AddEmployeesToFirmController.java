@@ -53,7 +53,7 @@ public class AddEmployeesToFirmController {
 	private Employee employeeToUpdate;
 	private boolean isUpdate = false;
 	private boolean isDueDateUpdate = false;
-	private String firmName;
+	private String firmId;
 	
 	@FXML
 	private void initialize() {
@@ -109,7 +109,7 @@ public class AddEmployeesToFirmController {
 		try {
 			if(allFieldsAreCorrect()) {
 				if(isDueDateUpdate) {
-					javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmName, employeeToUpdate, 
+					javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmId, employeeToUpdate, 
 																	new Employee(firstNameField.getText(),
 																				 lastNameField.getText(),
 																				 idCodeField.getText(), 
@@ -202,8 +202,8 @@ public class AddEmployeesToFirmController {
 		this.isDueDateUpdate = isDueDateUpdate;
 	}
 	
-	public void setFirmName(String firmName) {
-		this.firmName = firmName;
+	public void setFirmId(String firmId) {
+		this.firmId = firmId;
 	}
 	
 	public void setJavaFxMain(JavaFxMain javaFxMain) {

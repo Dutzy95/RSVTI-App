@@ -2,6 +2,8 @@ package com.rsvti.database.entities;
 
 import java.util.Date;
 
+import com.rsvti.common.Constants;
+
 public class Employee {
 	
 	private String firstName;
@@ -140,4 +142,18 @@ public class Employee {
 		this.homeAddress = homeAddress;
 	}
 	
+	public String toString() {
+		return "firstName: " + firstName +
+				"\nlastName: " + lastName +
+				"\nidCode: " + idCode +
+				"\nidNumber: " + idNumber +
+				"\npersonalIdentificationNumber: " + personalIdentificationNumber +
+				"\nauthorization: " + authorization.toString() +
+				"\ntitle: " + title +
+				"\nbirthDate: " + Constants.DEFAULT_DATE_FORMATTER.format(birthDate) +
+				"\nbirthCity: " + birthCity +
+				"\nhomeAddress: " + homeAddress +
+				"\nhomeRegion: " + homeRegion +
+				"\nisRsvti: " + isRsvti;
+	}
 }
