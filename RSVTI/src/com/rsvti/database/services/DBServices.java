@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -234,7 +235,7 @@ public class DBServices {
 				valve.setAttribute("nuEsteExtinsa", rigIndex.getValve().isNotExtended() + "");
 				
 				Element valveDueDate = document.createElement("data_scadentei");
-				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getDueDate().getTime() + ""));
+				valveDueDate.appendChild(document.createTextNode(rigIndex.getValve().getRevisionDate().getTime() + ""));
 				valve.appendChild(valveDueDate);
 				
 				Element valveRegistrationNumber = document.createElement("numar_inregistrare");
@@ -516,7 +517,7 @@ public class DBServices {
 		return selectedEmployees;
 	}
 	
-	public static List<RigWithDetails> getRigsBetweenDateInterval(Date beginDate, Date endDate) {
+	public static List<RigWithDetails> getRigsBetweenDateInterval(Date beginDate, Date endDate, Comparator<RigWithDetails> comparator) {
 		List<RigWithDetails> selectedRigs = new ArrayList<RigWithDetails>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
@@ -529,7 +530,7 @@ public class DBServices {
 				}
 			}
 		}
-		Collections.sort(selectedRigs, (r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()));
+		Collections.sort(selectedRigs, comparator);
 		return selectedRigs;
 	}
 	

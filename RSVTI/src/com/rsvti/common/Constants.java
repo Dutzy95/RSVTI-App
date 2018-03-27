@@ -36,7 +36,7 @@ public class Constants {
 	public static int ERR_LOG_REFRESH_INTERVAL = 1;
 	public static final int INFINITE = 999;
 	
-	public static String TABLE_PLACEHOLDER_MESSAGE = "Nu există conținut în tabel";
+	public static final String TABLE_PLACEHOLDER_MESSAGE = "Nu există conținut în tabel";
 	
 	public static final String DISABLED_COLOR = "lightgray";
 	

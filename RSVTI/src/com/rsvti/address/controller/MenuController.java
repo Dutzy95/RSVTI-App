@@ -70,7 +70,7 @@ public class MenuController {
 	@FXML
 	public void handleEditRig() {
 		try {
-			
+			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Modifică utilaj", null, true);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

@@ -50,7 +50,10 @@ public class GenerateTechnicalRigEvaluationReportController {
 	public void initialize() {
 		try {
 			rigTable.setItems(FXCollections.observableArrayList(removeLargePressureRigs(
-					DBServices.getRigsBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE))));
+					DBServices.getRigsBetweenDateInterval(
+							Constants.LOW_DATE,
+							Constants.HIGH_DATE,
+							(r1, r2) -> r1.getRig().getRigName().compareToIgnoreCase(r2.getRig().getRigName())))));
 			rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
 				if(newValue.getRig().getType().equals(Constants.LIFTING_RIG)) {
 					liftingRigTypeLabel.setVisible(true);

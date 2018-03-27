@@ -120,7 +120,10 @@ public class HomeController {
 					calendar = Calendar.getInstance();
 					for(int i = 0; i < homeDateIntervalNumberOf; i++) {
 						rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(homeDateIntervalUnit) + "-" + dateFormat.format(calendar.getTime()),
-								DBServices.getRigsBetweenDateInterval(calendar.getTime(), calendar.getTime()).size()));
+								DBServices.getRigsBetweenDateInterval(
+										calendar.getTime(),
+										calendar.getTime(),
+										(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 						calendar.add(homeDateIntervalUnit, 1);
 					}
 					calendar = Calendar.getInstance();
@@ -139,7 +142,10 @@ public class HomeController {
 							DBServices.getEmployeesBetweenDateInterval(calendar.getTime(), lastDayOfMonth.getTime()).size()));
 					
 					rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
-							DBServices.getRigsBetweenDateInterval(calendar.getTime(), lastDayOfMonth.getTime()).size()));
+							DBServices.getRigsBetweenDateInterval(
+									calendar.getTime(),
+									lastDayOfMonth.getTime(),
+									(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					
 					valves.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
 							DBServices.getValvesBetweenDateInterval(calendar.getTime(), lastDayOfMonth.getTime()).size()));
@@ -163,7 +169,10 @@ public class HomeController {
 						lastDayOfMonth.set(Calendar.DATE, lastDayOfMonth.getActualMaximum(Calendar.DATE));
 						
 						rigs.getData().add(new XYChart.Data<String,Number>(dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR),
-								DBServices.getRigsBetweenDateInterval(firstDayOfMonth.getTime(), lastDayOfMonth.getTime()).size()));
+								DBServices.getRigsBetweenDateInterval(
+										firstDayOfMonth.getTime(),
+										lastDayOfMonth.getTime(),
+										(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					}
 					calendar = Calendar.getInstance();
 					for(int i = 1; i < homeDateIntervalNumberOf; i++) {
@@ -187,7 +196,10 @@ public class HomeController {
 							DBServices.getEmployeesBetweenDateInterval(firstDayOfMonth.getTime(), sameDayInMonth.getTime()).size()));
 					
 					rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
-							DBServices.getRigsBetweenDateInterval(firstDayOfMonth.getTime(), sameDayInMonth.getTime()).size()));
+							DBServices.getRigsBetweenDateInterval(
+									firstDayOfMonth.getTime(),
+									sameDayInMonth.getTime(),
+									(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					
 					valves.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
 							DBServices.getValvesBetweenDateInterval(firstDayOfMonth.getTime(), sameDayInMonth.getTime()).size()));
@@ -204,7 +216,10 @@ public class HomeController {
 							DBServices.getEmployeesBetweenDateInterval(calendar.getTime(), lastDayOfYear.getTime()).size()));
 					
 					rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
-							DBServices.getRigsBetweenDateInterval(calendar.getTime(), lastDayOfYear.getTime()).size()));
+							DBServices.getRigsBetweenDateInterval(
+									calendar.getTime(),
+									lastDayOfYear.getTime(),
+									(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					
 					valves.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
 							DBServices.getValvesBetweenDateInterval(calendar.getTime(), lastDayOfYear.getTime()).size()));
@@ -232,7 +247,10 @@ public class HomeController {
 						lastDayOfYear.set(Calendar.MONTH, Calendar.DECEMBER);
 						
 						rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.YEAR) + "",
-								DBServices.getRigsBetweenDateInterval(firstDayOfYear.getTime(), lastDayOfYear.getTime()).size()));
+								DBServices.getRigsBetweenDateInterval(
+										firstDayOfYear.getTime(),
+										lastDayOfYear.getTime(),
+										(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					}
 					calendar = Calendar.getInstance();
 					for(int i = 1; i < homeDateIntervalNumberOf; i++) {
@@ -260,7 +278,10 @@ public class HomeController {
 							DBServices.getEmployeesBetweenDateInterval(firstDayOfYear.getTime(), sameDayInYear.getTime()).size()));
 					
 					rigs.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
-							DBServices.getRigsBetweenDateInterval(firstDayOfYear.getTime(), sameDayInYear.getTime()).size()));
+							DBServices.getRigsBetweenDateInterval(
+									firstDayOfYear.getTime(),
+									sameDayInYear.getTime(),
+									(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate())).size()));
 					
 					valves.getData().add(new XYChart.Data<String,Number>(calendar.get(Calendar.DATE) + "-" + dateFormat.format((calendar.getTime())) + "-" + calendar.get(Calendar.YEAR), 
 							DBServices.getValvesBetweenDateInterval(firstDayOfYear.getTime(), sameDayInYear.getTime()).size()));

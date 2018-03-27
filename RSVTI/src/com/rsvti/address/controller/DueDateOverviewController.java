@@ -68,7 +68,10 @@ public class DueDateOverviewController {
 			Utils.setDisabledDaysForDatePicker(dateTo);
 			Utils.setDisplayFormatForDatePicker(dateTo);
 			
-			rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+			rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+					java.sql.Date.valueOf(dateFrom.getValue()),
+					java.sql.Date.valueOf(dateTo.getValue()),
+					(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
 			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
 			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
@@ -78,7 +81,7 @@ public class DueDateOverviewController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			        	RigWithDetails rowData = row.getItem();
-			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName(), rowData.getFirmId());
+			            javaFxMain.showAddUpdateRigsToFirm(rowData.getRig(), false, true, rowData.getFirmName(), rowData.getFirmId(), false);
 			        }
 			    });
 			    return row ;
@@ -103,7 +106,10 @@ public class DueDateOverviewController {
 			
 			dateFrom.setOnAction(event -> {
 				if(dateTo.getValue().isAfter(dateFrom.getValue()) || dateTo.getValue().equals(dateFrom.getValue())) {
-					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 				} else {
 					dateFrom.setValue(LocalDate.now());
@@ -112,7 +118,10 @@ public class DueDateOverviewController {
 			});
 			dateTo.setOnAction(event -> {
 				if(dateTo.getValue().isAfter(dateFrom.getValue()) || dateTo.getValue().equals(dateFrom.getValue())) {
-					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 				} else {
 					dateTo.setValue(LocalDate.now());
@@ -123,12 +132,18 @@ public class DueDateOverviewController {
 				if(newValue) {
 					dateFrom.setDisable(true);
 					dateTo.setDisable(true);
-					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+							Constants.LOW_DATE,
+							Constants.HIGH_DATE,
+							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
 				} else {
 					dateFrom.setDisable(false);
 					dateTo.setDisable(false);
-					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
 					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
 				}
 			});

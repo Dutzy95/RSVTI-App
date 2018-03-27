@@ -29,6 +29,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -254,6 +255,27 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
+//	public void updateRig() {
+//		try {
+//	        FXMLLoader loader = new FXMLLoader();
+//	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
+//	        AnchorPane updateRig = (AnchorPane) loader.load();
+//
+//	        Tab updateRigTab = new Tab("Modifică utilaj");
+//	        updateRigTab.setContent(updateRig);
+//	        updateRigTab.setClosable(true);
+//            tabPane.getTabs().add(updateRigTab);
+//            tabPane.getSelectionModel().select(updateRigTab);
+//            
+//            AddRig = loader.getController();
+//            addFirmController.setJavaFxMain(this);
+//        	addFirmController.initializeIfUpdate();
+//            
+//	    } catch (Exception e) {
+//	        DBServices.saveErrorLogEntry(e);
+//	    }
+//	}
+	
 	public void addRigParameter() {
 		try {
 	        
@@ -275,7 +297,7 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddUpdateRigsToFirm(Rig rig, boolean isUpdate, boolean isDueDateUpdate, String stageName, String firmId) {
+	public void showAddUpdateRigsToFirm(Rig rig, boolean updateForFirm, boolean isDueDateUpdate, String stageName, String firmId, boolean update) {
 		try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
@@ -293,20 +315,30 @@ public class JavaFxMain extends Application {
 	        
 	        addUpdateRigsToFirmController = loader.getController();
 	        addUpdateRigsToFirmController.setJavaFxMain(this);
-	        addUpdateRigsToFirmController.setIsUpdate(isUpdate);
+	        addUpdateRigsToFirmController.setUpdateForFirm(updateForFirm);
+	        addUpdateRigsToFirmController.setUpdate(update);
+	        addUpdateRigsToFirmController.initializeIfUpdate();
             
-	        addUpdateRigsToFirmStage = new Stage();
-	        addUpdateRigsToFirmStage.setTitle(stageName);
-	        addUpdateRigsToFirmStage.initModality(Modality.WINDOW_MODAL);
-	        addUpdateRigsToFirmStage.initOwner(primaryStage);
-	        addUpdateRigsToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
-	        Scene scene = new Scene(addUpdateRigsToFirm);
-	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
-	        scene.getStylesheets().add(css);
-	        addUpdateRigsToFirmStage.setScene(scene);
-            
-            addUpdateRigsToFirmStage.showAndWait();
-            
+	        if(update) {
+	        	Tab updateRigTab = new Tab("Parametrii pentru utilaje");
+	            updateRigTab.setContent(addUpdateRigsToFirm);
+	            updateRigTab.setClosable(true);
+	            
+	            tabPane.getTabs().add(updateRigTab);
+	            tabPane.getSelectionModel().select(updateRigTab);
+	        } else {
+	            addUpdateRigsToFirmStage = new Stage();
+		        addUpdateRigsToFirmStage.setTitle(stageName);
+		        addUpdateRigsToFirmStage.initModality(Modality.WINDOW_MODAL);
+		        addUpdateRigsToFirmStage.initOwner(primaryStage);
+		        addUpdateRigsToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+		        Scene scene = new Scene(addUpdateRigsToFirm);
+		        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+		        scene.getStylesheets().add(css);
+		        addUpdateRigsToFirmStage.setScene(scene);
+	            
+	            addUpdateRigsToFirmStage.showAndWait();
+	        }
 	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);
 	    }

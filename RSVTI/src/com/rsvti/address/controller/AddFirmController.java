@@ -110,7 +110,7 @@ public class AddFirmController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			            Rig rowData = row.getItem();
-			            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj", null);
+			            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj", null, false);
 			        }
 			    });
 			    return row ;
@@ -158,6 +158,7 @@ public class AddFirmController {
 			splitPane.getItems().remove(anchorPane);
 			vbox.setPrefWidth(JavaFxMain.primaryStage.getWidth());
 		} else {
+			firmTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			firmTable.setItems(FXCollections.observableArrayList(DBServices.getAllFirms()));
 			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 			firmTable.getSelectionModel().clearSelection();
@@ -249,7 +250,7 @@ public class AddFirmController {
 	@FXML
 	private void handleAddRig() {
 		try {
-			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj", null);
+			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj", null, false);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
