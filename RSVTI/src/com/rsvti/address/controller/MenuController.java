@@ -79,7 +79,7 @@ public class MenuController {
 	@FXML
 	public void handleEditEmployee() {
 		try {
-			
+			javaFxMain.showAddUpdateEmployeesToFirm(null, false, false, "Modifică angajat", null, true);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

@@ -87,7 +87,10 @@ public class DueDateOverviewController {
 			    return row ;
 			});
 			
-			employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+			employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+					java.sql.Date.valueOf(dateFrom.getValue()),
+					java.sql.Date.valueOf(dateTo.getValue()),
+					(e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()))));
 			employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
 			employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));
@@ -98,7 +101,7 @@ public class DueDateOverviewController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			        	EmployeeWithDetails rowData = row.getItem();
-			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName(), rowData.getFirmId());
+			            javaFxMain.showAddUpdateEmployeesToFirm(rowData.getEmployee(), false, true, rowData.getFirmName(), rowData.getFirmId(), false);
 			        }
 			    });
 			    return row ;
@@ -110,7 +113,10 @@ public class DueDateOverviewController {
 							java.sql.Date.valueOf(dateFrom.getValue()),
 							java.sql.Date.valueOf(dateTo.getValue()),
 							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
-					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()))));
 				} else {
 					dateFrom.setValue(LocalDate.now());
 					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"", false);
@@ -122,7 +128,10 @@ public class DueDateOverviewController {
 							java.sql.Date.valueOf(dateFrom.getValue()),
 							java.sql.Date.valueOf(dateTo.getValue()),
 							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
-					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()))));
 				} else {
 					dateTo.setValue(LocalDate.now());
 					Utils.alert(AlertType.ERROR, "Eroare data", "", "\"De la data\" trebuie sa fie inainte de \"Până la data\"", false);
@@ -136,7 +145,10 @@ public class DueDateOverviewController {
 							Constants.LOW_DATE,
 							Constants.HIGH_DATE,
 							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
-					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+							Constants.LOW_DATE,
+							Constants.HIGH_DATE,
+							(e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()))));
 				} else {
 					dateFrom.setDisable(false);
 					dateTo.setDisable(false);
@@ -144,7 +156,10 @@ public class DueDateOverviewController {
 							java.sql.Date.valueOf(dateFrom.getValue()),
 							java.sql.Date.valueOf(dateTo.getValue()),
 							(r1, r2) -> r1.getDueDate().compareTo(r2.getDueDate()))));
-					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(java.sql.Date.valueOf(dateFrom.getValue()), java.sql.Date.valueOf(dateTo.getValue()))));
+					employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+							java.sql.Date.valueOf(dateFrom.getValue()),
+							java.sql.Date.valueOf(dateTo.getValue()),
+							(e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()))));
 				}
 			});
 		} catch (Exception e) {

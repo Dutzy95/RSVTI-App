@@ -50,7 +50,10 @@ public class GenerateTestController {
 	@FXML
 	private void initialize() {
 		try {
-			employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE)));
+			employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+					Constants.LOW_DATE,
+					Constants.HIGH_DATE,
+					(e1, e2) -> e1.getEmployee().getLastName().compareTo(e2.getEmployee().getLastName()))));
 			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 			firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getFirstName()));
 			lastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployee().getLastName()));

@@ -75,7 +75,10 @@ public class GenerateCertificateController {
 			Utils.setDisplayFormatForDatePicker(registrationDate);
 			Utils.setDisabledDaysForDatePicker(certificateIssueDate);
 			Utils.setDisplayFormatForDatePicker(certificateIssueDate);
-			List<EmployeeWithDetails> employees = DBServices.getEmployeesBetweenDateInterval(Constants.LOW_DATE, Constants.HIGH_DATE); 
+			List<EmployeeWithDetails> employees = DBServices.getEmployeesBetweenDateInterval(
+					Constants.LOW_DATE,
+					Constants.HIGH_DATE,
+					(e1, e2) -> e1.getEmployee().getLastName().compareTo(e2.getEmployee().getLastName())); 
 			employeeTable.setItems(FXCollections.observableArrayList(getEmployeesByTitle(employees, employeeTitleComboBox.getSelectionModel().getSelectedItem())));
 			employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> {
 				if(employeeTable.getSelectionModel().getSelectedItem() != null) {

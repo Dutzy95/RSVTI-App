@@ -500,7 +500,7 @@ public class DBServices {
 		transformXmlFile(Constants.XML_RIG_PARAMETERS_FILE_NAME);
 	}
 	
-	public static List<EmployeeWithDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate) {
+	public static List<EmployeeWithDetails> getEmployeesBetweenDateInterval(Date beginDate, Date endDate, Comparator<EmployeeWithDetails> comparator) {
 		List<EmployeeWithDetails> selectedEmployees = new ArrayList<EmployeeWithDetails>();
 		NodeList firmNodes = (NodeList) executeXmlQuery("//firma", XPathConstants.NODESET);
 		for(int i = 0; i < firmNodes.getLength(); i++) {
@@ -513,7 +513,7 @@ public class DBServices {
 				}
 			}
 		}
-		Collections.sort(selectedEmployees, (e1, e2) -> e1.getDueDate().compareTo(e2.getDueDate()));
+		Collections.sort(selectedEmployees, comparator);
 		return selectedEmployees;
 	}
 	

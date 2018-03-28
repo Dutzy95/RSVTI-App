@@ -110,7 +110,7 @@ public class AddFirmController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			            Rig rowData = row.getItem();
-			            javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Adaugă utilaj", null, false);
+		            	javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
 			        }
 			    });
 			    return row ;
@@ -135,7 +135,7 @@ public class AddFirmController {
 			    row.setOnMouseClicked(event -> {
 			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 			            Employee rowData = row.getItem();
-			            javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, "Editează personal", null);
+		            	javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
 			        }
 			    });
 			    return row ;
@@ -250,7 +250,7 @@ public class AddFirmController {
 	@FXML
 	private void handleAddRig() {
 		try {
-			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Editează utilaj", null, false);
+			javaFxMain.showAddUpdateRigsToFirm(null, false, false, "Adaugă utilaj", null, false);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -259,14 +259,14 @@ public class AddFirmController {
 	@FXML
 	private void handleAddEmployee() {
 		try {
-			javaFxMain.showAddUpdateEmployeesToFirm(null, false, false,"Adaugă personal", null);
+			javaFxMain.showAddUpdateEmployeesToFirm(null, false, false,"Adaugă angajat", null, false);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	
 	@FXML
-	public void handleDeleteRig() {
+	private void handleDeleteRig() {
 		try {
 			Rig rig = rigTable.getSelectionModel().getSelectedItem();
 			if(rig != null) {
@@ -280,7 +280,7 @@ public class AddFirmController {
 	}
 	
 	@FXML
-	public void handleDeleteEmployee() {
+	private void handleDeleteEmployee() {
 		try {
 			Employee employee = employeeTable.getSelectionModel().getSelectedItem();
 			if(employee != null) {

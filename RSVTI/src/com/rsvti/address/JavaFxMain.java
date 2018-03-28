@@ -320,7 +320,7 @@ public class JavaFxMain extends Application {
 	        addUpdateRigsToFirmController.initializeIfUpdate();
             
 	        if(update) {
-	        	Tab updateRigTab = new Tab("Parametrii pentru utilaje");
+	        	Tab updateRigTab = new Tab("Modifică utilaj");
 	            updateRigTab.setContent(addUpdateRigsToFirm);
 	            updateRigTab.setClosable(true);
 	            
@@ -344,35 +344,46 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-	public void showAddUpdateEmployeesToFirm(Employee employee, boolean isUpdate, boolean isDueDateUpdate, String stageName, String firmId) {
+	public void showAddUpdateEmployeesToFirm(Employee employee, boolean updateForFirm, boolean isDueDateUpdate, String stageName, String firmId, boolean update) {
 		try {
 	        
 	        FXMLLoader loader = new FXMLLoader();
 	        loader.setLocation(JavaFxMain.class.getResource("view/AddEmployeesToFirm.fxml"));
 	        AnchorPane addUpdateEmployeesToFirm = (AnchorPane) loader.load();
-            
-            addUpdateEmployeesToFirmStage = new Stage();
-	        addUpdateEmployeesToFirmStage.setTitle(stageName);
-	        addUpdateEmployeesToFirmStage.initModality(Modality.WINDOW_MODAL);
-	        addUpdateEmployeesToFirmStage.initOwner(primaryStage);
-	        addUpdateEmployeesToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
-	        Scene scene = new Scene(addUpdateEmployeesToFirm);
-	        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
-	        scene.getStylesheets().add(css);
-	        addUpdateEmployeesToFirmStage.setScene(scene);
-            
-        	addUpdateEmployeesToFirmController = loader.getController();
+	        
+	        addUpdateEmployeesToFirmController = loader.getController();
 	        addUpdateEmployeesToFirmController.setJavaFxMain(this);
 	        addUpdateEmployeesToFirmController.setFirmId(firmId);
 	        addUpdateEmployeesToFirmController.setIsDueDateUpdate(isDueDateUpdate);
 	        addUpdateEmployeesToFirmController.setValidators(addUpdateEmployeesToFirmStage);
-            addUpdateEmployeesToFirmController.setIsUpdate(isUpdate);
+	        addUpdateEmployeesToFirmController.setUpdateForFirm(updateForFirm);
+	        addUpdateEmployeesToFirmController.setUpdate(update);
+	        addUpdateEmployeesToFirmController.initializeIfUpdate();
             
-            if(employee != null) {
-            	addUpdateEmployeesToFirmController.showEmployeeDetails(employee);
-            }
-            
-            addUpdateEmployeesToFirmStage.showAndWait();
+	        if(update) {
+	        	Tab updateEmployeeTab = new Tab("Modifică angajat");
+	            updateEmployeeTab.setContent(addUpdateEmployeesToFirm);
+	            updateEmployeeTab.setClosable(true);
+	            
+	            tabPane.getTabs().add(updateEmployeeTab);
+	            tabPane.getSelectionModel().select(updateEmployeeTab);
+	        } else {
+	            addUpdateEmployeesToFirmStage = new Stage();
+		        addUpdateEmployeesToFirmStage.setTitle(stageName);
+		        addUpdateEmployeesToFirmStage.initModality(Modality.WINDOW_MODAL);
+		        addUpdateEmployeesToFirmStage.initOwner(primaryStage);
+		        addUpdateEmployeesToFirmStage.getIcons().add(new Image(new File(Utils.getJarFilePath() + "images\\RSVTI_without_text.png").toURI().toString()));
+		        Scene scene = new Scene(addUpdateEmployeesToFirm);
+		        String css = this.getClass().getResource("/Common.css").toExternalForm(); 
+		        scene.getStylesheets().add(css);
+		        addUpdateEmployeesToFirmStage.setScene(scene);
+	            
+	            if(employee != null) {
+	            	addUpdateEmployeesToFirmController.showEmployeeDetails(employee);
+	            }
+	            
+	            addUpdateEmployeesToFirmStage.showAndWait();
+	        }
             
 	    } catch (Exception e) {
 	        DBServices.saveErrorLogEntry(e);

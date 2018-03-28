@@ -212,25 +212,29 @@ public class AddRigsToFirmController {
 	}
 	
 	public void initializeIfUpdate() {
-		if(update) {
-			rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
-					Constants.LOW_DATE,
-					Constants.HIGH_DATE,
-					(r1, r2) -> r1.getRig().getRigName().compareToIgnoreCase(r2.getRig().getRigName()))));
-			firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
-			rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
-			rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-				if(newValue != null) {
-					showRigDetails(newValue.getRig());
-				}
-			});
-		} else {
-			splitPane.getItems().remove(leftSide);
-			vBox.setPrefWidth(800);
-			vBox.setPrefHeight(650);
-			vBox.setSpacing(10);
-			anchorPane.setPrefWidth(800);
-			anchorPane.setPrefHeight(650);
+		try {
+			if(update) {
+				rigTable.setItems(FXCollections.observableArrayList(DBServices.getRigsBetweenDateInterval(
+						Constants.LOW_DATE,
+						Constants.HIGH_DATE,
+						(r1, r2) -> r1.getRig().getRigName().compareToIgnoreCase(r2.getRig().getRigName()))));
+				firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
+				rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
+				rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+					if(newValue != null) {
+						showRigDetails(newValue.getRig());
+					}
+				});
+			} else {
+				splitPane.getItems().remove(leftSide);
+				vBox.setPrefWidth(800);
+				vBox.setPrefHeight(650);
+				vBox.setSpacing(10);
+				anchorPane.setPrefWidth(800);
+				anchorPane.setPrefHeight(650);
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
 		}
 	}
 	

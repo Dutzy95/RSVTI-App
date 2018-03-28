@@ -2,7 +2,7 @@
   -fx-alignment: CENTER;
 }
 
-.text-field {
+.text-field, .text-area{
 	-fx-alignment: CENTER;
 }
 

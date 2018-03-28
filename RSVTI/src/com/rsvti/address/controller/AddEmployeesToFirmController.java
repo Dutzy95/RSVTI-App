@@ -8,18 +8,42 @@ import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.database.entities.Employee;
 import com.rsvti.database.entities.EmployeeAuthorization;
+import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.services.DBServices;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AddEmployeesToFirmController {
 
-	@FXML
 	private JavaFxMain javaFxMain;
+	
+	@FXML
+	private VBox vBox;
+	@FXML
+	private AnchorPane anchorPane;
+	@FXML
+	private AnchorPane leftSide;
+	@FXML
+	private SplitPane splitPane;
+	@FXML
+	private TableView<EmployeeWithDetails> employeeTable;
+	@FXML
+	private TableColumn<EmployeeWithDetails, String> firmNameColumn;
+	@FXML
+	private TableColumn<EmployeeWithDetails, String> employeeNameColumn;
 	
 	@FXML
 	private TextField lastNameField;
@@ -44,16 +68,17 @@ public class AddEmployeesToFirmController {
 	@FXML
 	private TextField birthCityField;
 	@FXML
-	private TextField homeAddressField;
+	private TextArea homeAddressField;
 	@FXML
 	private TextField homeRegionField;
 	@FXML
 	private CheckBox rsvtiCheckbox;
 	
 	private Employee employeeToUpdate;
-	private boolean isUpdate = false;
+	private boolean updateForFirm = false;
 	private boolean isDueDateUpdate = false;
 	private String firmId;
+	private boolean update;
 	
 	@FXML
 	private void initialize() {
@@ -65,6 +90,33 @@ public class AddEmployeesToFirmController {
 			Utils.setDisabledDaysForDatePicker(birthDate);
 			Utils.setDisplayFormatForDatePicker(birthDate);
 		} catch (Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	public void initializeIfUpdate() {
+		try {
+			if(update) {
+				employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+						Constants.LOW_DATE,
+						Constants.HIGH_DATE,
+						(e1, e2) -> e1.getEmployee().getLastName().compareTo(e2.getEmployee().getLastName()))));
+				firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
+				employeeNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+						cellData.getValue().getEmployee().getLastName() + " " + cellData.getValue().getEmployee().getFirstName()));
+				employeeTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+					if(newValue != null) {
+						showEmployeeDetails(newValue.getEmployee());
+					}
+				});
+			} else {
+				splitPane.getItems().remove(leftSide);
+				anchorPane.setPrefWidth(600);
+				anchorPane.setPrefHeight(700);
+				vBox.setPrefWidth(600);
+				vBox.setPrefHeight(700);
+			}
+		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
 	}
@@ -93,10 +145,10 @@ public class AddEmployeesToFirmController {
 	}
 	
 	private boolean allFieldsAreCorrect() {
-		List<TextField> fields = Arrays.asList(authorizationNumberField, firstNameField, idCodeField, idNumberField, lastNameField, 
+		List<TextInputControl> fields = Arrays.asList(authorizationNumberField, firstNameField, idCodeField, idNumberField, lastNameField, 
 				personalIdentificationNumberField, titleField, birthCityField, homeRegionField, homeAddressField);
 		
-		for(TextField index : fields) {
+		for(TextInputControl index : fields) {
 			if(index.getBorder() != null) {
 				return false;
 			}
@@ -108,67 +160,41 @@ public class AddEmployeesToFirmController {
 	private void handleSave() {
 		try {
 			if(allFieldsAreCorrect()) {
+				Employee newEmployee = new Employee(firstNameField.getText(),
+					 lastNameField.getText(),
+					 idCodeField.getText(), 
+					 idNumberField.getText(), 
+					 personalIdentificationNumberField.getText(),
+					 java.sql.Date.valueOf(birthDate.getValue()),
+					 birthCityField.getText(),
+					 homeAddressField.getText(),
+					 homeRegionField.getText(),
+					 new EmployeeAuthorization(authorizationNumberField.getText(), 
+											   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
+											   java.sql.Date.valueOf(authorizationDueDate.getValue())),
+				    	titleField.getText(),
+				    	rsvtiCheckbox.selectedProperty().get());
 				if(isDueDateUpdate) {
-					javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmId, employeeToUpdate, 
-																	new Employee(firstNameField.getText(),
-																				 lastNameField.getText(),
-																				 idCodeField.getText(), 
-																				 idNumberField.getText(), 
-																				 personalIdentificationNumberField.getText(),
-																				 java.sql.Date.valueOf(birthDate.getValue()),
-																				 birthCityField.getText(),
-																				 homeAddressField.getText(),
-																				 homeRegionField.getText(),
-																				 new EmployeeAuthorization(authorizationNumberField.getText(), 
-																										   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
-																										   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-																			    	titleField.getText(),
-																			    	rsvtiCheckbox.selectedProperty().get()));
-					
+					javaFxMain.getDueDateOverviewController().updateEmployeeTable(firmId, employeeToUpdate, newEmployee);
+					javaFxMain.getAddEmployeesToFirmStage().close();
 				} else {
-					if(isUpdate) {
-						javaFxMain.getAddFirmController().updateEmployeeList(
-								employeeToUpdate, true, new Employee(firstNameField.getText(),
-																	 lastNameField.getText(),
-																	 idCodeField.getText(), 
-																	 idNumberField.getText(), 
-																	 personalIdentificationNumberField.getText(), 
-																	 java.sql.Date.valueOf(birthDate.getValue()),
-																	 birthCityField.getText(),
-																	 homeAddressField.getText(),
-																	 homeRegionField.getText(),
-																	 new EmployeeAuthorization(authorizationNumberField.getText(), 
-																							   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
-																							   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-																    	titleField.getText(),
-																    	rsvtiCheckbox.selectedProperty().get()));
+					if(updateForFirm) {
+						javaFxMain.getAddFirmController().updateEmployeeList(employeeToUpdate, true, newEmployee);
+						javaFxMain.getAddEmployeesToFirmStage().close();
+					} else if (update) {
+						DBServices.updateEmployeeForFirm(employeeTable.getSelectionModel().getSelectedItem().getFirmId(), employeeToUpdate, newEmployee);
+						employeeTable.setItems(FXCollections.observableArrayList(DBServices.getEmployeesBetweenDateInterval(
+								Constants.LOW_DATE,
+								Constants.HIGH_DATE,
+								(e1, e2) -> e1.getEmployee().getLastName().compareTo(e2.getEmployee().getLastName()))));
+						employeeTable.refresh();
 					} else {
-						try {
-						javaFxMain.getAddFirmController().updateEmployeeList(
-								new Employee(firstNameField.getText(),
-											 lastNameField.getText(),
-											 idCodeField.getText(), 
-											 idNumberField.getText(), 
-											 personalIdentificationNumberField.getText(),
-											 java.sql.Date.valueOf(birthDate.getValue()),
-											 birthCityField.getText(),
-											 homeAddressField.getText(),
-											 homeRegionField.getText(),
-											 new EmployeeAuthorization(authorizationNumberField.getText(), 
-																	   java.sql.Date.valueOf(authorizationObtainigDate.getValue()),
-																	   java.sql.Date.valueOf(authorizationDueDate.getValue())),
-											 titleField.getText(),
-											 rsvtiCheckbox.selectedProperty().get()),
-								false,
-								null);
-						} catch(Exception e) {
-							DBServices.saveErrorLogEntry(e);
-						}
+						javaFxMain.getAddFirmController().updateEmployeeList(newEmployee, false, null);
+						javaFxMain.getAddEmployeesToFirmStage().close();
 					}
 				}
-				javaFxMain.getAddEmployeesToFirmStage().close();
 				isDueDateUpdate = false;
-				isUpdate = false;
+				updateForFirm = false;
 			}
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
@@ -194,8 +220,12 @@ public class AddEmployeesToFirmController {
 		rsvtiCheckbox.selectedProperty().set(employee.isRsvti());
 	}
 	
-	public void setIsUpdate(boolean isUpdate) {
-		this.isUpdate = isUpdate;
+	public void setUpdateForFirm(boolean updateForFirm) {
+		this.updateForFirm = updateForFirm;
+	}
+	
+	public void setUpdate(boolean update) {
+		this.update = update;
 	}
 	
 	public void setIsDueDateUpdate(boolean isDueDateUpdate) {
