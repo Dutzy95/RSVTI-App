@@ -157,7 +157,7 @@
                               </TableView>
                            </children>
                         </HBox>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+                        <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
                      </children>
                   </VBox>
                </children>

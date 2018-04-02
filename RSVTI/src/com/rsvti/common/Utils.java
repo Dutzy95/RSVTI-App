@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -175,9 +176,27 @@ public class Utils {
 			file.mkdir();
 			file = new File(jarFilePath + "docs\\teste\\logs");
 			file.mkdir();
-			Runtime.getRuntime().exec("attrib +H " + file.getAbsolutePath());	//hide Folder
+			hideFolder(file);
 			file = new File(jarFilePath + "docs\\tabele utilaje");
 			file.mkdir();
+			
+			//hide app resource folder
+			file = new File(jarFilePath + Constants.APP_NAME + "_lib");
+			if(file.exists()) {
+				hideFolder(file);
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	private static void hideFolder(File file) {
+		try {
+			Path path = Paths.get(file.getAbsolutePath());
+			Boolean hidden = (Boolean) Files.getAttribute(path, "dos:hidden", LinkOption.NOFOLLOW_LINKS);
+			if (hidden != null && !hidden) {
+				Files.setAttribute(path, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+			}
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -330,47 +349,12 @@ public class Utils {
 				} else {
 					textField.setText(oldValue);
 				}
-			} catch(Exception e) {
-				DBServices.saveErrorLogEntry(e);
-			}
-		});
-		
-		textField.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-			try {
-				if(!newPropertyValue) {
-					if(textField.getText().isEmpty()) {
-						textField.setBorder(Constants.redBorder);
-//						System.out.println(parentStage);
-//						System.out.println(parentStage.getTitle());
-//						System.out.println(parentStage.getTitle().equals("Adaugă angajat"));
-//						if(parentStage.getTitle().equals("Adaugă angajat")) {
-//							emptyTooltip.show(parentStage, 
-//									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-//									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY());
-//						} else {
-//							emptyTooltip.show(parentStage, 
-//									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-//									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
-//						}
-					} else if(!textField.getText().matches(finalPattern)) {
-						textField.setBorder(Constants.redBorder);
-//						if(parentStage.getTitle().equals("Adaugă angajat")) {
-//							tooltip.show(parentStage, 
-//									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-//									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY());
-//						} else {
-//							tooltip.show(parentStage, 
-//									parentStage.getX() + textField.getParent().getLayoutX() + textField.getBoundsInParent().getMaxX() + 10, 
-//									parentStage.getY() + textField.getParent().getLayoutY() + textField.getBoundsInParent().getMaxY() + 73);
-//						}
-					} else {
-						emptyTooltip.hide();
-						tooltip.hide();
-						textField.setBorder(null);
-					}
+				if(textField.getText().isEmpty()) {
+					textField.setBorder(Constants.redBorder);
+				} else if(!textField.getText().matches(finalPattern)) {
+					textField.setBorder(Constants.redBorder);
 				} else {
-					emptyTooltip.hide();
-					tooltip.hide();
+					textField.setBorder(null);
 				}
 			} catch(Exception e) {
 				DBServices.saveErrorLogEntry(e);
@@ -419,5 +403,48 @@ public class Utils {
 			}
 		}
 		return calendar.getTime();
+	}
+	
+	public static boolean allFieldsAreFilled(TextInputControl... fields) {
+		for(int i = 0; i < fields.length; i++) {
+			if(fields[i].getText().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean allFieldsAreValid(TextInputControl... fields) {
+		for(int i = 0; i < fields.length; i++) {
+			if(fields[i].getBorder() != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean allDatePickersAreFilled(DatePicker... datePicker) {
+		for(int i = 0; i < datePicker.length; i++) {
+			if(datePicker[i].getValue() == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static void generateReadMe() {
+		try {
+			File file = new File(getJarFilePath() + "ReadMe.txt");
+			if(file.createNewFile()) {
+				PrintStream out = new PrintStream(new FileOutputStream(file));
+				out.println("When starting the app for the first time on a new device, the backup feature must be configured.");
+				out.println("A GMail login will be required to backup the database files on Google Drive. The credentials are:\n");
+				out.println("Username: rsvti.app@gmail.com");
+				out.println("Password: rsvti1234");
+				out.close();
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
 	}
 }

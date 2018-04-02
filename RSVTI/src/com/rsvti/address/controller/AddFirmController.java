@@ -1,7 +1,6 @@
 package com.rsvti.address.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import com.rsvti.database.entities.Rig;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +23,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -52,7 +53,7 @@ public class AddFirmController {
 	@FXML
 	private TextField fiscalCodeField;
 	@FXML
-	private TextField addressField;
+	private TextArea addressArea;
 	@FXML
 	private TextField phoneNumberField;
 	@FXML
@@ -92,6 +93,9 @@ public class AddFirmController {
 	@FXML
 	private TableColumn<Employee,String> employeeFirstNameColumn;
 	
+	@FXML
+	private Button saveButton;
+	
 	private List<Employee> employeeList = new ArrayList<Employee>();
 	
 	private List<Rig> rigList = new ArrayList<Rig>();
@@ -106,14 +110,22 @@ public class AddFirmController {
 			rigTable.setItems(FXCollections.observableArrayList(rigList));
 			rigColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRigName()));
 			rigTable.setRowFactory( tv -> {
-			    TableRow<Rig> row = new TableRow<>();
-			    row.setOnMouseClicked(event -> {
-			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-			            Rig rowData = row.getItem();
-		            	javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
-			        }
-			    });
-			    return row ;
+				TableRow<Rig> row = new TableRow<>();
+				try {
+				    row.setOnMouseClicked(event -> {
+				        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+				            Rig rowData = row.getItem();
+				            if(update) {
+				            	javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
+				            } else {
+				            	javaFxMain.showAddUpdateRigsToFirm(rowData, true, false, "Modifică utilaj", null, false);
+				            }
+				        }
+				    });
+				} catch(Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
+				return row ;
 			});
 			deleteRigButton.setDisable(true);
 			rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
@@ -131,13 +143,21 @@ public class AddFirmController {
 			employeeLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
 			employeeFirstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
 			employeeTable.setRowFactory( tv -> {
-			    TableRow<Employee> row = new TableRow<>();
-			    row.setOnMouseClicked(event -> {
-			        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-			            Employee rowData = row.getItem();
-		            	javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
-			        }
-			    });
+				TableRow<Employee> row = new TableRow<>();
+				try {
+				    row.setOnMouseClicked(event -> {
+				        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+				            Employee rowData = row.getItem();
+				            if(update) {
+				            	javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, firmTable.getSelectionModel().getSelectedItem().getFirmName(), null, false);
+				            } else {
+				            	javaFxMain.showAddUpdateEmployeesToFirm(rowData, true, false, "Modifică angajat", null, false);
+				            }
+				        }
+				    });
+				} catch(Exception e) {
+					DBServices.saveErrorLogEntry(e);
+				}
 			    return row ;
 			});
 			deleteEmployeeButton.setDisable(true);
@@ -148,6 +168,33 @@ public class AddFirmController {
 					deleteEmployeeButton.setDisable(true);
 				}
 			});
+			
+			ChangeListener<String> listener = (observable, oldValue, newValue) -> {
+				if(Utils.allFieldsAreFilled(firmNameField, registrationNumberField, fiscalCodeField, addressArea, phoneNumberField,
+						faxNumberField, emailField, bankNameField, ibanCodeField, executiveNameField, adminFirstNameField, adminLastNameField,
+						adminIdCodeField, adminIdNumberField, adminPhoneNumberField)) {
+					saveButton.setDisable(false);
+				} else {
+					saveButton.setDisable(true);
+				}
+			};
+			firmNameField.textProperty().addListener(listener);
+			registrationNumberField.textProperty().addListener(listener);
+			fiscalCodeField.textProperty().addListener(listener);
+			addressArea.textProperty().addListener(listener);
+			phoneNumberField.textProperty().addListener(listener);
+			faxNumberField.textProperty().addListener(listener);
+			emailField.textProperty().addListener(listener);
+			bankNameField.textProperty().addListener(listener);
+			ibanCodeField.textProperty().addListener(listener);
+			executiveNameField.textProperty().addListener(listener);
+			adminFirstNameField.textProperty().addListener(listener);
+			adminLastNameField.textProperty().addListener(listener);
+			adminIdCodeField.textProperty().addListener(listener);
+			adminIdNumberField.textProperty().addListener(listener);
+			adminPhoneNumberField.textProperty().addListener(listener);
+			
+			saveButton.setDisable(true);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -166,7 +213,7 @@ public class AddFirmController {
 				setFieldsAndTables(newValue);
 			});
 		}
-		Utils.setTextFieldValidator(addressField, "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
+		Utils.setTextFieldValidator(addressArea, "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", "[A-Za-z0-9 ăâțșîÂÎĂȚȘ,\\.-]*", false, Constants.INFINITE,
 				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", JavaFxMain.primaryStage);
 		Utils.setTextFieldValidator(adminFirstNameField, "[A-Za-z ăâțșîÂÎĂȚȘ]*", "[A-Za-z ăâțșîÂÎĂȚȘ]*", false, Constants.INFINITE,
 				"Prenumele administratorului poate conține doar litere majuscule și minuscule.", JavaFxMain.primaryStage);
@@ -201,12 +248,14 @@ public class AddFirmController {
 	@FXML
 	private void handleSave() {
 		try {
-			if(allFieldsAreCorrect()) {
+			if(Utils.allFieldsAreValid(firmNameField, registrationNumberField, fiscalCodeField, addressArea, phoneNumberField, faxNumberField, 
+					emailField, bankNameField, ibanCodeField, adminFirstNameField, adminLastNameField, adminIdCodeField, adminIdNumberField, 
+					adminPhoneNumberField)) {
 				Firm firm = new Firm(
 						firmNameField.getText(),
 						registrationNumberField.getText(),
 						fiscalCodeField.getText(),
-						addressField.getText(),
+						addressArea.getText(),
 						phoneNumberField.getText(),
 						faxNumberField.getText(),
 						emailField.getText(),
@@ -233,18 +282,6 @@ public class AddFirmController {
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
-	}
-	
-	private boolean allFieldsAreCorrect() {
-		List<TextField> fields = Arrays.asList(firmNameField, registrationNumberField, fiscalCodeField, addressField, phoneNumberField, faxNumberField, 
-				emailField, bankNameField, ibanCodeField, adminFirstNameField, adminLastNameField, adminIdCodeField, adminIdNumberField, adminPhoneNumberField);
-		
-		for(TextField index : fields) {
-			if(index.getBorder() != null) {
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	@FXML
@@ -328,7 +365,7 @@ public class AddFirmController {
 			firmNameField.setText(firm.getFirmName());
 			registrationNumberField.setText(firm.getRegistrationNumber());
 			fiscalCodeField.setText(firm.getFiscalCode());
-			addressField.setText(firm.getAddress());
+			addressArea.setText(firm.getAddress());
 			phoneNumberField.setText(firm.getPhoneNumber());
 			faxNumberField.setText(firm.getFaxNumber());
 			emailField.setText(firm.getEmail());

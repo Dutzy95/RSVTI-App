@@ -1,5 +1,6 @@
 package com.rsvti.address.controller;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,10 +13,13 @@ import com.rsvti.database.entities.EmployeeWithDetails;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -73,6 +77,8 @@ public class AddEmployeesToFirmController {
 	private TextField homeRegionField;
 	@FXML
 	private CheckBox rsvtiCheckbox;
+	@FXML
+	private Button saveButton;
 	
 	private Employee employeeToUpdate;
 	private boolean updateForFirm = false;
@@ -89,6 +95,32 @@ public class AddEmployeesToFirmController {
 			Utils.setDisplayFormatForDatePicker(authorizationDueDate);
 			Utils.setDisabledDaysForDatePicker(birthDate);
 			Utils.setDisplayFormatForDatePicker(birthDate);
+			
+			ChangeListener<Object> listener = (observable, oldValue, newValue) -> {
+				if(Utils.allFieldsAreFilled(lastNameField, firstNameField, idCodeField,	idNumberField, personalIdentificationNumberField,
+						titleField,	authorizationNumberField, birthCityField, homeAddressField, homeRegionField) &&
+						Utils.allDatePickersAreFilled(birthDate, authorizationObtainigDate, authorizationDueDate)) {
+					saveButton.setDisable(false);
+				} else {
+					saveButton.setDisable(true);
+				}
+			};
+			
+			lastNameField.textProperty().addListener(listener);
+			firstNameField.textProperty().addListener(listener);
+			idCodeField.textProperty().addListener(listener);
+			idNumberField.textProperty().addListener(listener);
+			personalIdentificationNumberField.textProperty().addListener(listener);
+			titleField.textProperty().addListener(listener);
+			authorizationNumberField.textProperty().addListener(listener);
+			birthCityField.textProperty().addListener(listener);
+			homeAddressField.textProperty().addListener(listener);
+			homeRegionField.textProperty().addListener(listener);
+			authorizationObtainigDate.valueProperty().addListener(listener);
+			authorizationDueDate.valueProperty().addListener(listener);
+			birthDate.valueProperty().addListener(listener);
+			
+			saveButton.setDisable(true);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -101,6 +133,7 @@ public class AddEmployeesToFirmController {
 						Constants.LOW_DATE,
 						Constants.HIGH_DATE,
 						(e1, e2) -> e1.getEmployee().getLastName().compareTo(e2.getEmployee().getLastName()))));
+				employeeTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 				firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 				employeeNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 						cellData.getValue().getEmployee().getLastName() + " " + cellData.getValue().getEmployee().getFirstName()));
@@ -144,22 +177,11 @@ public class AddEmployeesToFirmController {
 				"Adresa poate conține litere majuscule si minuscule cifre si caracterele . , -", stage);
 	}
 	
-	private boolean allFieldsAreCorrect() {
-		List<TextInputControl> fields = Arrays.asList(authorizationNumberField, firstNameField, idCodeField, idNumberField, lastNameField, 
-				personalIdentificationNumberField, titleField, birthCityField, homeRegionField, homeAddressField);
-		
-		for(TextInputControl index : fields) {
-			if(index.getBorder() != null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
 	@FXML
 	private void handleSave() {
 		try {
-			if(allFieldsAreCorrect()) {
+			if(Utils.allFieldsAreValid(lastNameField, firstNameField, idCodeField,	idNumberField, personalIdentificationNumberField,
+					titleField,	authorizationNumberField, birthCityField, homeAddressField, homeRegionField)) {
 				Employee newEmployee = new Employee(firstNameField.getText(),
 					 lastNameField.getText(),
 					 idCodeField.getText(), 

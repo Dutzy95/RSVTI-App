@@ -1,10 +1,12 @@
 package com.rsvti.address.controller;
 
 import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.RigParameter;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,6 +35,8 @@ public class AddRigParameterController {
 	private TableColumn<RigParameter,String> parameterMeasurementUnitColumn;
 	
 	@FXML
+	private Button saveButton;
+	@FXML
 	private Button deleteButton;
 	
 	@FXML
@@ -53,6 +57,18 @@ public class AddRigParameterController {
 				}
 			});
 			parameterTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
+			saveButton.setDisable(true);
+			
+			ChangeListener<String> listener = (observable, oldValue, newValue) -> {
+				if(Utils.allFieldsAreFilled(parameterNameField, parameterMeasurementUnitField)) {
+					saveButton.setDisable(false);
+				} else {
+					saveButton.setDisable(true);
+				}
+			};
+			
+			parameterNameField.textProperty().addListener(listener);
+			parameterMeasurementUnitField.textProperty().addListener(listener);
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

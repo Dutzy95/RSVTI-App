@@ -24,7 +24,7 @@
             <Label text="Răspuns" GridPane.rowIndex="1" />
             <Label text="Răspuns" GridPane.rowIndex="2" />
             <Label text="Răspuns" GridPane.rowIndex="3" />
-            <TextArea fx:id="questionArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+            <TextArea fx:id="questionArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" />
             <TextArea fx:id="firstAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextArea fx:id="secondAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextArea fx:id="thirdAnswerArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -41,7 +41,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button defaultButton="true" layoutX="435.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleSaveTestQuestion" text="Salvează" />
+      <Button fx:id="saveButton" defaultButton="true" layoutX="435.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleSaveTestQuestion" text="Salvează" />
       <Button fx:id="deleteButton" layoutX="703.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleDeleteTestQuestion" text="Șterge" />
       <Button layoutX="539.0" layoutY="677.0" mnemonicParsing="false" onAction="#handleEmptyAreas" text="Golește câmpurile" />
    </children>

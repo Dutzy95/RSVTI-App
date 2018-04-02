@@ -70,15 +70,15 @@
                               <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <DatePicker fx:id="birthDate" prefHeight="31.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <TextField fx:id="birthCityField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <TextArea fx:id="homeAddressField" maxHeight="70.0" prefHeight="50.0" prefWidth="244.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.rowSpan="2" />
                               <TextField fx:id="homeRegionField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                               <TextField fx:id="authorizationNumberField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                               <DatePicker fx:id="authorizationObtainigDate" prefHeight="31.0" prefWidth="247.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
                               <DatePicker fx:id="authorizationDueDate" prefHeight="31.0" prefWidth="244.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                               <CheckBox fx:id="rsvtiCheckbox" mnemonicParsing="false" text="RSVTI" GridPane.rowIndex="14" />
-                              <TextArea fx:id="homeAddressField" maxHeight="70.0" prefHeight="50.0" prefWidth="244.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.rowSpan="2" />
                            </children>
                         </GridPane>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
+                        <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Salvează" />
                      </children>
                   </VBox>
                </children>

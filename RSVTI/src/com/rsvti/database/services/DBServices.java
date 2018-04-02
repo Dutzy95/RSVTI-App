@@ -683,8 +683,8 @@ public class DBServices {
 	}
 	
 	public static void saveBackupPath(String backupPath) {
-		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backupPath", XPathConstants.NODE);
-		Element backupPathElement = document.createElement("backupPath");
+		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backup_path", XPathConstants.NODE);
+		Element backupPathElement = document.createElement("backup_path");
 		backupPathElement.appendChild(document.createTextNode(backupPath));
 		if(backupPathNode == null) {
 			document.getDocumentElement().appendChild(backupPathElement);
@@ -696,7 +696,7 @@ public class DBServices {
 	}
 	
 	public static String getBackupPath() {
-		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backupPath", XPathConstants.NODE);
+		Node backupPathNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backup_path", XPathConstants.NODE);
 		if(backupPathNode == null) {
 			return "";
 		} else {
@@ -705,9 +705,9 @@ public class DBServices {
 	}
 	
 	public static void saveHomeDateDisplayInterval(int numberOf, int unit) {
-		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//dateInterval", XPathConstants.NODE);
-		Element homeDateDisplayIntervalElement = document.createElement("dateInterval");
-		Element numberOfUnitsElement = document.createElement("numberOfUnits");
+		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date_interval", XPathConstants.NODE);
+		Element homeDateDisplayIntervalElement = document.createElement("date_interval");
+		Element numberOfUnitsElement = document.createElement("number_of_units");
 		numberOfUnitsElement.appendChild(document.createTextNode(numberOf + ""));
 		Element unitElement = document.createElement("unit");
 		unitElement.appendChild(document.createTextNode(unit + ""));
@@ -723,7 +723,7 @@ public class DBServices {
 	}
 	
 	public static String getHomeDateDisplayInterval() {
-		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//dateInterval", XPathConstants.NODE);
+		Node homeDateDisplayIntervalNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date_interval", XPathConstants.NODE);
 		if(homeDateDisplayIntervalNode == null) {
 			return "";
 		} else {
@@ -732,8 +732,8 @@ public class DBServices {
 	}
 	
 	public static void saveDatePattern(String datePattern) {
-		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
-		Element datePatternElement = document.createElement("datePattern");
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date_pattern", XPathConstants.NODE);
+		Element datePatternElement = document.createElement("date_pattern");
 		datePatternElement.appendChild(document.createTextNode(datePattern));
 		if(datePatternNode == null) {
 			document.getDocumentElement().appendChild(datePatternElement);
@@ -745,7 +745,7 @@ public class DBServices {
 	}
 	
 	public static String getDatePattern() {
-		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date_pattern", XPathConstants.NODE);
 		if(datePatternNode == null) {
 			return Constants.DEFAULT_DATE_FORMAT;
 		} else {
@@ -754,7 +754,7 @@ public class DBServices {
 	}
 	
 	public static String getRomanianDatePattern() {
-		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//datePattern", XPathConstants.NODE);
+		Node datePatternNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//date_pattern", XPathConstants.NODE);
 		if(datePatternNode == null) {
 			return "zz-ll-aaaa";
 		} else {
@@ -804,8 +804,8 @@ public class DBServices {
 	}
 	
 	public static void saveMaximumLogSize(int maximumLogSize) {
-		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//maxLogSize", XPathConstants.NODE);
-		Element maximumLogSizeElement = document.createElement("maxLogSize");
+		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//max_log_size", XPathConstants.NODE);
+		Element maximumLogSizeElement = document.createElement("max_log_size");
 		maximumLogSizeElement.appendChild(document.createTextNode(maximumLogSize + ""));
 		if(maximumLogSizeNode == null) {
 			document.getDocumentElement().appendChild(maximumLogSizeElement);
@@ -817,7 +817,7 @@ public class DBServices {
 	}
 	
 	public static int getMaximumLogSize() {
-		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//maxLogSize", XPathConstants.NODE);
+		Node maximumLogSizeNode = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//max_log_size", XPathConstants.NODE);
 		if(maximumLogSizeNode == null) {
 			return 999;
 		} else {

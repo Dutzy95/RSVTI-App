@@ -165,7 +165,6 @@ public class GoogleDriveBackup {
 					//only when uploading all at once with Data.populate
 					Thread.sleep(delay);
 					delay+=500;
-					//
 					uploadFile(fileName);
 				} catch(Exception e) {}
 			}

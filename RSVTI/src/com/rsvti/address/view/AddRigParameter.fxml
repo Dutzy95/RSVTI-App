@@ -36,7 +36,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button defaultButton="true" layoutX="153.0" layoutY="252.0" mnemonicParsing="false" onAction="#handleAddRigParameter" text="Adaugă" />
+      <Button fx:id="saveButton" defaultButton="true" layoutX="153.0" layoutY="252.0" mnemonicParsing="false" onAction="#handleAddRigParameter" text="Adaugă" />
       <Button fx:id="deleteButton" layoutX="284.0" layoutY="252.0" mnemonicParsing="false" onAction="#handleDeleteRigParameter" text="Șterge" />
    </children>
 </AnchorPane>

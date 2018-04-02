@@ -255,27 +255,6 @@ public class JavaFxMain extends Application {
 	    }
 	}
 	
-//	public void updateRig() {
-//		try {
-//	        FXMLLoader loader = new FXMLLoader();
-//	        loader.setLocation(JavaFxMain.class.getResource("view/AddRigsToFirm.fxml"));
-//	        AnchorPane updateRig = (AnchorPane) loader.load();
-//
-//	        Tab updateRigTab = new Tab("Modifică utilaj");
-//	        updateRigTab.setContent(updateRig);
-//	        updateRigTab.setClosable(true);
-//            tabPane.getTabs().add(updateRigTab);
-//            tabPane.getSelectionModel().select(updateRigTab);
-//            
-//            AddRig = loader.getController();
-//            addFirmController.setJavaFxMain(this);
-//        	addFirmController.initializeIfUpdate();
-//            
-//	    } catch (Exception e) {
-//	        DBServices.saveErrorLogEntry(e);
-//	    }
-//	}
-	
 	public void addRigParameter() {
 		try {
 	        
@@ -635,6 +614,7 @@ public class JavaFxMain extends Application {
 //		Utils.setStartup();
 		GoogleDriveBackup.initialize();
 		Utils.createFolderHierarchy();
+		Utils.generateReadMe();
 //		Data.populate();
 		launch(args);
 	}

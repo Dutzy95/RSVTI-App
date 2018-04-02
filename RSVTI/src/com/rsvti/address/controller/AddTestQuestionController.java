@@ -4,10 +4,12 @@ import java.util.Arrays;
 
 import com.rsvti.address.JavaFxMain;
 import com.rsvti.common.Constants;
+import com.rsvti.common.Utils;
 import com.rsvti.database.entities.TestQuestion;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,6 +44,8 @@ public class AddTestQuestionController {
 	private ComboBox<String> questionTypeComboBox;
 	
 	@FXML
+	private Button saveButton;
+	@FXML
 	private Button deleteButton;
 	
 	private boolean isUpdate = false;
@@ -65,6 +69,20 @@ public class AddTestQuestionController {
 			testTable.getSelectionModel().selectedItemProperty().addListener((observable, oldvalue, newValue) -> showTestDetails(newValue));
 			testTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 			deleteButton.setDisable(true);
+			saveButton.setDisable(true);
+			
+			ChangeListener<String> listener = (observable, oldValue, newValue) -> {
+				if(Utils.allFieldsAreFilled(questionArea, firstAnswerArea, secondAnswerArea, thirdAnswerArea)) {
+					saveButton.setDisable(false);
+				} else {
+					saveButton.setDisable(true);
+				}
+			};
+			
+			questionArea.textProperty().addListener(listener);
+			firstAnswerArea.textProperty().addListener(listener);
+			secondAnswerArea.textProperty().addListener(listener);
+			thirdAnswerArea.textProperty().addListener(listener);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

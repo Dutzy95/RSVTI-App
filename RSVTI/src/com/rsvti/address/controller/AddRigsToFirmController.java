@@ -16,8 +16,10 @@ import com.rsvti.database.entities.Valve;
 import com.rsvti.database.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -94,6 +96,9 @@ public class AddRigsToFirmController {
 	@FXML
 	private HBox valveHbox;
 	
+	@FXML
+	private Button saveButton;
+	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DBServices.getDatePattern());
 	
 	private boolean updateForFirm = false;
@@ -145,6 +150,20 @@ public class AddRigsToFirmController {
 					} else {
 						detailsVbox.getChildren().remove(valveHbox);
 						chosenParametersTable.setItems(FXCollections.emptyObservableList());
+					}
+					if(t1.equals(Constants.LIFTING_RIG)) {
+						if(Utils.allFieldsAreFilled(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField)) {
+							saveButton.setDisable(false);
+						} else {
+							saveButton.setDisable(true);
+						}
+					} else {
+						if(Utils.allFieldsAreFilled(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField,
+								valveRegistrationNumberField)) {
+							saveButton.setDisable(false);
+						} else {
+							saveButton.setDisable(true);
+						}
 					}
 				} catch (Exception e) {
 					DBServices.saveErrorLogEntry(e);
@@ -206,6 +225,42 @@ public class AddRigsToFirmController {
 					valveDueDateLabel.setText(simpleDateFormat.format(Utils.getCalculatedDueDate(java.sql.Date.valueOf(valveRevisionDate.getValue()), 1)));
 				}
 			});
+			
+			Utils.setTextFieldValidator(rigNameField, "[a-zA-Z ]*", "[a-zA-Z ]*", true, Constants.INFINITE,
+					"Numele productorului poate conține doar litere majuscule sau minuscule.", JavaFxMain.primaryStage);
+			Utils.setTextFieldValidator(valveRegistrationNumberField, "[a-zA-Z0-9]*", "[a-zA-Z0-9]*", true, Constants.INFINITE,
+					"Numărul de înregistrare al supapei poate conține doar cifre și litere.", JavaFxMain.primaryStage);
+			Utils.setTextFieldValidator(productionYearField, "[0-9]*", "[0-9]{4}", false, 4, "Anul de fabricație poate conține doar cifre.",
+					JavaFxMain.primaryStage);
+			Utils.setTextFieldValidator(productionNumberField, "[a-zA-Z0-9]*", "[a-zA-Z0-9]*", true, Constants.INFINITE,
+					"Numărul de producție poate conține doar cifre și litere.", JavaFxMain.primaryStage);
+			Utils.setTextFieldValidator(iscirRegistrationNumberField, "[a-zA-Z0-9]*", "[a-zA-Z0-9]*", true, Constants.INFINITE,
+					"Numărul de înregistrare ISCIR poate conține doar cifre și litere.", JavaFxMain.primaryStage);
+			
+			saveButton.setDisable(true);
+			
+			ChangeListener<String> listener = (observable, oldValue, newValue) -> {
+				if(rigType.getSelectionModel().getSelectedItem().equals(Constants.LIFTING_RIG)) {
+					if(Utils.allFieldsAreFilled(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField)) {
+						saveButton.setDisable(false);
+					} else {
+						saveButton.setDisable(true);
+					}
+				} else {
+					if(Utils.allFieldsAreFilled(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField,
+							valveRegistrationNumberField)) {
+						saveButton.setDisable(false);
+					} else {
+						saveButton.setDisable(true);
+					}
+				}
+			};
+			
+			rigNameField.textProperty().addListener(listener);
+			productionYearField.textProperty().addListener(listener);
+			productionNumberField.textProperty().addListener(listener);
+			iscirRegistrationNumberField.textProperty().addListener(listener);
+			valveRegistrationNumberField.textProperty().addListener(listener);
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
@@ -218,6 +273,7 @@ public class AddRigsToFirmController {
 						Constants.LOW_DATE,
 						Constants.HIGH_DATE,
 						(r1, r2) -> r1.getRig().getRigName().compareToIgnoreCase(r2.getRig().getRigName()))));
+				rigTable.setPlaceholder(new Label(Constants.TABLE_PLACEHOLDER_MESSAGE));
 				firmNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirmName()));
 				rigNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRig().getRigName()));
 				rigTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -285,6 +341,16 @@ public class AddRigsToFirmController {
 	@FXML
 	private void handleSave() {
 		try {
+			if(rigType.getSelectionModel().getSelectedItem().equals(Constants.LIFTING_RIG)) {
+				if(!Utils.allFieldsAreValid(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField)) {
+					return;
+				}
+			} else {
+				if(!Utils.allFieldsAreValid(rigNameField, productionYearField, productionNumberField, iscirRegistrationNumberField,
+						valveRegistrationNumberField)) {
+					return;
+				}
+			}
 			Rig newRig;
 			if(rigType.getValue().equals(Constants.LIFTING_RIG)) {
 				newRig = new Rig(rigNameField.getText(), 
