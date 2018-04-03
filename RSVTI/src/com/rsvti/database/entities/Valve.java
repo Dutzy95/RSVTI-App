@@ -1,8 +1,6 @@
 package com.rsvti.database.entities;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;

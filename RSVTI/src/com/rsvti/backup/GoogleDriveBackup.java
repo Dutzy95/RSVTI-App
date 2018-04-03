@@ -120,6 +120,10 @@ public class GoogleDriveBackup {
 	private static void downloadFile(Drive service, File file) {
 		try {
 			while(!connected());
+			java.io.File localFile = new java.io.File("database/" + file.getName() + ".xml ");
+			if(localFile.exists()) {
+				localFile.delete();
+			}
 			OutputStream outputStream = new FileOutputStream("database/" + file.getName() + ".xml ");
 			service.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
 			outputStream.close();
@@ -280,28 +284,28 @@ public class GoogleDriveBackup {
 	}
 	
     public static void main(String[] args) throws IOException {
-    	try {
-    		initialize();
-    		while(!connected());
-	        FileList result = service.files().list()
-	             .setPageSize(1000)
-	             .setFields("nextPageToken, files(" + FILE_SEARCH_FIELDS + ")")
-	             .execute();
-	        List<File> files = result.getFiles();
-	        System.out.println(files.size());
-	        if (files == null || files.size() == 0) {
-	            System.out.println("No files found.");
-	        } else {
-	            System.out.println("Files:");
-	            for (File file : files) {
-	            	System.out.printf("%s (%s) %s\n", file.getName(), file.getId(),
-	            			new SimpleDateFormat("dd.MM.yyyy hh:mm:ss.SSS").format(
-	            					new Date(file.getCreatedTime() == null ? 0 : file.getCreatedTime().getValue())));
-	            }
-	        }
-	        deleteAllFiles(service, files);
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    	}
+//    	try {
+//    		initialize();
+//    		while(!connected());
+//	        FileList result = service.files().list()
+//	             .setPageSize(1000)
+//	             .setFields("nextPageToken, files(" + FILE_SEARCH_FIELDS + ")")
+//	             .execute();
+//	        List<File> files = result.getFiles();
+//	        System.out.println(files.size());
+//	        if (files == null || files.size() == 0) {
+//	            System.out.println("No files found.");
+//	        } else {
+//	            System.out.println("Files:");
+//	            for (File file : files) {
+//	            	System.out.printf("%s (%s) %s\n", file.getName(), file.getId(),
+//	            			new SimpleDateFormat("dd.MM.yyyy hh:mm:ss.SSS").format(
+//	            					new Date(file.getCreatedTime() == null ? 0 : file.getCreatedTime().getValue())));
+//	            }
+//	        }
+//	        deleteAllFiles(service, files);
+//    	} catch(Exception e) {
+//    		e.printStackTrace();
+//    	}
     }
 }

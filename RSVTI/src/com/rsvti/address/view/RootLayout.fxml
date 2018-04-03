@@ -51,7 +51,9 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Ajutor">
             <items>
+                  <CheckMenuItem fx:id="checkBackupActivation" mnemonicParsing="false" onAction="#handleCheckBackupActivation" text="Activează copierea de rezervă a bazei de date" />
                   <MenuItem mnemonicParsing="false" onAction="#handleRecoverData" text="Recuperează date" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" text="Despre" />
             </items>
           </Menu>

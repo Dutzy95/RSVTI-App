@@ -29,7 +29,6 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
@@ -611,11 +610,12 @@ public class JavaFxMain extends Application {
 	public static void main(String[] args) {
 		Locale locale = new Locale("ro", "RO");
 		Locale.setDefault(locale);
+		Utils.generateReadMe();
+		Utils.createDesktopShortcut();
 //		Utils.setStartup();
 		GoogleDriveBackup.initialize();
 		Utils.createFolderHierarchy();
-		Utils.generateReadMe();
-//		Data.populate();
+		Data.populate();
 		launch(args);
 	}
 }

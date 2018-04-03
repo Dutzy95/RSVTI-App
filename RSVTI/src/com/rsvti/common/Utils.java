@@ -7,6 +7,7 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -26,6 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import com.rsvti.database.entities.Employee;
@@ -39,12 +41,13 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import mslinks.ShellLink;
+import net.sf.image4j.codec.ico.ICOEncoder;
 
 public class Utils {
 
@@ -442,6 +445,27 @@ public class Utils {
 				out.println("Username: rsvti.app@gmail.com");
 				out.println("Password: rsvti1234");
 				out.close();
+			}
+		} catch(Exception e) {
+			DBServices.saveErrorLogEntry(e);
+		}
+	}
+	
+	public static void createDesktopShortcut() {
+		try {
+			File file = new File(getJarFilePath() + "RSVTIApp_lib\\RSVTI_without_text.ico");
+			if(new File(getJarFilePath() + "RSVTIApp_lib").exists()) {
+				if(!file.exists()) {
+					BufferedImage bi = ImageIO.read(Utils.class.getResource("/RSVTI_without_text.png"));
+			        ICOEncoder.write(bi, new File(getJarFilePath() + "RSVTIApp_lib\\RSVTI_without_text.ico"));
+				}
+			ShellLink sl = ShellLink.createLink(getJarFilePath() + Constants.APP_NAME + ".jar")
+					.setIconLocation(getJarFilePath() + "RSVTIApp_lib\\RSVTI_without_text.ico");
+				sl.getConsoleData()
+					.setFont(mslinks.extra.ConsoleData.Font.Consolas)
+					.setFontSize(24)
+					.setTextColor(5);
+				sl.saveTo(System.getProperty("user.home") + "\\Desktop\\" + Constants.APP_NAME + ".lnk");
 			}
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);

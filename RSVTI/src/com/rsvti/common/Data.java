@@ -21,11 +21,11 @@ public class Data {
 
 	public static void populate() {
 		try {
-			
 			String jarFilePath = Utils.getJarFilePath();
 			new File(jarFilePath + "database/" + Constants.XML_FIRMS_FILE_NAME).delete();
 			new File(jarFilePath + "database/" + Constants.XML_RIG_PARAMETERS_FILE_NAME).delete();
 			new File(jarFilePath + "database/" + Constants.XML_TEST_DATA_FILE_NAME).delete();
+			new File(jarFilePath + "database/" + Constants.XML_CUSTOM_SETTINGS_FILE_NAME).delete();
 			
 			Employee employee1 = new Employee("FirstNamea", "LastNamea", "CT", "123456", "195042033495", getDate(1978, 10, 15), "Arad", "Str. nume lung de strada, nr.4, Bl.6, Sc.B, Ap.17, Et.3", "Arad", 
 					new EmployeeAuthorization("123948273", addFromTodayDate(0, 0, 20), addFromTodayDate(0, 0, 25)), "manevrant", true);
@@ -52,8 +52,8 @@ public class Data {
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"10","bar"));
 			pressureRig1.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"15","litri"));
 			
-			DBServices.saveEntry(new Firm("SC Gigi SRL", "J12/23/1995", "1234567890", "Str.Oituz, Nr.7", "012398423", "238120948", 
-					"email@domain.com", "Gigi Bank", "RO34 2134 4366 3456 4568 8457",
+			DBServices.saveEntry(new Firm("SC Gigi SRL", "J12/23/1995", "1234567890", "Str.Oituz, Nr.7", "0123984234", "2381209482", 
+					"email@domain.com", "Gigi Bank", "RO34 FEGR 4366 3456 4568 8457",
 					"Vasile Vasilescu",	new Administrator("Ion", "Ionescu", "AR", "123678", "4128309478"), 
 					Arrays.asList(liftingRig1, pressureRig1), Arrays.asList(employee1,employee2)), false);
 			
@@ -69,8 +69,8 @@ public class Data {
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_PRESSURE,"15","bar"));
 			pressureRig2.addParameter(new ParameterDetails(Constants.RIG_PARAMETER_VOLUME,"20","litri"));
 			
-			DBServices.saveEntry(new Firm("SC DURU SRL", "J23/75/2000", "RO1234567", "Str.Florii, Nr.3", "1297048613", "532784921", 
-					"email2ter@domain.com", "Duru Bank", "RO34 1234 2345 3734 8567 5600", 
+			DBServices.saveEntry(new Firm("SC DURU SRL", "J23/75/2000", "RO1234567", "Str.Florii, Nr.3", "1297048613", "5327849214", 
+					"email2ter@domain.com", "Duru Bank", "RO34 ABCD 2345 3734 8567 5600", 
 					"Dan Popescu", new Administrator("Doru", "Georgescu", "MH", "147283", "5328934729"), 
 					Arrays.asList(liftingRig2,pressureRig2), Arrays.asList(employee3, employee4, employee5, employee6)), false);
 			

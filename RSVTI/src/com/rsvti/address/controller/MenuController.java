@@ -12,11 +12,21 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
 
 public class MenuController {
 	
 	private JavaFxMain javaFxMain;
+	
+	@FXML
+	private CheckMenuItem checkBackupActivation;
 
+	
+	@FXML
+	private void initialize() {
+		checkBackupActivation.selectedProperty().set(DBServices.getBackupActivation());
+	}
+	
 	@FXML
 	private void handleAddFirm() {
 		try {
@@ -173,6 +183,11 @@ public class MenuController {
 		} catch (Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}
+	}
+	
+	@FXML
+	public void handleCheckBackupActivation() {
+		DBServices.saveBackupActivation(checkBackupActivation.selectedProperty().get());
 	}
 	
 	@FXML

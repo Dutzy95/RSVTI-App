@@ -56,6 +56,7 @@ public class DBServices {
 	private static Document document;
 	private static long numberOfFirms = getLastFirmIndex();
 	private static String jarFilePath;
+	private static boolean backupActivated = getBackupActivation();
 	
 	private static void openFile(String filepath) {
 		try {
@@ -106,10 +107,12 @@ public class DBServices {
 			if(fileName.equals(Constants.XML_ERROR_LOG_FILE)) {
 				output = new StreamResult(new File(jarFilePath + fileName));
 			} else {
-				Thread thread = new Thread(() -> {
-					GoogleDriveBackup.uploadFile(fileName);
-				});
-				thread.start();
+				if(backupActivated) {
+					Thread thread = new Thread(() -> {
+						GoogleDriveBackup.uploadFile(fileName);
+					});
+					thread.start();
+				}
 				output = new StreamResult(new File(jarFilePath + "database/" + fileName));
 			}
 			Source input = new DOMSource(document);
@@ -874,5 +877,23 @@ public class DBServices {
 	public static String getPersonalIdentificationNumberForEmployee(String lastName, String firstName) {
 		Node personalIdentificationNumberNode = (Node) executeXmlQuery("//angajat[nume = '" + firstName + "'][prenume = '" + lastName + "']/CNP", XPathConstants.NODE);
 		return personalIdentificationNumberNode.getTextContent();
+	}
+	
+	public static void saveBackupActivation(boolean activate) {
+		Element node = (Element) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backup", XPathConstants.NODE);
+		Node activatedAttribute = node.getAttributes().getNamedItem("activated");
+		if(activatedAttribute == null) {
+			node.setAttribute("activated", activate + "");
+		} else {
+			activatedAttribute.setNodeValue(activate + "");
+		}
+		backupActivated = activate;
+		transformXmlFile(Constants.XML_CUSTOM_SETTINGS_FILE_NAME);
+	}
+	
+	public static boolean getBackupActivation() {
+		Node node = (Node) executeXmlQuery(Constants.XML_CUSTOM_SETTINGS_FILE_NAME, "//backup", XPathConstants.NODE);
+		return node.getAttributes().getNamedItem("activated") == null ? false : 
+			Boolean.parseBoolean(node.getAttributes().getNamedItem("activated").getTextContent());
 	}
 }
