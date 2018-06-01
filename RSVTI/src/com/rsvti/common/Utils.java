@@ -30,9 +30,9 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.Employee;
 import com.rsvti.model.entities.LoggedTest;
-import com.rsvti.model.services.DBServices;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;

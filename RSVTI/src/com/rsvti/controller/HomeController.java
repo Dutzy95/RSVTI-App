@@ -3,7 +3,7 @@ package com.rsvti.controller;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;

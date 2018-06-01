@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.rsvti.JavaFxMain;
 import com.rsvti.common.Utils;
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

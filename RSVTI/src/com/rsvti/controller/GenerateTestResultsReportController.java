@@ -10,10 +10,10 @@ import com.rsvti.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.generator.Generator;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.Employee;
 import com.rsvti.model.entities.EmployeeTestResults;
 import com.rsvti.model.entities.Firm;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

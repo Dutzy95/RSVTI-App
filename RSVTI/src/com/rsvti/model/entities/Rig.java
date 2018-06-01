@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.rsvti.common.Constants;
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 public class Rig{
 

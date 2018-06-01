@@ -7,11 +7,11 @@ import java.util.List;
 import com.rsvti.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.Employee;
 import com.rsvti.model.entities.EmployeeWithDetails;
 import com.rsvti.model.entities.Rig;
 import com.rsvti.model.entities.RigWithDetails;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

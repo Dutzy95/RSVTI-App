@@ -2,8 +2,8 @@ package com.rsvti.controller;
 
 import com.rsvti.JavaFxMain;
 import com.rsvti.common.Constants;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.Firm;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

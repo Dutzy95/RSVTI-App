@@ -18,4 +18,4 @@ encoding//src/com/rsvti/controller/HomeController.java=UTF-8
 encoding//src/com/rsvti/controller/RigOverviewController.java=UTF-8
 encoding//src/com/rsvti/controller/SettingsController.java=UTF-8
 encoding//src/com/rsvti/generator/Generator.java=UTF-8
-encoding//src/com/rsvti/model/services/DBServices.java=UTF-8
+encoding//src/com/rsvti/model/database/DBServices.java=UTF-8

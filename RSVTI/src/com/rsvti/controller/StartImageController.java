@@ -1,6 +1,6 @@
 package com.rsvti.controller;
 
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

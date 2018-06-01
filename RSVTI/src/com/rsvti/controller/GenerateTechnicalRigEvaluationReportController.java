@@ -9,8 +9,8 @@ import java.util.Optional;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
 import com.rsvti.generator.Generator;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.RigWithDetails;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

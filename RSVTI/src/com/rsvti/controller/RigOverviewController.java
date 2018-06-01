@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.rsvti.common.Constants;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.ParameterDetails;
 import com.rsvti.model.entities.Rig;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

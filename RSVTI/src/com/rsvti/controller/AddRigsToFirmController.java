@@ -8,12 +8,12 @@ import java.util.List;
 import com.rsvti.JavaFxMain;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.ParameterDetails;
 import com.rsvti.model.entities.Rig;
 import com.rsvti.model.entities.RigParameter;
 import com.rsvti.model.entities.RigWithDetails;
 import com.rsvti.model.entities.Valve;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;

@@ -1,4 +1,4 @@
-package com.rsvti.model.services;
+package com.rsvti.model.database;
 
 import java.util.ArrayList;
 import java.util.Date;

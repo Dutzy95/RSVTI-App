@@ -28,7 +28,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 public class GoogleDriveBackup {
     /** Application name. */

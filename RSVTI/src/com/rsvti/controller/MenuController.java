@@ -6,7 +6,7 @@ import com.rsvti.JavaFxMain;
 import com.rsvti.backup.GoogleDriveBackup;
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
-import com.rsvti.model.services.DBServices;
+import com.rsvti.model.database.DBServices;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

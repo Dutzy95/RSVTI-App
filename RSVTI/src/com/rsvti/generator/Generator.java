@@ -36,6 +36,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.EmployeeTestResults;
 import com.rsvti.model.entities.EmployeeWithDetails;
 import com.rsvti.model.entities.Firm;
@@ -44,7 +45,6 @@ import com.rsvti.model.entities.ParameterDetails;
 import com.rsvti.model.entities.Rig;
 import com.rsvti.model.entities.RigWithDetails;
 import com.rsvti.model.entities.TestQuestion;
-import com.rsvti.model.services.DBServices;
 
 import javafx.scene.control.CheckBox;
 

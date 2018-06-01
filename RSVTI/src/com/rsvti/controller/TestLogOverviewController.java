@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat;
 
 import com.rsvti.common.Constants;
 import com.rsvti.common.Utils;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.LoggedTest;
-import com.rsvti.model.services.DBServices;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

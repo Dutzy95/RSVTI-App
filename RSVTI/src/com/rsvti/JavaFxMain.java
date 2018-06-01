@@ -21,9 +21,9 @@ import com.rsvti.controller.HomeController;
 import com.rsvti.controller.MenuController;
 import com.rsvti.controller.RigOverviewController;
 import com.rsvti.controller.SettingsController;
+import com.rsvti.model.database.DBServices;
 import com.rsvti.model.entities.Employee;
 import com.rsvti.model.entities.Rig;
-import com.rsvti.model.services.DBServices;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
