@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +28,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.rsvti.database.services.DBServices;
+import com.rsvti.model.services.DBServices;
 
 public class GoogleDriveBackup {
     /** Application name. */
@@ -120,13 +119,15 @@ public class GoogleDriveBackup {
 	private static void downloadFile(Drive service, File file) {
 		try {
 			while(!connected());
-			java.io.File localFile = new java.io.File("database/" + file.getName() + ".xml ");
-			if(localFile.exists()) {
-				localFile.delete();
+			if(!file.getName().contains("ErrorLog")) {
+				java.io.File localFile = new java.io.File("database/" + file.getName() + ".xml ");
+				if(localFile.exists()) {
+					localFile.delete();
+				}
+				OutputStream outputStream = new FileOutputStream("database/" + file.getName() + ".xml ");
+				service.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
+				outputStream.close();
 			}
-			OutputStream outputStream = new FileOutputStream("database/" + file.getName() + ".xml ");
-			service.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
-			outputStream.close();
 		} catch(Exception e) {
 			DBServices.saveErrorLogEntry(e);
 		}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rsvti.controller.MenuController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Fișier">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddFirm" text="Adaugă firmă" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddRigParameters" text="Parametrii pentru utilaj" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddTestQuestion" text="Întrebări test" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleShowSettings" text="Setări" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#handleFileClose" text="Închide aplicația" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Modifică">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditFirm" text="Firmă" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditRig" text="Utilaj" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleEditEmployee" text="Angajat" />
+               </items></Menu>
+            <Menu mnemonicParsing="false" text="Afișează">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#handleViewFirms" text="Firme" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewRigs" text="Utilaje" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewEmployees" text="Angajați" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewDueDateOverview" text="Date scadente" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleViewTestLogs" text="Istoric teste" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Generează">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#handleGenerateTest" text="Examinare personal deservent" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleGenerateTable" text="Tabel utilaje" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleGenerateCertificate" text="Adeverință angajat" />
+                  <Menu mnemonicParsing="false" text="Proces verbal">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#handleGenerateTestResultsReport" text="Rezultate examinare" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleTechnicalRigEvaluationReport" text="Verificare tehnică utilaj" />
+                    </items>
+                  </Menu>
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Ajutor">
+            <items>
+                  <CheckMenuItem fx:id="checkBackupActivation" mnemonicParsing="false" onAction="#handleCheckBackupActivation" text="Activează copierea de rezervă a bazei de date" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleRecoverData" text="Recuperează date" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" text="Despre" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

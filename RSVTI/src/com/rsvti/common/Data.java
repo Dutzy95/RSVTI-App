@@ -6,16 +6,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.rsvti.database.entities.Administrator;
-import com.rsvti.database.entities.Employee;
-import com.rsvti.database.entities.EmployeeAuthorization;
-import com.rsvti.database.entities.Firm;
-import com.rsvti.database.entities.ParameterDetails;
-import com.rsvti.database.entities.Rig;
-import com.rsvti.database.entities.RigParameter;
-import com.rsvti.database.entities.TestQuestion;
-import com.rsvti.database.entities.Valve;
-import com.rsvti.database.services.DBServices;
+import com.rsvti.model.entities.Administrator;
+import com.rsvti.model.entities.Employee;
+import com.rsvti.model.entities.EmployeeAuthorization;
+import com.rsvti.model.entities.Firm;
+import com.rsvti.model.entities.ParameterDetails;
+import com.rsvti.model.entities.Rig;
+import com.rsvti.model.entities.RigParameter;
+import com.rsvti.model.entities.TestQuestion;
+import com.rsvti.model.entities.Valve;
+import com.rsvti.model.services.DBServices;
 
 public class Data {
 
